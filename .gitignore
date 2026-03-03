@@ -1,0 +1,56 @@
+# ===== C# / .NET =====
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.rsuser
+*.cache
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Publish output
+publish/
+out/
+
+# ===== Entity Framework =====
+*.mdf
+*.ldf
+
+# ===== Docker =====
+docker-compose.override.yml
+
+# ===== Secrets / Environment =====
+.env
+*.env
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# ===== Visual Studio 2022 =====
+.vs/
+*.VC.db
+*.VC.VC.opendb
+*.suo
+*.sdf
+ipch/
+*.opensdf
+*.psess
+*.vsp
+*.vspx
+*.sap
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Rider (hvis nogen skifter IDE)
+.idea/
+*.sln.iml

@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj" />
+  <Project Path="Semesterprojekt1PBA.Application/Semesterprojekt1PBA.Application.csproj" />
+  <Project Path="Semesterprojekt1PBA.DatabaseMigration/Semesterprojekt1PBA.DatabaseMigration.csproj" />
+  <Project Path="Semesterprojekt1PBA.Domain.Test/Semesterprojekt1PBA.Domain.Test.csproj" />
+  <Project Path="Semesterprojekt1PBA.Domain/Semesterprojekt1PBA.Domain.csproj" />
+  <Project Path="Semesterprojekt1PBA.Infrastructure/Semesterprojekt1PBA.Infrastructure.csproj" />
+</Solution>
