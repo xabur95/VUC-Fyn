@@ -15,23 +15,38 @@
         public string Name
         {
             get;
+            private set;
         }
-        public string Level
+        public Level Level
         {
             get;
+            private set;
         }
         public List<Topic> Topics 
         {
             get;
-            set;
+            private set;
         }   
 
         //Constructors
+        public Subject(string name, Level level)
+        {
+            Name = name;
+            Level = level;
+            Topics = [];
+        }
+
         public Subject(string name, Level level, List<Topic> topics)
         {
-            this.name = name;
-            this.level = level;
-            this.topics = topics;
+            Name = name;
+            Level = level;
+            Topics = topics;
+        }
+
+        //Methods
+        public void AddTopic(Topic topic)
+        {
+            Topics.Add(topic);
         }
     }
 }
