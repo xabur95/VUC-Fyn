@@ -29,14 +29,7 @@
         }   
 
         //Constructors
-        public Subject(string name, Level level)
-        {
-            Name = name;
-            Level = level;
-            Topics = [];
-        }
-
-        public Subject(string name, Level level, List<Topic> topics)
+        private Subject(string name, Level level, List<Topic> topics)
         {
             Name = name;
             Level = level;
@@ -44,6 +37,16 @@
         }
 
         //Methods
+        public static Subject Create(string name, Level level)
+        {
+            return new Subject(name, level, []);
+        }
+
+        public static Subject Create(string name, Level level, List<Topic> topics)
+        {
+            return new Subject(name, level, topics);
+        }
+
         public void AddTopic(Topic topic)
         {
             Topics.Add(topic);
