@@ -1,4 +1,6 @@
-﻿namespace Semesterprojekt1PBA.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Semesterprojekt1PBA.Domain;
 /// <summary>
 ///  Author: Michael
 /// Represents the base type for domain entities with a unique identifier.
@@ -6,4 +8,5 @@
 public abstract class DomainEntity
 {
     public Guid Id { get; protected set; }
+    [Timestamp] public byte[] RowVersion { get; protected set; } = null;
 }

@@ -1,6 +1,8 @@
-﻿namespace Semesterprojekt1PBA.Domain.Test.Entities.User;
+﻿using Semesterprojekt1PBA.Domain.ValueObjects;
 
-public class UserDomainModelTest
+namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
+
+public class NameTests
 {
     [Fact]
     public void Constructor_WhenFirstNameIsEmpty_ThrowsArgumentException()
@@ -9,7 +11,7 @@ public class UserDomainModelTest
         var firstName = "";
 
         // Act
-        var act = () => new TestUser(firstName, "Hansen", "test@test.com");
+        var act = () => new Name(firstName, "Hansen");
 
         // Assert
         Assert.Throws<ArgumentException>(act);
@@ -21,7 +23,7 @@ public class UserDomainModelTest
         // Arange
         var firstName = "Peter123";
         // Act
-        var act = () => new TestUser(firstName, "Hansen", "test@test.com");
+        var act = () => new Name(firstName, "Hansen");
         // Assert
         Assert.Throws<ArgumentException>(act);
     }
@@ -32,7 +34,7 @@ public class UserDomainModelTest
     public void Constructor_WhenFirstNameLengthIsOutOfArea_ThrowsArgumentException(string firstName)
     {
         // Act
-        var act = () => new TestUser(firstName, "Hansen", "test@test.com");
+        var act = () => new Name(firstName, "Hansen");
         // Assert
         Assert.Throws<ArgumentException>(act);
     }
@@ -45,7 +47,7 @@ public class UserDomainModelTest
         var lastName = "";
 
         // Act
-        var act = () => new TestUser("Peter", lastName, "test@test.com");
+        var act = () => new Name("Peter", lastName);
         // Assert
         Assert.Throws<ArgumentException>(act);
     }
@@ -56,7 +58,7 @@ public class UserDomainModelTest
         // Arange
         var lastName = "Hansen123";
         // Act
-        var act = () => new TestUser("Peter", lastName, "test@test.com");
+        var act = () => new Name("Peter", lastName);
         // Assert
         Assert.Throws<ArgumentException>(act);
     }
@@ -67,38 +69,8 @@ public class UserDomainModelTest
     public void Constructor_WhenLastNameLengthIsOutOfArea_ThrowsArgumentException(string lastName)
     {
         // Act
-        var act = () => new TestUser("Peter", lastName, "test@test.com");
+        var act = () => new Name("Peter", lastName);
         // Assert
         Assert.Throws<ArgumentException>(act);
     }
-
-    [Fact]
-    public void Constructor_WhenEmailIsEmpty_ThrowsArgumentException()
-    {
-        // Arrange
-        var email = "";
-
-        // Act
-        var act = () => new TestUser("Peter", "Hansen", email);
-
-        // Assert
-        Assert.Throws<ArgumentException>(act);
-    }
-
-    [Theory]
-    [InlineData("test")]
-    [InlineData("test@")]
-    [InlineData("@gmail.com")]
-    [InlineData("test@gmail")]
-    [InlineData("testgmail.com")]
-    public void Constructor_WhenEmailIsInvalid_ThrowsArgumentException(string email)
-    {
-        // Act
-        var act = () => new TestUser("Peter", "Hansen", email);
-
-        // Assert
-        Assert.Throws<ArgumentException>(act);
-    }
-
-
 }
