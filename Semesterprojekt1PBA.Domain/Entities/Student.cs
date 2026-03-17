@@ -1,4 +1,6 @@
-﻿namespace Semesterprojekt1PBA.Domain.Entities;
+﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+
+namespace Semesterprojekt1PBA.Domain.Entities;
 
 public class Student : User
 {
@@ -14,4 +16,15 @@ public class Student : User
     {
         return new Student(firstName, lastName, email);
     }
+
+    public override void AssignRole(UserRole role)
+    {
+        if (role.RoleType != RoleType.Student)
+        {
+            throw new Exception("Invalid role type for Student. Expected RoleType.Student.");
+        }
+        AddRole(role);
+    }
+
+   
 }
