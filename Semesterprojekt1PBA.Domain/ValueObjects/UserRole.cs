@@ -1,6 +1,6 @@
 ﻿namespace Semesterprojekt1PBA.Domain.ValueObjects
 {
-    public class UserRole
+    public record UserRole
     {
         public RoleType RoleType { get; }
 
@@ -15,9 +15,3 @@
     }
 }
 
-public enum RoleType
-{
-    Student,
-    Teacher,
-    Admin
-}
