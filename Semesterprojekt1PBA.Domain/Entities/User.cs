@@ -31,8 +31,6 @@ public abstract class User : DomainEntity
         _roles.Add(role);
     }
 
-
     // Tvinger at Student, Teacher og Admin skal opsætte regler for deres egen Rolle
     public abstract void AssignRole(UserRole role);
-
 }

@@ -8,8 +8,9 @@ public class Student : User
     {
     }
 
-    public Student(string firstName, string lastName, string email) : base(firstName, lastName, email)
+    private Student(string firstName, string lastName, string email) : base(firstName, lastName, email)
     {
+        AssignRole(new UserRole(RoleType.Student));
     }
 
     public static Student Create(string firstName, string lastName, string email)
@@ -21,10 +22,13 @@ public class Student : User
     {
         if (role.RoleType != RoleType.Student)
         {
-            throw new Exception("Invalid role type for Student. Expected RoleType.Student.");
+            throw new InvalidOperationException("Invalid role type for Student.");
+        }
+
+        if (Roles.Any(r => r.RoleType == role.RoleType))
+        {
+            return;
         }
         AddRole(role);
     }
-
-   
 }
