@@ -1,4 +1,5 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using System.Data;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
 
@@ -23,6 +24,15 @@ public class Teacher : User
             teacher.AssignRole(new UserRole(RoleType.Admin));
         }
         return teacher;
+    }
+
+    public override void RevokeRole(UserRole role)
+    {
+        if (role.RoleType == RoleType.Teacher)
+        {
+            throw new InvalidOperationException("Invalid role type for Teacher. Expected Teacher or Admin.");
+        }
+        RemoveRole(role);
     }
 
     public override void AssignRole(UserRole role)

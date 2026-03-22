@@ -4,6 +4,15 @@ namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 
 public class EmailTests
 {
+    public static IEnumerable<object[]> ValidEmailData =>
+        new List<object[]>
+        {
+            new object[] {"bob@gmail.com"},
+            new object[] {"poul@bundgaard.dk"},
+            new object[] {"homer@simpson.com"}
+        };
+
+
     [Theory]
     [InlineData("test")]
     [InlineData("test@")]
@@ -32,5 +41,14 @@ public class EmailTests
         Assert.Throws<ArgumentException>(act);
     }
 
+    [Theory]
+    [MemberData(nameof(ValidEmailData))]
+    public void Constructor_WhenEmailIsValid_ShouldCreateEmail(string email)
+    {
+        // Act
+        var result = new Email(email);
 
+        // Assert
+        Assert.Equal(email, result.Value);
+    }
 }

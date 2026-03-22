@@ -35,7 +35,8 @@ appsettings.Local.json
 secrets.json
 
 # ===== Local Dev Tools =====
-CLAUDE.md
+local-CLAUDE.md
+*CLAUDE.md
 
 # ===== Visual Studio 2022 =====
 .vs/

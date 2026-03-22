@@ -18,6 +18,14 @@ public class Student : User
         return new Student(firstName, lastName, email);
     }
 
+    public override void RevokeRole(UserRole role)
+    {
+        if (role.RoleType == RoleType.Student)
+        {
+            throw new InvalidOperationException("Invalid role type for Student.");
+        }
+    }
+
     public override void AssignRole(UserRole role)
     {
         if (role.RoleType != RoleType.Student)

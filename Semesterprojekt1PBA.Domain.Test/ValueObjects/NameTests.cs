@@ -1,4 +1,6 @@
 ﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+using System.Collections;
+using Castle.Components.DictionaryAdapter;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 
@@ -72,5 +74,30 @@ public class NameTests
         var act = () => new Name("Peter", lastName);
         // Assert
         Assert.Throws<ArgumentException>(act);
+    }
+
+
+    [Theory]
+    [ClassData(typeof(InvalidNameData))]
+    public void Constructor_WhenInvalidNameIsUsed_ThrowsArgumentException(string firstName, string lastName )
+    {
+        // Act
+        var result = () => new Name(firstName, lastName);
+
+        // Assert
+        Assert.Throws<ArgumentException>(result);
+    }
+
+}
+
+public class InvalidNameData : IEnumerable<object[]>
+{
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        yield return new object[] { "", "Hansen" };
+        yield return new object[] { "Peter123", "Hansen" };
+        yield return new object[] { "P", "Hansen" };
     }
 }

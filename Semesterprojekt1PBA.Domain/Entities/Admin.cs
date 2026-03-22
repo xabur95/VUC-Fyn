@@ -19,6 +19,15 @@ public class Admin : User
         return new Admin(firstName, lastName, email);
     }
 
+    public override void RevokeRole(UserRole role)
+    {
+        if (role.RoleType == RoleType.Admin)
+        {
+            throw new InvalidOperationException("Cannot revoke Admin role from an Admin user.");
+        }
+        RemoveRole(role);
+    }
+
     public override void AssignRole(UserRole role)
     {
         if (role.RoleType != RoleType.Admin)
