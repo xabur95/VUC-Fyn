@@ -1,7 +1,13 @@
 ﻿using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
-
+/// <summary>
+/// Author: Michael
+/// Unit tests for Email class der verificerer håndtering af gyldige og ugyldige email adresser.
+/// </summary>
+/// <remarks>
+/// Tester at ArgumentException kastes for ugyldige emails og at gyldige emails oprettes succesfuldt.
+/// </remarks>
 public class EmailTests
 {
     public static IEnumerable<object[]> ValidEmailData =>

@@ -1,7 +1,14 @@
 ﻿using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
-
+/// <summary>
+/// Author: Michael
+/// Repræsenterer en bruger med Admin rollen.
+/// </summary>
+/// <remarks>
+/// Admin sikrer, at kun Admin rollen kan tildeles. Andre roller kan ikke tildeles eller fjernes og vil give en
+/// undtagelse. Brug den statiske Create metode til at oprette en Admin.
+/// </remarks>
 public class Admin : User
 {
     protected Admin()

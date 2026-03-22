@@ -1,14 +1,21 @@
-﻿using System.Data;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
-
+/// <summary>
+/// Author: Michael
+/// Repræsenterer en bruger med lærerrollen og funktioner for lærere i systemet.
+/// </summary>
+/// <remarks>
+/// En Teacher kan også have Admin rollen. Brug den statiske Create metode til at oprette en lærer og angive om
+/// brugeren også skal have Admin rollen. Kun rollerne lærer og Admin kan tildeles eller fjernes, ellers kastes en
+/// exception.
+/// </remarks>
 public class Teacher : User
 {
     protected Teacher()
     {
     }
-     
+
     private Teacher(string firstName, string lastName, string email)
         : base(firstName, lastName, email)
     {
@@ -23,6 +30,7 @@ public class Teacher : User
         {
             teacher.AssignRole(new UserRole(RoleType.Admin));
         }
+
         return teacher;
     }
 
@@ -32,6 +40,7 @@ public class Teacher : User
         {
             throw new InvalidOperationException("Invalid role type for Teacher. Expected Teacher or Admin.");
         }
+
         RemoveRole(role);
     }
 
@@ -46,6 +55,7 @@ public class Teacher : User
         {
             return;
         }
+
         AddRole(role);
     }
 

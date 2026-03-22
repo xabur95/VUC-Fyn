@@ -1,9 +1,14 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
-using System.Collections;
-using Castle.Components.DictionaryAdapter;
+﻿using System.Collections;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
-
+/// <summary>
+/// Author: Michael
+/// Unit tests for Name class constructor validering med forskellige input scenarier.
+/// </summary>
+/// <remarks>
+/// Verificerer at validerings regler håndhæves og exceptions kastes ved ugyldigt input.
+/// </remarks>
 public class NameTests
 {
     [Fact]
@@ -79,7 +84,7 @@ public class NameTests
 
     [Theory]
     [ClassData(typeof(InvalidNameData))]
-    public void Constructor_WhenInvalidNameIsUsed_ThrowsArgumentException(string firstName, string lastName )
+    public void Constructor_WhenInvalidNameIsUsed_ThrowsArgumentException(string firstName, string lastName)
     {
         // Act
         var result = () => new Name(firstName, lastName);
@@ -87,12 +92,14 @@ public class NameTests
         // Assert
         Assert.Throws<ArgumentException>(result);
     }
-
 }
 
 public class InvalidNameData : IEnumerable<object[]>
 {
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
     public IEnumerator<object[]> GetEnumerator()
     {

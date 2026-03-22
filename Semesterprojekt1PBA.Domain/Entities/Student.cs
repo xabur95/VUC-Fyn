@@ -1,7 +1,14 @@
 ﻿using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
-
+/// <summary>
+/// Author: Michael
+/// Repræsenterer en bruger med student rollen og funktioner for studerende.
+/// </summary>
+/// <remarks>
+/// Student klassen sikrer, at kun student rollen kan tildeles eller fjernes. Brug den statiske Create metode til
+/// at oprette en Student. Klassen nedarver fra User og bruges ved rollebaseret brugerhåndtering.
+/// </remarks>
 public class Student : User
 {
     protected Student()
@@ -37,6 +44,7 @@ public class Student : User
         {
             return;
         }
+
         AddRole(role);
     }
 }
