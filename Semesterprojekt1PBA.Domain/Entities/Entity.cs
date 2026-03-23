@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Semesterprojekt1PBA.Domain;
+namespace Semesterprojekt1PBA.Domain.Entities;
 /// <summary>
 /// Author: Michael
 /// Basistype for domain entities med unik identifier.
 /// </summary>
-public abstract class DomainEntity : IEquatable<DomainEntity>
+public abstract class Entity : IEquatable<Entity>
 {
     public Guid Id { get; protected set; }
     [Timestamp] public byte[] RowVersion { get; protected set; }
 
-    public bool Equals(DomainEntity? other)
+    public bool Equals(Entity? other)
     {
         if (other is null)
         {
@@ -42,10 +42,10 @@ public abstract class DomainEntity : IEquatable<DomainEntity>
             return false;
         }
 
-        return Equals((DomainEntity)obj);
+        return Equals((Entity)obj);
     }
 
-    public static bool operator ==(DomainEntity left, DomainEntity right)
+    public static bool operator ==(Entity left, Entity right)
     {
         if (left is null)
         {
@@ -54,7 +54,7 @@ public abstract class DomainEntity : IEquatable<DomainEntity>
         return left.Equals(right);
     }
 
-    public static bool operator !=(DomainEntity left, DomainEntity right)
+    public static bool operator !=(Entity left, Entity right)
     {
         return !(left == right);
     }
