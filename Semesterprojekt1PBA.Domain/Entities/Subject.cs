@@ -1,4 +1,6 @@
-﻿namespace Semesterprojekt1PBA.Domain.Entities
+﻿using System.Reflection.Metadata;
+
+namespace Semesterprojekt1PBA.Domain.Entities
 {
     /// <summary>
     /// Author: Mikkel
@@ -50,6 +52,11 @@
         public void AddTopic(Topic topic)
         {
             Topics.Add(topic);
+        }
+
+        protected void AssureTeacher(User teacher)
+        {
+            //Todo: Throw exception if not teacher
         }
     }
 }
