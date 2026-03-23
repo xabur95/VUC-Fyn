@@ -58,3 +58,4 @@ TestResults/
 # Rider (hvis nogen skifter IDE)
 .idea/
 *.sln.iml
+/Semesterprojekt1PBA.Domain/Entities/Topic.cs
