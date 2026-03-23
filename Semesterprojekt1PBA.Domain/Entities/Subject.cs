@@ -54,5 +54,10 @@ namespace Semesterprojekt1PBA.Domain.Entities
         {
             //Todo: Throw exception if not teacher
         }
+
+        protected void AssureUnique(List<Subject> subjects, Subject subject)
+        {
+            //ToDo assure List is consiting of unique objects. else throw execption.
+        }
     }
 }
