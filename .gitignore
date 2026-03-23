@@ -34,6 +34,10 @@ appsettings.Development.json
 appsettings.Local.json
 secrets.json
 
+# ===== Local Dev Tools =====
+local-CLAUDE.md
+*CLAUDE.md
+
 # ===== Visual Studio 2022 =====
 .vs/
 *.VC.db
@@ -54,3 +58,4 @@ TestResults/
 # Rider (hvis nogen skifter IDE)
 .idea/
 *.sln.iml
+/Semesterprojekt1PBA.Domain/Entities/Topic.cs

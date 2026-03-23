@@ -1,46 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Semesterprojekt1PBA.Domain.Entities
+namespace Semesterprojekt1PBA.Domain.Entities;
+
+/// <summary>
+///     Author: Michael
+///     Basistype for domain entities med unik identifier.
+/// </summary>
+public abstract class Entity : IEquatable<Entity>
 {
-    public abstract class Entity : IEquatable<Entity>
+    public Guid Id { get; protected set; }
+    [Timestamp] public byte[] RowVersion { get; protected set; }
+
+    public bool Equals(Entity? other)
     {
-        public Guid Id { get; protected set; }
-        public byte[] RowVersion { get; protected set; }
+        if (other is null) return false;
 
-        bool IEquatable<Entity>.Equals(Entity? other)
-        {
-            if (other is null)
-                return false;
+        if (ReferenceEquals(this, other)) return true;
 
-            if (ReferenceEquals(this, other))
-                return true;
+        return Id == other.Id;
+    }
 
-            return Id == other.Id;
-        }
+    //TODO: Undersøg om Equals på Entity er nødvendigt,
+    // da det kan være problematisk at sammenligne to forskellige instanser af samme type,
+    // selvom de har samme Id.
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
 
-        public override bool Equals(object? obj)
-        {
-            return base.Equals(obj as Entity);
-        }
+        if (ReferenceEquals(this, obj)) return true;
 
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
+        if (obj.GetType() != GetType()) return false;
 
-        public static bool operator ==(Entity left, Entity right)
-        {
-            if (left is null)
-                return right is null;
+        return Equals((Entity)obj);
+    }
 
-            return left.Equals(right);
-        }
+    public static bool operator ==(Entity left, Entity right)
+    {
+        if (left is null) return right is null;
+        return left.Equals(right);
+    }
 
-        public static bool operator !=(Entity left, Entity right)
-        {
-            return !(left == right);
-        }
+    public static bool operator !=(Entity left, Entity right)
+    {
+        return !(left == right);
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
     }
 }
