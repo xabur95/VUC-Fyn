@@ -10,7 +10,7 @@ namespace Semesterprojekt1PBA.Domain.Entities;
 /// nedarvede klasser håndterer tildeling og fjernelse af roller. Metoder til rolle styring er beskyttede og bruges
 /// kun i nedarvede klasser.
 /// </remarks>
-public abstract class User : DomainEntity
+public abstract class User : Entity
 {
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
