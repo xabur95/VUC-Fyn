@@ -9,33 +9,29 @@ namespace Semesterprojekt1PBA.Domain.Entities
     public class Subject
     {
         //Fields
-        private string name;
-        private Level level;
-        private List<Topic> topics;
+        private readonly List<Topic> _topics = [];
         
         //Properties
         public string Name
         {
             get;
-            private set;
+            protected set;
         }
         public Level Level
         {
             get;
-            private set;
+            protected set;
         }
-        public List<Topic> Topics 
-        {
-            get;
-            private set;
-        }   
+
+        public IReadOnlyCollection<Topic> Topics => _topics.AsReadOnly();     
+           
 
         //Constructors
         private Subject(string name, Level level, List<Topic> topics)
         {
             Name = name;
             Level = level;
-            Topics = topics;
+            _topics = topics;
         }
 
         //Methods
@@ -51,7 +47,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
 
         public void AddTopic(Topic topic)
         {
-            Topics.Add(topic);
+            _topics.Add(topic);
         }
 
         protected void AssureTeacher(User teacher)
