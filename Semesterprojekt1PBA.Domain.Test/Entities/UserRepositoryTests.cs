@@ -1,6 +1,8 @@
 ﻿using Moq;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Interfaces;
+using Semesterprojekt1PBA.Domain.Policies;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities;
 
@@ -12,7 +14,7 @@ public class UserRepositoryTests
     {
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
-        var student = Student.Create("Homer", "Simpson", "Simp@dooh.com");
+        var student = User.Create("Homer", "Simpson", "Simp@dooh.com", new RolePolicies.StudentRolePolicy(), RoleType.Student);
         mockRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).Returns(student);
 
         // Act

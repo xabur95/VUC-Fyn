@@ -1,13 +1,13 @@
 ﻿using Semesterprojekt1PBA.Domain.Entities;
+using Semesterprojekt1PBA.Domain.Policies;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities;
 /// <summary>
 /// Author: Michael
 /// Unit tests for at verificere Student class adfærd.
 /// </summary>
-/// <remarks>
-/// Bruger xUnit framework til at sikre Student class opretter instanser med forventede property værdier.
-/// </remarks>
+
 public class StudentTest
 {
 
@@ -20,7 +20,7 @@ public class StudentTest
         var email = "poul@hansen.dk";
 
         // Act
-        var student = Student.Create(firstName, lastName, email);
+        var student = User.Create(firstName, lastName, email, new RolePolicies.StudentRolePolicy(), RoleType.Student);
 
         // Assert
         Assert.Equal(firstName, student.Name.FirstName);
