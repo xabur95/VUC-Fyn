@@ -9,21 +9,34 @@ namespace Semesterprojekt1PBA.Domain.Entities
     /// Represents a topic for a school subject. Such algebra and functions for math, or cells and evolution for biologic.
     /// primarily used with Class Subject.
     /// </summary>
-    public class Topic
+    public class Topic : Entity
     {
-        //Fields
-        private string name;
-
         //Properties
         public string Name 
         { 
             get;
+            private set;
         }
 
         //Constructor
-        public Topic(string name) 
+        protected Topic() { } // For EF Core
+
+        private Topic(string name) 
         {
-            this.name = name;
+            SetName(name);
+        }
+
+        public Topic Create(string name)
+        {
+            return new Topic(name);
+        }
+
+        private void SetName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Topic name cannot be empty.", nameof(name));
+
+            Name = name;
         }
     }
 }

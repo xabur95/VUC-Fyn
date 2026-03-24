@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+using System.Reflection.Metadata;
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
@@ -6,7 +7,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
     /// Author: Mikkel
     /// Represents a Subject such as: Danish, math, biology.
     /// </summary>
-    public class Subject
+    public class Subject : Entity
     {
         //Fields
         private readonly List<Topic> _topics = [];
@@ -27,9 +28,11 @@ namespace Semesterprojekt1PBA.Domain.Entities
            
 
         //Constructors
+        protected Subject () { } // for EF Core
+
         private Subject(string name, Level level, List<Topic> topics)
         {
-            Name = name;
+            SetName(name);
             Level = level;
             _topics = topics;
         }
@@ -47,17 +50,37 @@ namespace Semesterprojekt1PBA.Domain.Entities
 
         public void AddTopic(Topic topic)
         {
+            AssureUniqueTopic(topic);
             _topics.Add(topic);
         }
 
-        protected void AssureTeacher(User teacher)
+        public void DeleteTopic(Topic topic)
         {
-            //Todo: Throw exception if not teacher
+            _topics.Remove(topic);
         }
 
-        protected void AssureUnique(List<Subject> subjects, Subject subject)
+        //This should probably be in it's own service since it's useful for several entities.
+        protected void AssureUserIsAuthorised(User user)
         {
-            //ToDo assure List is consiting of unique objects. else throw execption.
+            if (user is not Teacher and not Admin)
+                throw new UnauthorizedAccessException("User most be either a teacher or an admin");
+        }
+
+        private void SetName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Subject name cannot be empty.", nameof(name));
+
+            Name = name;
+        }
+
+        private void AssureUniqueTopic(Topic newTopic)
+        {
+            if (_topics.Any(t =>
+                t.Name.Equals(newTopic.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new ArgumentException("Topic already exists in this subject.");
+            }
         }
     }
 }
