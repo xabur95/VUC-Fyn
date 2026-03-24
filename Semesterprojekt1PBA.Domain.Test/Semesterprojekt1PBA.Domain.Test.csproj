@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Semesterprojekt1PBA.Domain\Semesterprojekt1PBA.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClassData\" />
+  </ItemGroup>
+
 </Project>
