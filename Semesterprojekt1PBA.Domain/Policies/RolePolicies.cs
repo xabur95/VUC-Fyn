@@ -20,23 +20,14 @@ public class RolePolicies
     {
         public void Validate(RoleType newRole, IEnumerable<UserRole> currentRoles)
         {
-            if (newRole is not RoleType.Teacher and not RoleType.SchoolAdmin)
+            if (newRole is not RoleType.Teacher and not RoleType.Admin)
             {
                 throw new InvalidOperationException("Invalid role type for Teacher. Expected Teacher or Admin.");
             }
         }
     }
 
-    public class SchoolAdminPolicy : IRolePolicy
-    {
-        public void Validate(RoleType newRole, IEnumerable<UserRole> currentRoles)
-        {
-            if (newRole != RoleType.SchoolAdmin)
-                throw new InvalidOperationException("Invalid role type for School Admin.");
-        }
-    }
-
-    public class AdminRolePolicy : IRolePolicy
+   public class AdminRolePolicy : IRolePolicy
     {
         public void Validate(RoleType newRole, IEnumerable<UserRole> currentRoles)
         {

@@ -10,6 +10,5 @@ public enum RoleType
 {
     Student,
     Teacher,
-    Admin,
-    SchoolAdmin
+    Admin
 }

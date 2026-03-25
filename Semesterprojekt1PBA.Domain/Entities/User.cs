@@ -1,22 +1,21 @@
 ﻿using Semesterprojekt1PBA.Domain.Interfaces;
-using Semesterprojekt1PBA.Domain.Policies;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
+
 /// <summary>
-/// Author: Michael
-/// Repræsenterer en bruger med identitet, kontaktoplysninger og tildelt rolle.
-/// Userklassen indkapsler brugerrelaterede data og funktionalitet til håndtering af roller. 
-/// Den giver metoder til at tildele og fjerne roller samt til at opdatere brugeroplysninger. 
-/// Roller administreres i henhold til den angivne rollepolitik, hvilket sikrer, at kun gyldige 
-/// rolletildelinger er tilladt. Instanser af User oprettes typisk ved hjælp af statiske 
-/// fabriksmetoder, som sikrer korrekt initialisering og rolletildeling.
+///     Author: Michael
+///     Repræsenterer en bruger med identitet, kontaktoplysninger og tildelt rolle.
+///     Class RolePolicy indkapsler brugerrelaterede regler til håndtering af roller.
+///     User  class giver metoder til at tildele og fjerne roller samt til at opdatere brugeroplysninger.
+///     Roller administreres i henhold til den angivne rollepolitik, hvilket sikrer, at kun gyldige
+///     rolletildelinger er tilladt. Instanser af User oprettes typisk ved hjælp af statiske
+///     fabriksmetoder, som sikrer korrekt initialisering og rolletildeling.
 /// </summary>
 public class User : Entity
 {
-    private readonly List<UserRole> _roles = [];
-
     private readonly IRolePolicy _rolePolicy;
+    private readonly List<UserRole> _roles = [];
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
     public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
@@ -40,6 +39,11 @@ public class User : Entity
 
     public void RevokeRole(UserRole role)
     {
+        if (!_roles.Contains(role))
+        {
+            throw new InvalidOperationException($"User does not have the role, cannot remove: {role.RoleType}");
+        }
+
         _roles.Remove(role);
     }
 
@@ -61,17 +65,6 @@ public class User : Entity
 
         user.AssignRole(new UserRole(roleType));
 
-        return user;
-    }
-    
-    public static User CreateTeacher(string firstName, string lastName, string email, bool isAlsoAdmin)
-    {
-        var user = Create(firstName, lastName, email, new RolePolicies.TeacherRolePolicy(),RoleType.Teacher);
-
-        if (isAlsoAdmin)
-        {
-            user.AssignRole(new UserRole(RoleType.SchoolAdmin));
-        }
         return user;
     }
 
