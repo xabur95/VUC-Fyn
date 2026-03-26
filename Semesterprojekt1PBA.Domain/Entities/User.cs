@@ -44,6 +44,11 @@ public class User : Entity
             throw new InvalidOperationException($"User does not have the role, cannot remove: {role.RoleType}");
         }
 
+        if (_roles.Count == 1 && _roles.Contains(role))
+        {
+            throw new InvalidOperationException($"User only have this single role, cannot remove: {role.RoleType}");
+        }
+
         _roles.Remove(role);
     }
 
