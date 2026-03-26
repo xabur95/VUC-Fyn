@@ -1,16 +1,16 @@
 ﻿using Semesterprojekt1PBA.Domain.Interfaces;
+using Semesterprojekt1PBA.Domain.Policies;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
-
 /// <summary>
-///     Author: Michael
-///     Repræsenterer en bruger med identitet, kontaktoplysninger og tildelt rolle.
-///     Class RolePolicy indkapsler brugerrelaterede regler til håndtering af roller.
-///     User  class giver metoder til at tildele og fjerne roller samt til at opdatere brugeroplysninger.
-///     Roller administreres i henhold til den angivne rollepolitik, hvilket sikrer, at kun gyldige
-///     rolletildelinger er tilladt. Instanser af User oprettes typisk ved hjælp af statiske
-///     fabriksmetoder, som sikrer korrekt initialisering og rolletildeling.
+/// Author: Michael
+/// Repræsenterer en bruger med identitet, kontaktoplysninger og tildelt rolle.
+/// Class RolePolicy indkapsler brugerrelaterede regler til håndtering af roller.
+/// User class giver metoder til at tildele og fjerne roller samt til at opdatere brugeroplysninger.
+/// Roller administreres i henhold til den angivne rollepolitik, hvilket sikrer, at kun gyldige
+/// rolletildelinger er tilladt. Instanser af User oprettes typisk ved hjælp af statiske
+/// fabriksmetoder, som sikrer korrekt initialisering og rolletildeling.
 /// </summary>
 public class User : Entity
 {
@@ -64,13 +64,30 @@ public class User : Entity
         _roles.Add(role);
     }
 
-    public static User Create(string firstName, string lastName, string email, IRolePolicy rolePolicy, RoleType roleType)
+    public static User Create(string firstName, string lastName, string email, RoleType roleType)
     {
-        var user = new User(firstName, lastName, email, rolePolicy);
+        var policy = CreatePolicy(roleType);
+
+        var user = new User(firstName, lastName, email, policy);
 
         user.AssignRole(new UserRole(roleType));
 
         return user;
+    }
+
+    private static IRolePolicy CreatePolicy(RoleType roleType)
+    {
+        switch (roleType)
+        {
+            case RoleType.Student:
+                return new RolePolicies.StudentRolePolicy();
+            case RoleType.Teacher:
+                return new RolePolicies.TeacherRolePolicy();
+            case RoleType.Admin:
+                return new RolePolicies.AdminRolePolicy();
+            default:
+                throw new ArgumentException($"Invalid role type: {roleType}");
+        }
     }
 
     public void Update(string firstName, string lastName, string email)

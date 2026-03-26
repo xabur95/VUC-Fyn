@@ -3,7 +3,7 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Policies;
 
-public class RolePolicies
+public static class RolePolicies
 {
     public class StudentRolePolicy : IRolePolicy
     {

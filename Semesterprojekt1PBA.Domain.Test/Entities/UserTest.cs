@@ -28,7 +28,7 @@ public class UserTest
     public void Create_ShouldInitializeUserCorrectly(string firstName, string lastName, string email)
     {
         // Act
-        var user = User.Create(firstName, lastName, email, new RolePolicies.StudentRolePolicy(), RoleType.Student);
+        var user = User.Create(firstName, lastName, email, RoleType.Student);
 
         // Assert
         Assert.Equal(firstName, user.Name.FirstName);
@@ -41,7 +41,7 @@ public class UserTest
     public void Create_WhenInvalidData_ThrowsArgumentException(string firstName, string lastName, string email)
     {
         // Act
-        var user = () => User.Create(firstName, lastName, email, new RolePolicies.AdminRolePolicy(), RoleType.Admin);
+        var user = () => User.Create(firstName, lastName, email, RoleType.Admin);
 
         // Assert
         Assert.Throws<ArgumentException>(user);
@@ -51,7 +51,7 @@ public class UserTest
     public void AssignRole_WhenRoleIsValid_ShouldAssignRole()
     {
         // Arrange
-        var user = User.Create("Carl", "Carlson", "carl@gmail.com", new RolePolicies.TeacherRolePolicy(),
+        var user = User.Create("Carl", "Carlson", "carl@gmail.com",
             RoleType.Teacher);
 
         // Act
@@ -65,7 +65,7 @@ public class UserTest
     public void AssignRole_WhenRoleIsAlreadyAssigned_ThrowsInvalidOperationException()
     {
         // Arrange
-        var user = User.Create("Apu", "Nahasapeemapetilon", "apu@indiangmail.com", new RolePolicies.StudentRolePolicy(),
+        var user = User.Create("Apu", "Nahasapeemapetilon", "apu@indiangmail.com",
             RoleType.Student);
 
         // Assert
@@ -76,7 +76,7 @@ public class UserTest
     public void RevokeRole_WhenRoleExists_RemovesRole()
     {
         // Arrange
-        var user = User.Create("Lenny", "Leonard", "leeeennnyyy@wallmart.com", new RolePolicies.TeacherRolePolicy(),
+        var user = User.Create("Lenny", "Leonard", "leeeennnyyy@wallmart.com",
             RoleType.Teacher);  
 
         // Act
@@ -90,7 +90,7 @@ public class UserTest
     public void RevokeRole_WhenRoleDoesNotExist_ThrowsException()
     {
         // Arrange
-        var user = User.Create("Maggie", "Simpson", "thababy@tahoo.com", new RolePolicies.StudentRolePolicy(), RoleType.Student);
+        var user = User.Create("Maggie", "Simpson", "thababy@tahoo.com", RoleType.Student);
         
         // Assert
         Assert.Throws<InvalidOperationException>(() => user.RevokeRole(new UserRole(RoleType.Admin)));
@@ -100,7 +100,7 @@ public class UserTest
     public void Update_ShouldChangeNameAndEmail()
     {
         // Arrange
-        var user = User.Create("Abe", "Simpson", "grandpa@yahoo.com", new RolePolicies.AdminRolePolicy(), RoleType.Admin);
+        var user = User.Create("Abe", "Simpson", "grandpa@yahoo.com", RoleType.Admin);
 
         // Act
         user.Update("Abraham", "Simpson", "hotDaddy@gmail.com");
