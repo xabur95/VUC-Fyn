@@ -24,10 +24,15 @@ public static class RolePolicies
             {
                 throw new InvalidOperationException("Invalid role type for Teacher. Expected Teacher or Admin.");
             }
+
+            if (newRole == RoleType.Admin && !currentRoles.Any(r => r.RoleType == RoleType.Teacher))
+            {
+                throw new InvalidOperationException("Admin role can only be assigned to a user who already has the Teacher role.");
+            }
         }
     }
 
-   public class AdminRolePolicy : IRolePolicy
+    public class AdminRolePolicy : IRolePolicy
     {
         public void Validate(RoleType newRole, IEnumerable<UserRole> currentRoles)
         {

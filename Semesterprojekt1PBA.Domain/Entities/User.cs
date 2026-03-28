@@ -14,7 +14,7 @@ namespace Semesterprojekt1PBA.Domain.Entities;
 /// </summary>
 public class User : Entity
 {
-    private readonly IRolePolicy _rolePolicy;
+    private readonly IRolePolicy _rolePolicy = null!;
     private readonly List<UserRole> _roles = [];
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
