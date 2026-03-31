@@ -9,7 +9,7 @@ namespace Semesterprojekt1PBA.Domain.Entities;
 /// Class RolePolicy indkapsler brugerrelaterede regler til håndtering af roller.
 /// User class giver metoder til at tildele og fjerne roller samt til at opdatere brugeroplysninger.
 /// Roller administreres i henhold til den angivne rollepolitik, hvilket sikrer, at kun gyldige
-/// rolletildelinger er tilladt. Instanser af User oprettes typisk ved hjælp af statiske
+/// rolletildelinger er tilladt. Instanser af User oprettes ved hjælp af statiske
 /// fabriksmetoder, som sikrer korrekt initialisering og rolletildeling.
 /// </summary>
 public class User : Entity

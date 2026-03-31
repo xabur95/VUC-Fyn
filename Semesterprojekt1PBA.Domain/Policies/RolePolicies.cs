@@ -2,6 +2,12 @@
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Policies;
+/// <summary>
+/// Author: Michael
+/// Indeholder rollepolitikker for Student, Teacher og Admin.
+/// /// Hver indlejret klasse implementerer IRolePolicy og håndhæver valideringsregler                                                              
+/// for at sikre gyldige rolletildelinger.
+/// </summary>
 
 public static class RolePolicies
 {

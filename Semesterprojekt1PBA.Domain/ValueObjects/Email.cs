@@ -4,10 +4,8 @@ namespace Semesterprojekt1PBA.Domain.ValueObjects;
 /// <summary>
 /// Author: Michael
 /// Repræsenterer en email adresse value object der sikrer værdierne er i et gyldigt email format.
-/// </summary>
-/// <remarks>
 /// Værdien valideres ved oprettelse for at sikre den overholder standard email mønster.
-/// </remarks>
+/// </summary>
 public record Email
 {
     public string Value { get; init; }

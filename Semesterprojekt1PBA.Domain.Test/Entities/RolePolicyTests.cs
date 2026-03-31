@@ -2,7 +2,12 @@
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities;
-
+/// <summary>
+/// Author: Michael
+/// Enhedstests for rollebaseret politikvalidering for student-, teacher- og   admin-roller.
+/// Verificerer at hver rollepolitik accepterer gyldige roller og kaster exceptions ved ugyldige roller,
+/// herunder scenarier hvor brugere har flere roller.
+/// </summary>  
 public class RolePolicyTests
 {
     [Fact]

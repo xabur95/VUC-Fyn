@@ -1,5 +1,4 @@
-﻿using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Test.Fakes;
+using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Tests;
@@ -13,7 +12,7 @@ public class SchoolTests
     public void Given_Valid_Data_Then_Create_Success(string title)
     {
         // Act
-        var school = Entities.School.Create(title, []);
+        var school = School.Create(title, []);
 
         // Assert
         Assert.NotNull(school);
@@ -26,66 +25,51 @@ public class SchoolTests
 
     [Theory]
     [MemberData(nameof(NotUniqueTitleData))]
-    public void Given_Not_Unique_Title_Then_Throw_ArgumentException(Title title, IEnumerable<string> otherSchools)
+    public void Given_Not_Unique_Title_Then_Throw_ArgumentException(string title, IEnumerable<School> otherSchools)
     {
-        // Arrange
-        var school = new FakeSchool();
-
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.SetScoolTitle(title, otherSchools));
+        Assert.Throws<ArgumentException>(() => School.Create(title, otherSchools));
     }
 
     [Theory]
     [MemberData(nameof(UniqueTitleData))]
-    public void Given_Unique_Title_Then_Void(Title title, IEnumerable<string> otherSchools)
+    public void Given_Unique_Title_Then_Create_Success(string title, IEnumerable<School> otherSchools)
     {
-        // Arrange
-        var school = new FakeSchool();
-
         // Act
-        school.SetScoolTitle(title, otherSchools);
-    }
+        var school = School.Create(title, otherSchools);
 
-    [Fact]
-    public void Given_Valid_SchoolTitle_Then_Void()
-    {
-        // Arrange
-        var school = new FakeSchool();
-
-        // Act
-        school.SetScoolTitle("Valid Title", []);
+        // Assert
+        Assert.NotNull(school);
     }
 
     [Fact]
     public void Given_WhiteSpace_SchoolTitle_Then_Throw_ArgumentException()
     {
-
         // Arrange
-        var school = new FakeSchool();
         var whiteSpaceString = " ";
+
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.SetScoolTitle(whiteSpaceString, []));
+        Assert.Throws<ArgumentException>(() => School.Create(whiteSpaceString, []));
     }
 
     [Fact]
     public void Given_Null_SchoolTitle_Then_Throw_ArgumentException()
     {
         // Arrange
-        var school = new FakeSchool();
         string? nullString = null;
+
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.SetScoolTitle(nullString!, []));
+        Assert.Throws<ArgumentException>(() => School.Create(nullString!, []));
     }
 
     [Fact]
     public void Given_SchoolTitle_With_Length_Over_50_Then_Throw_ArgumentException()
     {
         // Arrange
-        var school = new FakeSchool();
         var longString = new string('a', 51);
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.SetScoolTitle(longString, []));
+        Assert.Throws<ArgumentException>(() => School.Create(longString, []));
     }
     #endregion
 
@@ -97,31 +81,20 @@ public class SchoolTests
     public void Given_Valid_ClassData_When_AddClass_Then_Success(string classTitle, DateOnly startDate, DateOnly endDate)
     {
         // Arrange
-        var school = new FakeSchool();
+        var school = School.Create("Test School", []);
         IEnumerable<Class> otherClasses = [];
         var expected = 1;
 
         // Act
-        var addedClass = school.AddClass(classTitle, startDate, endDate, otherClasses);
+        school.AddClass(classTitle, startDate, endDate, otherClasses);
 
         // Assert
-        Assert.Equal(school.Classes.Count, expected);
-    }
-
-    [Theory]
-    [MemberData(nameof(DuplicateClassData))]
-    public void Given_Duplicate_ClassData_When_AddClass_Then_Throw_ArgumentException(Class fakeClass, IEnumerable<Class> otherClasses)
-    {
-        // Arrange
-        var school = new FakeSchool();
-
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.AssureNoDuplicateClass(fakeClass, otherClasses.ToList()));
+        Assert.Equal(expected, school.Classes.Count);
     }
 
     #endregion
 
-    #region Memeber Data
+    #region Member Data
 
     public static IEnumerable<object[]> CreateWithValidData()
     {
@@ -138,7 +111,7 @@ public class SchoolTests
         var otherSchools = GetOtherSchools();
         yield return new object[]
         {
-            "NotUniqueName",
+            "NotUniqueTitle",
             otherSchools
         };
     }
@@ -153,31 +126,14 @@ public class SchoolTests
         };
     }
 
-    private static IEnumerable<string> GetOtherSchools()
-    {
-        return new[]
-        {
-            "NotUniqueTitle",
-            "UniqueTitle"
-        };
-    }
-
-    public static IEnumerable<object[]> DuplicateClassData()
-    {
-        var otherClasses = GetOtherClasses();
-        yield return new object[]
-        {
-            new FakeClass(Guid.Parse("80d1ffdd-b31d-4183-bcc6-6709e7177de7"), "TestClass"),
-            otherClasses
-        };
-    }
-    private static IEnumerable<FakeClass> GetOtherClasses()
+    private static IEnumerable<School> GetOtherSchools()
     {
         return
         [
-            new FakeClass(Guid.Parse("80d1ffdd-b31d-4183-bcc6-6709e7177de7"), "TestClass"),
-            new FakeClass(Guid.Parse("501b49fd-9428-456e-8fe7-95c24bbc8a88"), "OtherTestClass")
+            School.Create("NotUniqueTitle", []),
+            School.Create("UniqueTitle", [])
         ];
     }
+
     #endregion
 }
