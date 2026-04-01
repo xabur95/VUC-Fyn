@@ -5,12 +5,9 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 namespace Semesterprojekt1PBA.Domain.Entities;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en bruger med identitet, kontaktoplysninger og tildelt rolle.
-/// Class RolePolicy indkapsler brugerrelaterede regler til håndtering af roller.
-/// User class giver metoder til at tildele og fjerne roller samt til at opdatere brugeroplysninger.
-/// Roller administreres i henhold til den angivne rollepolitik, hvilket sikrer, at kun gyldige
-/// rolletildelinger er tilladt. Instanser af User oprettes ved hjælp af statiske
-/// fabriksmetoder, som sikrer korrekt initialisering og rolletildeling.
+/// Repræsenterer en applikationsbruger med identitet, kontaktinformation, roller og aktiveringsstatus.
+/// Håndterer rolletildeling og -fjernelse med validering via role policy. 
+/// Instanser oprettes via static Create metode som sikrer initial rolletildeling.
 /// </summary>
 public class User : Entity
 {
@@ -19,6 +16,8 @@ public class User : Entity
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
     public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
+
+    public bool IsActive { get; private set; } = true;
 
     protected User()
     {
@@ -97,5 +96,10 @@ public class User : Entity
 
         var userEmail = new Email(email);
         Email = userEmail;
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
     }
 }

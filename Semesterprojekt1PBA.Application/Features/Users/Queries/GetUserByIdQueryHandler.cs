@@ -8,7 +8,6 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Queries;
 /// Håndterer forespørgsler om at hente en bruger via ID.
 /// Returnerer brugerens oplysninger.
 /// </summary>
-
 public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, GetUserByIdResponse>
 {
     private readonly IUserRepository _userRepository;
