@@ -26,7 +26,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
             SetName(name);
         }
 
-        public Topic Create(string name)
+        public static Topic Create(string name)
         {
             return new Topic(name);
         }
