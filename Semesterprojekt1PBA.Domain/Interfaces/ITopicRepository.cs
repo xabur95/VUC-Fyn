@@ -8,7 +8,7 @@ namespace Semesterprojekt1PBA.Domain.Interfaces
     public interface ITopicRepository
     {
         Task AddAsync(Topic topic);
-        Task<IReadOnlyCollection<Topic>> GetTopicsBySubject(Subject subject);
+        Task<IReadOnlyCollection<Topic>> GetTopicsBySubjectAsync(Subject subject);
         Task UpdateAsync(Topic topic);
     }
 }
