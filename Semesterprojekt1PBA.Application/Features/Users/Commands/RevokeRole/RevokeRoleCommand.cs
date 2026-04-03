@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.RevokeRole;
