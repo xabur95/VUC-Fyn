@@ -5,7 +5,11 @@ using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
-
+/// <summary>
+/// Author: Michael
+/// Unittests for CreateUserCommandHandler. Verificerer at handleren opretter en ny bruger korrekt
+/// og returnerer det forventede resultat. Mockede afhængigheder isolerer handleren fra IUserRepository.
+/// </summary>
 public class CreateUserCommandHandlerTests
 {
     [Fact]

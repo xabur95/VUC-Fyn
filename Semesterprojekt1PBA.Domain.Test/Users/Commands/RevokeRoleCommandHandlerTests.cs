@@ -6,7 +6,11 @@ using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
-
+/// <summary>
+/// Author: Michael
+/// Unittest for RevokeRoleCommandHandler. Verificerer at handleren opdaterer brugerroller korrekt
+/// og interagerer med IUserRepository som forventet. Mockede afhængigheder isolerer handleren fra eksterne lag.
+/// </summary>
 public class RevokeRoleCommandHandlerTests
 {
     [Fact]

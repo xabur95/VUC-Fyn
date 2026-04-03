@@ -6,7 +6,11 @@ using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
-
+/// <summary>
+/// Author: Michael
+/// Unittest for UpdateUserCommandHandler. Verificerer at handleren opdaterer brugerdata korrekt
+/// og interagerer med IUserRepository som forventet.
+/// </summary>
 public class UpdateUserCommandHandlerTests
 {
     [Fact]

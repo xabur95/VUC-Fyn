@@ -6,7 +6,11 @@ using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
-
+/// <summary>
+/// Author: Michael
+/// Unittests for DeactivateUserCommandHandler. Verificerer at handleren returnerer korrekt resultat
+/// og interagerer med IUserRepository som forventet ved deaktivering af en bruger.
+/// </summary>
 public class DeactivateUserCommandHandlerTests
 {
     [Fact]

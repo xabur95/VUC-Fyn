@@ -5,10 +5,8 @@ namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 /// <summary>
 /// Author: Michael
 /// Unit tests for Name class constructor validering med forskellige input scenarier.
-/// </summary>
-/// <remarks>
 /// Verificerer at validerings regler håndhæves og exceptions kastes ved ugyldigt input.
-/// </remarks>
+/// </summary>
 public class NameTests
 {
     [Fact]

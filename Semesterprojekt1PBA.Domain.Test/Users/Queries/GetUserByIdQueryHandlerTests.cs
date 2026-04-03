@@ -5,7 +5,11 @@ using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Queries;
-
+/// <summary>
+/// Author: Michael
+/// Enhedstests for GetUserByIdQueryHandler. Verificerer at handleren returnerer korrekt svar når en bruger findes,
+/// og kaster InvalidOperationException når brugeren ikke eksisterer. Mockede afhængigheder isolerer handleren fra eksterne lag.
+/// </summary>
 public class GetUserByIdQueryHandlerTests
 {
     [Fact]
@@ -40,10 +44,4 @@ public class GetUserByIdQueryHandlerTests
         // Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => getUserByIdQueryHandler.Handle(query, CancellationToken.None));
     }
-
-
-
-
-
-
 }
