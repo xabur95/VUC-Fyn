@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
+﻿using System.Data;
 
-namespace Semesterprojekt1PBA.Application.Interfaces
+namespace Semesterprojekt1PBA.Application.Interfaces;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task CommitAsync();
-        Task RollbackAsync();
-        Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Serializable);
-    }
+    Task CommitAsync();
+    Task RollbackAsync();
+    Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Serializable);
 }

@@ -21,6 +21,11 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, GetUser
     {
         var user = await _userRepository.GetByIdAsync(request.Id);
 
+        if (user == null)
+        {
+            throw new InvalidOperationException($"User with id {request.Id} was not   found");
+        }
+
         var result = new GetUserByIdResponse
         {
             Id = user.Id,
