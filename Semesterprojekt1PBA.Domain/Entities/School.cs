@@ -2,7 +2,10 @@
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
-    // Xabur
+    /// <summary>
+    /// Author: Xabur
+    /// Represents a School 
+    /// </summary>
     public class School : Entity
     {
         #region Properties
@@ -54,6 +57,11 @@ namespace Semesterprojekt1PBA.Domain.Entities
             return new School(title, classes, otherSchools);
         }
 
+       public void UpdateTitle(Title title, IEnumerable<School> otherSchools)
+        {
+            var otherSchoolTitles = otherSchools.Select(s => s.Title.Value);
+            Title = Title.Create(title, otherSchoolTitles);
+        }
         #endregion
 
         #region Relational Methods

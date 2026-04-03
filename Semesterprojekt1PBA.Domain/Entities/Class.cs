@@ -76,8 +76,7 @@ public class Class : Entity
         _subjects.Add(subject);
     }
 
-    //TODO: Dette skal vi kigge på når user og rollerne er done
-    // AssureCorrectRole kaldet er opdateret
+    
     public void AddStudent(User student)
     {
         AssureCorrectRole(RoleType.Student, student);
@@ -85,8 +84,6 @@ public class Class : Entity
         _students.Add(student);
     }
 
-    //TODO: Dette skal vi kigge på når user og rollerne er done
-    // AssureCorrectRole er opdateret
     public void AddTeacher(User teacher)
     {
         AssureCorrectRole(RoleType.Teacher, teacher);
@@ -103,21 +100,19 @@ public class Class : Entity
             throw new ArgumentException(
                 "This teacher/student has already been added to this Class.");
     }
-    
+
     protected void AssureNoDuplicateSubject(Subject subjectToCreate, List<Subject> subjects)
     {
-        if (subjects.Any(c => c.Id == subjectToCreate.Id))
+        if (subjects.Any(c => c.Name == subjectToCreate.Name))
             throw new ArgumentException("This subject has already been added to this class.");
     }
-   
 
-    // Korrekt AssureCorrectRole til typeCasting
-     protected void AssureCorrectRole(RoleType roleType, User user)
-      {
-    if (!user.Roles.Any(r => r.RoleType == roleType))
+    protected void AssureCorrectRole(RoleType roleType, User user)
     {
-        throw new InvalidOperationException("Invalid role type for Class.Expected Teacher or Student.");
-    }
+        if (!user.Roles.Any(r => r.RoleType == roleType))
+        {
+            throw new InvalidOperationException("Invalid role type for Class.Expected Teacher or Student.");
+        }
     }
 
     #endregion
