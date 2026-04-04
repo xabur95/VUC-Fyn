@@ -12,15 +12,22 @@ namespace Semesterprojekt1PBA.Domain.Test.Users.Queries;
 /// </summary>
 public class GetUserByIdQueryHandlerTests
 {
+    private readonly Mock<IUserRepository> _mockRepository;
+    private User _user;
+
+    public GetUserByIdQueryHandlerTests()
+    {
+        _mockRepository = new Mock<IUserRepository>();
+        _user = User.Create("Homer", "Simpson", "dooh@gmail.com", RoleType.Student);
+    }
+    
     [Fact]
     public async Task GetUserByIdQuery_WhenUserExists_ReturnsGetUserByIdResponse()
     {
         // Arrange
-        var mockRepository = new Mock<IUserRepository>();
-        var user = User.Create("Homer", "Simpson", "dooh@gmail.com", RoleType.Student);
-        mockRepository.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-        var getUserByIdQueryHandler = new GetUserByIdQueryHandler(mockRepository.Object);
-        var query = new GetUserByIdQuery { Id = user.Id };
+        _mockRepository.Setup(r => r.GetByIdAsync(_user.Id)).ReturnsAsync(_user);
+        var getUserByIdQueryHandler = new GetUserByIdQueryHandler(_mockRepository.Object);
+        var query = new GetUserByIdQuery { Id = _user.Id };
 
         // Act
         var result = await getUserByIdQueryHandler.Handle(query, CancellationToken.None);
@@ -36,9 +43,8 @@ public class GetUserByIdQueryHandlerTests
     public async Task GetUserByIdQuery_WhenUserDoNotExists_ThrowsInvalidOperationException()
     {
         // Arrange
-        var mockRepository = new Mock<IUserRepository>();
-        mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))!.ReturnsAsync((User?)null);
-        var getUserByIdQueryHandler = new GetUserByIdQueryHandler(mockRepository.Object);
+        _mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))!.ReturnsAsync((User?)null);
+        var getUserByIdQueryHandler = new GetUserByIdQueryHandler(_mockRepository.Object);
         var query = new GetUserByIdQuery { Id = Guid.NewGuid() };
         
         // Assert
