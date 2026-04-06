@@ -1,26 +1,28 @@
 ﻿using Moq;
-using Semesterprojekt1PBA.Application.Features.Users.Queries;
+using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Queries;
+
 /// <summary>
-/// Author: Michael
-/// Enhedstests for GetUserByIdQueryHandler. Verificerer at handleren returnerer korrekt svar når en bruger findes,
-/// og kaster InvalidOperationException når brugeren ikke eksisterer. Mockede afhængigheder isolerer handleren fra eksterne lag.
+///     Author: Michael
+///     Enhedstests for GetUserByIdQueryHandler. Verificerer at handleren returnerer korrekt svar når en bruger findes,
+///     og kaster InvalidOperationException når brugeren ikke eksisterer. Mockede afhængigheder isolerer handleren fra
+///     eksterne lag.
 /// </summary>
 public class GetUserByIdQueryHandlerTests
 {
     private readonly Mock<IUserRepository> _mockRepository;
-    private User _user;
+    private readonly User _user;
 
     public GetUserByIdQueryHandlerTests()
     {
         _mockRepository = new Mock<IUserRepository>();
         _user = User.Create("Homer", "Simpson", "dooh@gmail.com", RoleType.Student);
     }
-    
+
     [Fact]
     public async Task GetUserByIdQuery_WhenUserExists_ReturnsGetUserByIdResponse()
     {
@@ -33,9 +35,9 @@ public class GetUserByIdQueryHandlerTests
         var result = await getUserByIdQueryHandler.Handle(query, CancellationToken.None);
 
         // Assert
-        Assert.Equal("Homer",result.FirstName);
-        Assert.Equal("Simpson",result.LastName);
-        Assert.Equal("dooh@gmail.com",result.Email);
+        Assert.Equal("Homer", result.FirstName);
+        Assert.Equal("Simpson", result.LastName);
+        Assert.Equal("dooh@gmail.com", result.Email);
         Assert.Contains(result.Roles, r => r == RoleType.Student);
     }
 
@@ -46,8 +48,9 @@ public class GetUserByIdQueryHandlerTests
         _mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))!.ReturnsAsync((User?)null);
         var getUserByIdQueryHandler = new GetUserByIdQueryHandler(_mockRepository.Object);
         var query = new GetUserByIdQuery { Id = Guid.NewGuid() };
-        
+
         // Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => getUserByIdQueryHandler.Handle(query, CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            getUserByIdQueryHandler.Handle(query, CancellationToken.None));
     }
 }

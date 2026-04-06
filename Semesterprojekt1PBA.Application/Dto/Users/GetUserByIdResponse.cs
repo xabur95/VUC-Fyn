@@ -6,7 +6,6 @@ namespace Semesterprojekt1PBA.Application.Dto.Users;
 /// Repræsenterer data for en bruger hentet via ID.
 /// Indeholder grundlæggende brugeroplysninger og roller.
 /// </summary>
-
 public record GetUserByIdResponse
 {
     public Guid Id { get; init; }

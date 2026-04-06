@@ -2,7 +2,7 @@
 using Semesterprojekt1PBA.Application.Dto.Users;
 using Semesterprojekt1PBA.Domain.Interfaces;
 
-namespace Semesterprojekt1PBA.Application.Features.Users.Queries;
+namespace Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;
 /// <summary>
 /// Author: MIchael
 /// Håndterer forespørgsler om at hente en bruger via ID.
