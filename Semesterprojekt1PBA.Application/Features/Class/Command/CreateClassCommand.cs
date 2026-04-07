@@ -1,9 +1,9 @@
 ﻿using FluentResults;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Semesterprojekt1PBA.Application.Abstractions;
 using Semesterprojekt1PBA.Application.Dto.Class.Command;
 using Semesterprojekt1PBA.Application.Interfaces;
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
 using System;
