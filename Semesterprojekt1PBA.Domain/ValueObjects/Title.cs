@@ -1,4 +1,6 @@
-﻿namespace Semesterprojekt1PBA.Domain.ValueObjects
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+
+namespace Semesterprojekt1PBA.Domain.ValueObjects
 {
     public record Title
     {
@@ -21,17 +23,17 @@
         private static void AssureIsUniqueTitle(IEnumerable<string> otherTitles, string title)
         {
             if (otherTitles.Any(otherTitle => otherTitle == title))
-                throw new ArgumentException($"The title '{title}' already exists.");
+                throw new ErrorException($"The title '{title}' already exists.");
         }
 
 
         private void Validate(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("The title can't be null or whitespace.", nameof(value));
+                throw new ErrorException("The title can't be null or whitespace.", nameof(value));
 
             if (value.Length > 50)
-                throw new ArgumentException("The title has a max length of 50 characters", nameof(value));
+                throw new ErrorException("The title has a max length of 50 characters", nameof(value));
         }
 
         public static implicit operator string(Title value)
