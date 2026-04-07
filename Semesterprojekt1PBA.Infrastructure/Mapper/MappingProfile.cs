@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Semesterprojekt1PBA.Application.Dto.School;
+using Semesterprojekt1PBA.Application.Dto.School.Query;
 using Semesterprojekt1PBA.Domain.Entities;
 using System;
 using System.Collections.Generic;

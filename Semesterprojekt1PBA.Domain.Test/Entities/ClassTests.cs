@@ -1,8 +1,9 @@
+using Semesterprojekt1PBA.Domain.Entities;
+using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities
 {
@@ -27,7 +28,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         }
 
         [Fact]
-        public void Create_WithStartInPast_ThrowsArgumentException()
+        public void Create_WithStartInPast_ThrowsErrorException()
         {
             // Arrange
             var title = "Past Class";
@@ -35,11 +36,11 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
             var end = DateOnly.FromDateTime(DateTime.Now.AddDays(2));
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => Class.Create(title, start, end, Array.Empty<Class>()));
+            Assert.Throws<ErrorException>(() => Class.Create(title, start, end, Array.Empty<Class>()));
         }
 
         [Fact]
-        public void Create_WithStartEqualToEnd_ThrowsArgumentException()
+        public void Create_WithStartEqualToEnd_ThrowsErrorException()
         {
             // Arrange
             var title = "SameDate";
@@ -47,7 +48,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
             var end = start;
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => Class.Create(title, start, end, Array.Empty<Class>()));
+            Assert.Throws<ErrorException>(() => Class.Create(title, start, end, Array.Empty<Class>()));
         }
 
         //TODO: when subject is Implemented fully implement this test
@@ -78,7 +79,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
             cls.AddSubject(subject);
 
             // Assert duplicate throws
-            Assert.Throws<ArgumentException>(() => cls.AddSubject(Subject.Create("History", Level.B)));
+            Assert.Throws<ErrorException>(() => cls.AddSubject(Subject.Create("History", Level.B)));
         }
 
         */
@@ -99,18 +100,18 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         }
 
         [Fact]
-        public void AddStudent_WithWrongRole_ThrowsInvalidOperationException()
+        public void AddStudent_WithWrongRole_ThrowsErrorException()
         {
             // Arrange
             var cls = Class.Create("S4", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
             var teacherUser = User.Create("Teach", "Er", "t@example.com", RoleType.Teacher);
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => cls.AddStudent(teacherUser));
+            Assert.Throws<ErrorException>(() => cls.AddStudent(teacherUser));
         }
 
         [Fact]
-        public void AddStudent_Duplicate_ThrowsArgumentException()
+        public void AddStudent_Duplicate_ThrowsErrorException()
         {
             // Arrange
             var cls = Class.Create("S5", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
@@ -118,7 +119,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
             cls.AddStudent(student);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => cls.AddStudent(student));
+            Assert.Throws<ErrorException>(() => cls.AddStudent(student));
         }
 
         [Fact]
@@ -137,18 +138,18 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         }
 
         [Fact]
-        public void AddTeacher_WithWrongRole_ThrowsInvalidOperationException()
+        public void AddTeacher_WithWrongRole_ThrowsErrorException()
         {
             // Arrange
             var cls = Class.Create("S7", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
             var student = User.Create("Not", "Teacher", "nont@example.com", RoleType.Student);
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => cls.AddTeacher(student));
+            Assert.Throws<ErrorException>(() => cls.AddTeacher(student));
         }
 
         [Fact]
-        public void AddTeacher_Duplicate_ThrowsArgumentException()
+        public void AddTeacher_Duplicate_ThrowsErrorException()
         {
             // Arrange
             var cls = Class.Create("S8", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
@@ -156,7 +157,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
             cls.AddTeacher(teacher);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => cls.AddTeacher(teacher));
+            Assert.Throws<ErrorException>(() => cls.AddTeacher(teacher));
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using Semesterprojekt1PBA.Domain.Entities;
+using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjects;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities;
 
@@ -27,13 +28,13 @@ public class SchoolTests
 
     [Theory]
     [MemberData(nameof(NotUniqueTitleData))]
-    public void Given_Not_Unique_Title_Then_Throw_ArgumentException(string title, IEnumerable<School> otherSchools)
+    public void Given_Not_Unique_Title_Then_Throw_ErrorException(string title, IEnumerable<School> otherSchools)
     {
         // Arrange
         var school =  School.Create("Existing", Array.Empty<School>());
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.UpdateTitle(title, otherSchools));
+        Assert.Throws<ErrorException>(() => school.UpdateTitle(title, otherSchools));
     }
 
     [Theory]
@@ -58,35 +59,35 @@ public class SchoolTests
     }
 
     [Fact]
-    public void Given_WhiteSpace_SchoolTitle_Then_Throw_ArgumentException()
+    public void Given_WhiteSpace_SchoolTitle_Then_Throw_ErrorException()
     {
 
         // Arrange
         var school = School.Create("Existing", Array.Empty<School>());
         var whiteSpaceString = " ";
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.UpdateTitle(whiteSpaceString, Array.Empty<School>()));
+        Assert.Throws<ErrorException>(() => school.UpdateTitle(whiteSpaceString, Array.Empty<School>()));
     }
 
     [Fact]
-    public void Given_Null_SchoolTitle_Then_Throw_ArgumentException()
+    public void Given_Null_SchoolTitle_Then_Throw_ErrorException()
     {
         // Arrange
         var school = School.Create("Existing", Array.Empty<School>());
         string? nullString = null;
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.UpdateTitle(nullString!, Array.Empty<School>()));
+        Assert.Throws<ErrorException>(() => school.UpdateTitle(nullString!, Array.Empty<School>()));
     }
 
     [Fact]
-    public void Given_SchoolTitle_With_Length_Over_50_Then_Throw_ArgumentException()
+    public void Given_SchoolTitle_With_Length_Over_50_Then_Throw_ErrorException()
     {
         // Arrange
         var school = School.Create("Existing", Array.Empty<School>());
         var longString = new string('a', 51);
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => school.UpdateTitle(longString, Array.Empty<School>()));
+        Assert.Throws<ErrorException>(() => school.UpdateTitle(longString, Array.Empty<School>()));
     }
     #endregion
 

@@ -1,4 +1,5 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
 
@@ -97,21 +98,21 @@ public class Class : Entity
     protected void AssureNoDuplicateUser(User user, List<User> otherUsers)
     {
         if (otherUsers.Any(u => u.Id == user.Id))
-            throw new ArgumentException(
+            throw new ErrorException(
                 "This teacher/student has already been added to this Class.");
     }
 
     protected void AssureNoDuplicateSubject(Subject subjectToCreate, List<Subject> subjects)
     {
         if (subjects.Any(c => c.Name == subjectToCreate.Name))
-            throw new ArgumentException("This subject has already been added to this class.");
+            throw new ErrorException("This subject has already been added to this class.");
     }
 
     protected void AssureCorrectRole(RoleType roleType, User user)
     {
         if (!user.Roles.Any(r => r.RoleType == roleType))
         {
-            throw new InvalidOperationException("Invalid role type for Class.Expected Teacher or Student.");
+            throw new ErrorException("Invalid role type for Class.Expected Teacher or Student.");
         }
     }
 

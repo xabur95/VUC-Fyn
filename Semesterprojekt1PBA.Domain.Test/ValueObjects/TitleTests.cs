@@ -1,6 +1,7 @@
+using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 using System;
 using Xunit;
-using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects
 {
@@ -18,33 +19,34 @@ namespace Semesterprojekt1PBA.Domain.Test.ValueObjects
         }
 
         [Fact]
-        public void Create_WithDuplicateTitle_ThrowsArgumentException()
+        public void Create_WithDuplicateTitle_ThrowsErrorException()
         {
             // Arrange
             var otherTitles = new[] { "DupTitle", "Other" };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => Title.Create("DupTitle", otherTitles));
+            Assert.Throws<ErrorException>(() => Title.Create("DupTitle", otherTitles));
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
         [InlineData("   ")]
-        public void Create_WithNullOrWhitespace_ThrowsArgumentException(string value)
+        public void Create_WithNullOrWhitespace_ThrowsErrorException(string value)
         {
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => Title.Create(value!, Array.Empty<string>()));
+            Assert.Throws<ErrorException>(() => Title.Create(value!, Array.Empty<string>()));
         }
 
+
         [Fact]
-        public void Create_WithTooLong_ThrowsArgumentException()
+        public void Create_WithTooLong_ThrowsErrorException()
         {
             // Arrange
             var longString = new string('a', 51);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => Title.Create(longString, Array.Empty<string>()));
+            Assert.Throws<ErrorException>(() => Title.Create(longString, Array.Empty<string>()));
         }
 
         [Fact]

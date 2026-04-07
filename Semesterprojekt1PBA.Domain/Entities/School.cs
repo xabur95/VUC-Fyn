@@ -1,4 +1,5 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
@@ -99,14 +100,14 @@ namespace Semesterprojekt1PBA.Domain.Entities
         protected void AssureNoDuplicateUser(User admin, List<User> schoolResponsibles)
         {
             if (schoolResponsibles.Any(u => u.Id == admin.Id))
-                throw new ArgumentException(
+                throw new ErrorException(
                     "This admin has already been added to this School as one of its responsibles.");
         }
 
         protected void AssureNoDuplicateClass(Class classToCreate, List<Class> classes)
         {
             if (classes.Any(c => c.Id == classToCreate.Id))
-                throw new ArgumentException("This class has already been added to this School.");
+                throw new ErrorException("This class has already been added to this School.");
         }
 
         // TODO: Dette skal vi kigge på når user og rollerne er done
