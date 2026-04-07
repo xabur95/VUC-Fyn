@@ -17,7 +17,3 @@ namespace Semesterprojekt1PBA.Presentation.Extenstions
 }
 
 
-Jeg skal lave:
-    Class Queries;
-Endpoints og en måde man kan kommunikere med applikationen ude fra 
-    
