@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;
+using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
@@ -7,10 +8,9 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 namespace Semesterprojekt1PBA.Domain.Test.Users.Queries;
 
 /// <summary>
-///     Author: Michael
-///     Enhedstests for GetUserByIdQueryHandler. Verificerer at handleren returnerer korrekt svar når en bruger findes,
-///     og kaster InvalidOperationException når brugeren ikke eksisterer. Mockede afhængigheder isolerer handleren fra
-///     eksterne lag.
+/// Author: Michael
+/// Test for GetUserByIdQueryHandler. Verificerer at handleren returnerer korrekt svar når en bruger findes,
+/// og kaster InvalidOperationException når brugeren ikke eksisterer.
 /// </summary>
 public class GetUserByIdQueryHandlerTests
 {

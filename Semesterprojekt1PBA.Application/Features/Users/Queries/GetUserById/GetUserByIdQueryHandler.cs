@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Semesterprojekt1PBA.Application.Dto.Users;
+using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Interfaces;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;

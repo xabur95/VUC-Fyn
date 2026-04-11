@@ -1,7 +1,7 @@
 ﻿using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
-namespace Semesterprojekt1PBA.Domain.Interfaces;
+namespace Semesterprojekt1PBA.Application.Interfaces;
 /// <summary>
 /// Author: Michael
 /// Definerer metoder til at gemme og hente brugere fra en datakilde.
