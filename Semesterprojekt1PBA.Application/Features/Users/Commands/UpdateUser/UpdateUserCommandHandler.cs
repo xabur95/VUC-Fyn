@@ -1,31 +1,49 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Interfaces;
-using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
+using Semesterprojekt1PBA.Domain.Helpers;
+using System.Runtime.ConstrainedExecution;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.UpdateUser;
 /// <summary>
 /// Author: Michael
-/// Håndterer opdatering af en bruger ved at behandle en UpdateUserCommand.
-/// Henter brugeren via ID, anvender opdateringerne og gemmer ændringerne i repository'et.
+/// Handles the update of a user by processing an UpdateUserCommand.
+/// Retrieves the user by ID, applies the updates, and persists the changes via the repository.
 /// </summary>
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
  {
-     private readonly IUserRepository _userRepository;
+     private readonly ILogger _logger;
+    private readonly IUserRepository _userRepository;
 
-     public UpdateUserCommandHandler(IUserRepository userRepository)
+     public UpdateUserCommandHandler(IUserRepository userRepository, ILogger logger)
      {
-         _userRepository = userRepository;
+        _logger = logger;
+        _userRepository = userRepository;
      }
     
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        User user = await _userRepository.GetByIdAsync(request.Id);
+        try
+        {
+            User user = await _userRepository.GetByIdAsync(request.Id);
 
-        user.Update(request.FirstName, request.LastName, request.Email);
+            user.Update(request.FirstName, request.LastName, request.Email);
 
-        await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user);
 
-        return Unit.Value;
+            return Unit.Value;
+        }
+        catch (ErrorException ex)
+        {
+            _logger.LogError(ex, "Domain error occurred while updating the user. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}",
+                ex.ErrorCode, ex.UserMessage);
+            throw;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred while updating the user.");
+            throw;
+        }
     }
 }

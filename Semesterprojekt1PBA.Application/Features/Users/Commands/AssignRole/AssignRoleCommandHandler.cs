@@ -1,31 +1,50 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Interfaces;
-using Semesterprojekt1PBA.Domain.Interfaces;
+using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
+
 /// <summary>
 /// Author: Michael
-/// Håndterer kommandoen til at tildele en rolle til en bruger ved at opdatere brugerens rolleinformation i repository'et.
-/// Behandler AssignRoleCommand ved at hente brugeren, tildele rollen og gemme ændringerne.
+/// Handles the AssignRoleCommand by retrieving the user, assigning the role,
+/// and persisting the changes via the repository.
 /// </summary>
 public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, Unit>
 {
+    private readonly ILogger _logger;
     private readonly IUserRepository _userRepository;
 
-    public AssignRoleCommandHandler(IUserRepository userRepository)
+    public AssignRoleCommandHandler(IUserRepository userRepository, ILogger logger)
     {
         _userRepository = userRepository;
+        _logger = logger;
     }
 
     public async Task<Unit> Handle(AssignRoleCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
+        try
+        {
+            var user = await _userRepository.GetByIdAsync(request.Id);
 
-        user.AssignRole(new UserRole(request.RoleType));
+            user.AssignRole(new UserRole(request.RoleType));
 
-        await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user);
 
-        return Unit.Value;
+            return Unit.Value;
+        }
+        catch (ErrorException ex)
+        {
+            _logger.LogError(ex,
+                "Domain error occurred while assigning the role. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}",
+                ex.ErrorCode, ex.UserMessage);
+            throw;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred while assigning the role.");
+            throw;
+        }
     }
 }

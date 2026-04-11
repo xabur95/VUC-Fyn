@@ -1,16 +1,15 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
-
 /// <summary>
-///     Author: Michael
-///     Unittests for AssignRoleCommandHandler. Verificerer at handleren opdaterer brugerroller korrekt
-///     ved håndtering af AssignRoleCommand. Mockede afhængigheder isolerer handleren fra IUserRepository.
+/// Author: Michael
+/// Unit tests for AssignRoleCommandHandler. Verifies that the handler correctly updates user roles
+/// when handling an AssignRoleCommand. Mocked dependencies isolate the handler from IUserRepository.
 /// </summary>
 public class AssignRoleCommandHandlerTests
 {
@@ -19,10 +18,11 @@ public class AssignRoleCommandHandlerTests
     {
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
+        var mockLogger = new Mock<ILogger>();
         var user = User.Create("Homer", "Simpson", "dooh@gmail.com", RoleType.Teacher);
         mockRepository.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
         mockRepository.Setup(r => r.UpdateAsync(user));
-        var assignRoleCommandHandler = new AssignRoleCommandHandler(mockRepository.Object);
+        var assignRoleCommandHandler = new AssignRoleCommandHandler(mockRepository.Object, mockLogger.Object);
         var query = new AssignRoleCommand { Id = user.Id, RoleType = RoleType.Admin };
 
         // Act

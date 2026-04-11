@@ -1,13 +1,14 @@
-﻿using Semesterprojekt1PBA.Domain.Interfaces;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.Policies;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en applikationsbruger med identitet, kontaktinformation, roller og aktiveringsstatus.
-/// Håndterer rolletildeling og -fjernelse med validering via role policy. 
-/// Instanser oprettes via static Create metode som sikrer initial rolletildeling.
+/// Represents an application user with identity, contact information, roles, and activation status.
+/// Handles role assignment and removal with validation via role policy.
+/// Instances are created via the static Create method, which ensures initial role assignment.
 /// </summary>
 public class User : Entity
 {
@@ -47,12 +48,12 @@ public class User : Entity
     {
         if (!_roles.Contains(role))
         {
-            throw new InvalidOperationException($"User does not have the role, cannot remove: {role.RoleType}");
+            throw new ErrorException($"User does not have the role, cannot remove:  {role.RoleType}", errorCode: "ROLE_NOT_FOUND");
         }
 
         if (_roles.Count == 1 && _roles.Contains(role))
         {
-            throw new InvalidOperationException($"User only have this single role, cannot remove: {role.RoleType}");
+            throw new ErrorException($"User only have this single role,cannot remove: {role.RoleType}", errorCode: "ROLE_NOT_FOUND");
         }
 
         _roles.Remove(role);
@@ -64,7 +65,7 @@ public class User : Entity
 
         if (Roles.Contains(role))
         {
-            throw new InvalidOperationException($"User already has the role: {role.RoleType}");
+            throw new ErrorException($"User already has the role: {role.RoleType}", errorCode: "ROLE_ALREADY_ASSIGNED");
         }
 
         _roles.Add(role);
@@ -80,6 +81,7 @@ public class User : Entity
 
         return user;
     }
+
     public void Update(string firstName, string lastName, string email)
     {
         var name = new Name(firstName, lastName);
@@ -100,7 +102,7 @@ public class User : Entity
             case RoleType.Admin:
                 return new RolePolicies.AdminRolePolicy();
             default:
-                throw new ArgumentException($"Invalid role type: {roleType}");
+                throw new ErrorException($"Invalid role type: {roleType}", errorCode: "INVALID_ROLE_TYPE");
         }
     }
  

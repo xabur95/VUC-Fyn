@@ -1,10 +1,11 @@
-﻿using System.Text.RegularExpressions;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using System.Text.RegularExpressions;
 
 namespace Semesterprojekt1PBA.Domain.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en email adresse value object der sikrer værdierne er i et gyldigt email format.
-/// Værdien valideres ved oprettelse for at sikre den overholder standard email mønster.
+/// Represents an email address value object that ensures the value is in a valid email format.
+/// The value is validated upon creation to ensure it conforms to the standard email pattern.
 /// </summary>
 public record Email
 {
@@ -20,7 +21,7 @@ public record Email
     {
         if (!Regex.IsMatch(value, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
         {
-            throw new ArgumentException($"{paramName} must be a valid email address.");
+            throw new ErrorException($"{paramName} Must be valid email address.", errorCode: "INVALID_EMAIL");
         }
     }
 }

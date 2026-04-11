@@ -1,10 +1,11 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Unit tests for Email class der verificerer håndtering af gyldige og ugyldige email adresser.
-/// Tester at ArgumentException kastes for ugyldige emails og at gyldige emails oprettes succesfuldt.
+/// Unit tests for the Email class that verify handling of valid and invalid email addresses.
+/// Tests that an ArgumentException is thrown for invalid emails and that valid emails are created successfully.
 /// </summary>
 public class EmailTests
 {
@@ -28,7 +29,7 @@ public class EmailTests
         var act = () => new Email(email);
 
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Fact]
@@ -41,7 +42,7 @@ public class EmailTests
         var act = () => new Email(email);
 
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Theory]

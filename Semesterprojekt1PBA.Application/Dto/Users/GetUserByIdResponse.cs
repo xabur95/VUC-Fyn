@@ -3,8 +3,8 @@
 namespace Semesterprojekt1PBA.Application.Dto.Users;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer data for en bruger hentet via ID.
-/// Indeholder grundlæggende brugeroplysninger og roller.
+/// Represents data for a user retrieved by ID.
+/// Contains basic user information and roles.
 /// </summary>
 public record GetUserByIdResponse
 {

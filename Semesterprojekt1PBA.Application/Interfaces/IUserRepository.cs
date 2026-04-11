@@ -4,8 +4,8 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 namespace Semesterprojekt1PBA.Application.Interfaces;
 /// <summary>
 /// Author: Michael
-/// Definerer metoder til at gemme og hente brugere fra en datakilde.
-/// Implementeringer håndterer persistens og adgang til brugerdata.
+/// Defines methods for saving and retrieving users from a data source.
+/// Implementations handle persistence and access to user data.
 /// </summary>
 public interface IUserRepository
 {

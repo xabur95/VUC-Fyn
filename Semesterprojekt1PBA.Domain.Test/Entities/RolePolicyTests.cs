@@ -1,13 +1,14 @@
-﻿using Semesterprojekt1PBA.Domain.Policies;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.Policies;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities;
 /// <summary>
 /// Author: Michael
-/// Enhedstests for rollebaseret politikvalidering for student-, teacher- og   admin-roller.
-/// Verificerer at hver rollepolitik accepterer gyldige roller og kaster exceptions ved ugyldige roller,
-/// herunder scenarier hvor brugere har flere roller.
-/// </summary>  
+/// Unit tests for role-based policy validation for Student, Teacher, and Admin roles.
+/// Verifies that each role policy accepts valid roles and throws exceptions for invalid roles,
+/// including scenarios where users have multiple roles.
+/// </summary>
 public class RolePolicyTests
 {
     [Fact]
@@ -30,7 +31,7 @@ public class RolePolicyTests
         var policy = new RolePolicies.StudentRolePolicy();
 
         // Assert
-        Assert.Throws<InvalidOperationException>(() =>
+        Assert.Throws<ErrorException>(() =>
             policy.Validate(RoleType.Teacher, new List<UserRole>()));
     }
 
@@ -54,7 +55,7 @@ public class RolePolicyTests
         var policy = new RolePolicies.AdminRolePolicy();
 
         // Assert
-        Assert.Throws<InvalidOperationException>(() =>
+        Assert.Throws<ErrorException>(() =>
             policy.Validate(RoleType.Student, new List<UserRole>()));
     }
 
@@ -89,8 +90,7 @@ public class RolePolicyTests
         var policy = new RolePolicies.TeacherRolePolicy();
 
         // Assert
-        Assert.Throws<InvalidOperationException>(() =>
-            policy.Validate(RoleType.Student, new List<UserRole>()));
+        Assert.Throws<ErrorException>(() => policy.Validate(RoleType.Student, new List<UserRole>()));
     }
 
 }

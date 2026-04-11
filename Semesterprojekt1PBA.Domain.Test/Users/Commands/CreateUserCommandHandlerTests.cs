@@ -1,15 +1,15 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateUser;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 /// <summary>
 /// Author: Michael
-/// Unittests for CreateUserCommandHandler. Verificerer at handleren opretter en ny bruger korrekt
-/// og returnerer det forventede resultat. Mockede afhængigheder isolerer handleren fra IUserRepository.
+/// Unit tests for CreateUserCommandHandler. Verifies that the handler correctly creates a new user
+/// and returns the expected result. Mocked dependencies isolate the handler from IUserRepository.
 /// </summary>
 public class CreateUserCommandHandlerTests
 {
@@ -18,6 +18,8 @@ public class CreateUserCommandHandlerTests
     {
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
+        var mockLogger = new Mock<ILogger>();
+
         var command = new CreateUserCommand
         {
             FirstName = "Homer",
@@ -25,7 +27,7 @@ public class CreateUserCommandHandlerTests
             Email = "dooh@gmail.com",
             RoleType = RoleType.Student
         };
-        var createUserCommandHandler = new CreateUserCommandHandler(mockRepository.Object);
+        var createUserCommandHandler = new CreateUserCommandHandler(mockRepository.Object, mockLogger.Object);
 
         // Act
         var result = await createUserCommandHandler.Handle(command, CancellationToken.None);

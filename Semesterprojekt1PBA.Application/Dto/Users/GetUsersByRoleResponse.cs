@@ -1,7 +1,7 @@
 ﻿namespace Semesterprojekt1PBA.Application.Dto.Users;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en bruger returneret af en rolle-baseret query.
+/// Represents a user returned by a role-based query.
 /// </summary>
 public record GetUsersByRoleResponse
 { public Guid Id { get; init; }

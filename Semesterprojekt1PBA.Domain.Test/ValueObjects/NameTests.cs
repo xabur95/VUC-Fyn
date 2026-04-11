@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjects;
+using System.Collections;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Unit tests for Name class constructor validering med forskellige input scenarier.
-/// Verificerer at validerings regler håndhæves og exceptions kastes ved ugyldigt input.
+/// Unit tests for Name class constructor validation with various input scenarios.
+/// Verifies that validation rules are enforced and exceptions are thrown for invalid input.
 /// </summary>
 public class NameTests
 {
@@ -19,7 +20,7 @@ public class NameTests
         var act = () => new Name(firstName, "Hansen");
 
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Fact]
@@ -30,7 +31,7 @@ public class NameTests
         // Act
         var act = () => new Name(firstName, "Hansen");
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Theory]
@@ -41,7 +42,7 @@ public class NameTests
         // Act
         var act = () => new Name(firstName, "Hansen");
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
 
@@ -54,7 +55,7 @@ public class NameTests
         // Act
         var act = () => new Name("Peter", lastName);
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Fact]
@@ -65,7 +66,7 @@ public class NameTests
         // Act
         var act = () => new Name("Peter", lastName);
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Theory]
@@ -76,7 +77,7 @@ public class NameTests
         // Act
         var act = () => new Name("Peter", lastName);
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
 
@@ -88,7 +89,7 @@ public class NameTests
         var result = () => new Name(firstName, lastName);
 
         // Assert
-        Assert.Throws<ArgumentException>(result);
+        Assert.Throws<ErrorException>(result);
     }
 }
 

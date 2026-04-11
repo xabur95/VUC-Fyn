@@ -1,7 +1,11 @@
 ﻿using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
-
+/// <summary>
+/// Author: Michael
+/// Represents a student user with enrollment date and student number.
+/// Instantiate via the static Create method.
+/// </summary>
 public class Student : User
 {
     public string Knr { get; private set; } = null!;
