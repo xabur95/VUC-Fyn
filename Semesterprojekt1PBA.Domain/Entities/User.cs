@@ -35,6 +35,13 @@ public class User : Entity
 
         _rolePolicy = rolePolicy;
     }
+    protected User(string firstName, string lastName, string email, RoleType roleType)
+    {
+        Name = new Name(firstName, lastName);
+        Email = new Email(email);
+        Id = Guid.NewGuid();
+        _rolePolicy = CreatePolicy(roleType);
+    }
 
     public void RevokeRole(UserRole role)
     {
@@ -73,6 +80,14 @@ public class User : Entity
 
         return user;
     }
+    public void Update(string firstName, string lastName, string email)
+    {
+        var name = new Name(firstName, lastName);
+        Name = name;
+
+        var userEmail = new Email(email);
+        Email = userEmail;
+    }
 
     private static IRolePolicy CreatePolicy(RoleType roleType)
     {
@@ -88,16 +103,7 @@ public class User : Entity
                 throw new ArgumentException($"Invalid role type: {roleType}");
         }
     }
-
-    public void Update(string firstName, string lastName, string email)
-    {
-        var name = new Name(firstName, lastName);
-        Name = name;
-
-        var userEmail = new Email(email);
-        Email = userEmail;
-    }
-
+ 
     public void Deactivate()
     {
         IsActive = false;
