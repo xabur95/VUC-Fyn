@@ -1,4 +1,5 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 using System.Reflection.Metadata;
 
 namespace Semesterprojekt1PBA.Domain.Entities
@@ -59,17 +60,18 @@ namespace Semesterprojekt1PBA.Domain.Entities
             _topics.Remove(topic);
         }
 
+        /* 
         //This should probably be in it's own service since it's useful for several entities.
         protected void AssureUserIsAuthorised(User user)
         {
             if (user is not Teacher and not Admin)
                 throw new UnauthorizedAccessException("User most be either a teacher or an admin");
-        }
+        }*/
 
         private void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Subject name cannot be empty.", nameof(name));
+                throw new ErrorException("Subject name cannot be empty.", nameof(name));
 
             Name = name;
         }
@@ -79,7 +81,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
             if (_topics.Any(t =>
                 t.Name.Equals(newTopic.Name, StringComparison.OrdinalIgnoreCase)))
             {
-                throw new ArgumentException("Topic already exists in this subject.");
+                throw new ErrorException("Topic already exists in this subject.");
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -34,7 +35,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
         private void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Topic name cannot be empty.", nameof(name));
+                throw new ErrorException("Topic name cannot be empty.", nameof(name));
 
             Name = name;
         }
