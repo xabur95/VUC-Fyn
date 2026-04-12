@@ -1,29 +1,30 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using Semesterprojekt1PBA.Domain.Interfaces;
+using Semesterprojekt1PBA.Domain.Policies;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en abstrakt bruger og fælles funktioner for identitet og roller.
+/// Repræsenterer en bruger med identitet, kontaktoplysninger og tildelt rolle.
+/// Class RolePolicy indkapsler brugerrelaterede regler til håndtering af roller.
+/// User class giver metoder til at tildele og fjerne roller samt til at opdatere brugeroplysninger.
+/// Roller administreres i henhold til den angivne rollepolitik, hvilket sikrer, at kun gyldige
+/// rolletildelinger er tilladt. Instanser af User oprettes typisk ved hjælp af statiske
+/// fabriksmetoder, som sikrer korrekt initialisering og rolletildeling.
 /// </summary>
-/// <remarks>
-/// Klassen er base for bruger typer som student, lærer og Admin. Den indeholder fælles egenskaber og kræver at
-/// nedarvede klasser håndterer tildeling og fjernelse af roller. Metoder til rolle styring er beskyttede og bruges
-/// kun i nedarvede klasser.
-/// </remarks>
-public abstract class User : Entity
+public class User : Entity
 {
+    private readonly IRolePolicy _rolePolicy = null!;
+    private readonly List<UserRole> _roles = [];
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
-
-    private readonly List<UserRole> _roles = new();
     public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
-
 
     protected User()
     {
     }
 
-    protected User(string firstName, string lastName, string email)
+    private User(string firstName, string lastName, string email, IRolePolicy rolePolicy)
     {
         var name = new Name(firstName, lastName);
         Name = name;
@@ -32,10 +33,63 @@ public abstract class User : Entity
         Email = userEmail;
 
         Id = Guid.NewGuid();
+
+        _rolePolicy = rolePolicy;
     }
 
-    // Ligges her så det er tilgængeligt for alle nedarvede klasser
-    // Hvis de flyttes ud på entitet niveau er koden DRY, da både Student, Teacher og Admin skal have samme kode for at opdatere navn og email 
+    public void RevokeRole(UserRole role)
+    {
+        if (!_roles.Contains(role))
+        {
+            throw new InvalidOperationException($"User does not have the role, cannot remove: {role.RoleType}");
+        }
+
+        if (_roles.Count == 1 && _roles.Contains(role))
+        {
+            throw new InvalidOperationException($"User only have this single role, cannot remove: {role.RoleType}");
+        }
+
+        _roles.Remove(role);
+    }
+
+    public void AssignRole(UserRole role)
+    {
+        _rolePolicy.Validate(role.RoleType, Roles);
+
+        if (Roles.Contains(role))
+        {
+            throw new InvalidOperationException($"User already has the role: {role.RoleType}");
+        }
+
+        _roles.Add(role);
+    }
+
+    public static User Create(string firstName, string lastName, string email, RoleType roleType)
+    {
+        var policy = CreatePolicy(roleType);
+
+        var user = new User(firstName, lastName, email, policy);
+
+        user.AssignRole(new UserRole(roleType));
+
+        return user;
+    }
+
+    private static IRolePolicy CreatePolicy(RoleType roleType)
+    {
+        switch (roleType)
+        {
+            case RoleType.Student:
+                return new RolePolicies.StudentRolePolicy();
+            case RoleType.Teacher:
+                return new RolePolicies.TeacherRolePolicy();
+            case RoleType.Admin:
+                return new RolePolicies.AdminRolePolicy();
+            default:
+                throw new ArgumentException($"Invalid role type: {roleType}");
+        }
+    }
+
     public void Update(string firstName, string lastName, string email)
     {
         var name = new Name(firstName, lastName);
@@ -44,21 +98,4 @@ public abstract class User : Entity
         var userEmail = new Email(email);
         Email = userEmail;
     }
-
-    protected void AddRole(UserRole role)
-    {
-        _roles.Add(role);
-    }
-
-    protected void RemoveRole(UserRole role)
-    {
-        _roles.Remove(role);
-    }
-
-    // Tvinger at Student, Teacher og Admin skal opsætte regler for deres egen Rolle
-    public abstract void RevokeRole(UserRole role);
-
-
-    // Tvinger at Student, Teacher og Admin skal opsætte regler for deres egen Rolle
-    public abstract void AssignRole(UserRole role);
 }

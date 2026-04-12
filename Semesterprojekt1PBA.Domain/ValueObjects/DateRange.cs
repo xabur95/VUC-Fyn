@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -26,10 +27,10 @@ namespace Semesterprojekt1PBA.Domain.ValueObjects
         private void Validate(DateOnly start, DateOnly end, DateOnly now)
         {
             if (start >= end)
-                throw new ArgumentException("End date has to be after the start date.");
+                throw new ErrorException("End date has to be after the start date.");
 
             if (start <= now)
-                throw new ArgumentException("Start date has to be in the future.");
+                throw new ErrorException("Start date has to be in the future.");
         }
     }
 }
