@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Domain.Entities;
+using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.Interfaces;
 
 namespace Semesterprojekt1PBA.Application.Features.Topics.Commands.CreateTopic
@@ -7,19 +9,29 @@ namespace Semesterprojekt1PBA.Application.Features.Topics.Commands.CreateTopic
     public class CreateTopicCommandHandler : IRequestHandler<CreateTopicCommand, Guid>
     {
         private readonly ITopicRepository _topicRepository;
+        private readonly ILogger _logger;
 
-        public CreateTopicCommandHandler(ITopicRepository topicRepository)
+        public CreateTopicCommandHandler(ITopicRepository topicRepository, ILogger logger)
         {
             _topicRepository = topicRepository;
+            _logger = logger;
         }
 
         public async Task<Guid> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
         {
-            Topic topic = Topic.Create(request.Name);
-            
-            await _topicRepository.AddAsync(topic);
+            try
+            {
+                Topic topic = Topic.Create(request.Name);
 
-            return topic.Id;
+                await _topicRepository.AddAsync(topic);
+
+                return topic.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Domain error occurred while creating subject. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}", ex.ErrorCode, ex.UserMessage);
+                throw;
+            }
         }
     }
 }
