@@ -5,4 +5,5 @@
   <Project Path="Semesterprojekt1PBA.Domain.Test/Semesterprojekt1PBA.Domain.Test.csproj" />
   <Project Path="Semesterprojekt1PBA.Domain/Semesterprojekt1PBA.Domain.csproj" />
   <Project Path="Semesterprojekt1PBA.Infrastructure/Semesterprojekt1PBA.Infrastructure.csproj" />
+  <Project Path="Semesterprojekt1PBA.Presentation/Semesterprojekt1PBA.Presentation.csproj" Id="baaadb69-afc1-477e-ac30-8913fc1622c8" />
 </Solution>
