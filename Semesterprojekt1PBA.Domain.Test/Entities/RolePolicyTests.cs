@@ -25,7 +25,7 @@ public class RolePolicyTests
     }
 
     [Fact]
-    public void StudentPolicy_WhenInvalidRole_ThrowsInvalidOperationException()
+    public void StudentPolicy_WhenInvalidRole_ThrowsErrorException()
     {
         // Arrange
         var policy = new RolePolicies.StudentRolePolicy();
@@ -49,7 +49,7 @@ public class RolePolicyTests
     }
 
     [Fact]
-    public void AdminPolicy_WhenInvalidRole_ThrowsInvalidOperationException()
+    public void AdminPolicy_WhenInvalidRole_ThrowsErrorException()
     {
         // Arrange
         var policy = new RolePolicies.AdminRolePolicy();
@@ -84,7 +84,7 @@ public class RolePolicyTests
     }
 
     [Fact]
-    public void TeacherPolicy_WhenInvalidRole_ThrowsInvalidOperationException()
+    public void TeacherPolicy_WhenInvalidRole_ThrowsErrorException()
     {
         // Arrange
         var policy = new RolePolicies.TeacherRolePolicy();

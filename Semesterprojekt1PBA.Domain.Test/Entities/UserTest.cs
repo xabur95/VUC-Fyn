@@ -38,7 +38,7 @@ public class UserTest
 
     [Theory]
     [MemberData(nameof(InvalidUserData))]
-    public void Create_WhenInvalidData_ThrowsArgumentException(string firstName, string lastName, string email)
+    public void Create_WhenInvalidData_ThrowsErrorException(string firstName, string lastName, string email)
     {
         // Act
         var user = () => User.Create(firstName, lastName, email, RoleType.Admin);
@@ -61,7 +61,7 @@ public class UserTest
     }
 
     [Fact]
-    public void AssignRole_WhenRoleIsAlreadyAssigned_ThrowsInvalidOperationException()
+    public void AssignRole_WhenRoleIsAlreadyAssigned_ThrowsErrorException()
     {
         // Arrange
         var user = User.Create("Apu", "Nahasapeemapetilon", "apu@indiangmail.com",

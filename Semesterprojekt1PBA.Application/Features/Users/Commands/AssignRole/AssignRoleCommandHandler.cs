@@ -28,6 +28,11 @@ public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, Unit>
         {
             var user = await _userRepository.GetByIdAsync(request.Id);
 
+            if (user is null)
+            {
+                throw new ErrorException($"User with id '{request.Id}' was not found.", errorCode: "USER_NOT_FOUND");
+            }
+
             user.AssignRole(new UserRole(request.RoleType));
 
             await _userRepository.UpdateAsync(user);

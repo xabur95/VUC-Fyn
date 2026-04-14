@@ -23,7 +23,7 @@ public class EmailTests
     [InlineData("@gmail.com")]
     [InlineData("test@gmail")]
     [InlineData("testgmail.com")]
-    public void Constructor_WhenEmailIsInvalid_ThrowsArgumentException(string email)
+    public void Constructor_WhenEmailIsInvalid_ThrowsErrorException(string email)
     {
         // Act
         var act = () => new Email(email);
@@ -33,7 +33,7 @@ public class EmailTests
     }
 
     [Fact]
-    public void Constructor_WhenEmailIsEmpty_ThrowsArgumentException()
+    public void Constructor_WhenEmailIsEmpty_ThrowsErrorException()
     {
         // Arrange
         var email = "";

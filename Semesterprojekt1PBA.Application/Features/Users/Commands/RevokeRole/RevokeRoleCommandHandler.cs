@@ -28,6 +28,11 @@ public class RevokeRoleCommandHandler : IRequestHandler<RevokeRoleCommand, Unit>
         {
             User user = await _userRepository.GetByIdAsync(request.Id);
 
+            if (user is null)
+            {
+                throw new ErrorException($"User with id '{request.Id}' was not found.", errorCode: "USER_NOT_FOUND");
+            }
+
             user.RevokeRole(new UserRole(request.RoleType));
 
             await _userRepository.UpdateAsync(user);

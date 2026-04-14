@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Helpers;
 
@@ -25,6 +24,11 @@ public class DeactivateUserCommandHandler : IRequestHandler<DeactivateUserComman
         try
         {
             var user = await _userRepository.GetByIdAsync(request.Id);
+
+            if (user is null)
+            {
+                throw new ErrorException($"User with id '{request.Id}' was not found.", errorCode: "USER_NOT_FOUND");
+            }
 
             user.Deactivate();
 

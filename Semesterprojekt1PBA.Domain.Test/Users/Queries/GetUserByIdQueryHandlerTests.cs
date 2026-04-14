@@ -44,7 +44,7 @@ public class GetUserByIdQueryHandlerTests
     }
 
     [Fact]
-    public async Task GetUserByIdQuery_WhenUserDoNotExists_ThrowsInvalidOperationException()
+    public async Task GetUserByIdQuery_WhenUserDoNotExists_ThrowsErrorException()
     {
         // Arrange
         _mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))!.ReturnsAsync((User?)null);

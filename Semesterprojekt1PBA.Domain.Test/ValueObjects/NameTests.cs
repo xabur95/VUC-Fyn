@@ -11,7 +11,7 @@ namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 public class NameTests
 {
     [Fact]
-    public void Constructor_WhenFirstNameIsEmpty_ThrowsArgumentException()
+    public void Constructor_WhenFirstNameIsEmpty_ThrowsErrorException()
     {
         // Arange
         var firstName = "";
@@ -24,7 +24,7 @@ public class NameTests
     }
 
     [Fact]
-    public void Constructor_WhenFirstNameContainsNumbers_ThrowsArgumentException()
+    public void Constructor_WhenFirstNameContainsNumbers_ThrowsErrorException()
     {
         // Arange
         var firstName = "Peter123";
@@ -37,7 +37,7 @@ public class NameTests
     [Theory]
     [InlineData("P")]
     [InlineData("Pppppppppppppppppppppppppppppppppppppppppppp")]
-    public void Constructor_WhenFirstNameLengthIsOutOfArea_ThrowsArgumentException(string firstName)
+    public void Constructor_WhenFirstNameLengthIsOutOfArea_ThrowsErrorException(string firstName)
     {
         // Act
         var act = () => new Name(firstName, "Hansen");
@@ -47,7 +47,7 @@ public class NameTests
 
 
     [Fact]
-    public void Constructor_WhenLastNameIsEmpty_ThrowsArgumentException()
+    public void Constructor_WhenLastNameIsEmpty_ThrowsErrorException()
     {
         // Arange
         var lastName = "";
@@ -59,7 +59,7 @@ public class NameTests
     }
 
     [Fact]
-    public void Constructor_WhenLastNameContainsNumbers_ThrowsArgumentException()
+    public void Constructor_WhenLastNameContainsNumbers_ThrowsErrorException()
     {
         // Arange
         var lastName = "Hansen123";
@@ -72,7 +72,7 @@ public class NameTests
     [Theory]
     [InlineData("P")]
     [InlineData("Pppppppppppppppppppppppppppppppppppppppppppp")]
-    public void Constructor_WhenLastNameLengthIsOutOfArea_ThrowsArgumentException(string lastName)
+    public void Constructor_WhenLastNameLengthIsOutOfArea_ThrowsErrorException(string lastName)
     {
         // Act
         var act = () => new Name("Peter", lastName);
@@ -83,7 +83,7 @@ public class NameTests
 
     [Theory]
     [ClassData(typeof(InvalidNameData))]
-    public void Constructor_WhenInvalidNameIsUsed_ThrowsArgumentException(string firstName, string lastName)
+    public void Constructor_WhenInvalidNameIsUsed_ThrowsErrorException(string firstName, string lastName)
     {
         // Act
         var result = () => new Name(firstName, lastName);
