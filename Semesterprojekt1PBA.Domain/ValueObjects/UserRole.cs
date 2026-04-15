@@ -1,7 +1,7 @@
 ﻿namespace Semesterprojekt1PBA.Domain.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en brugers rolle i systemet.
+/// Represents a user's role in the system.
 /// </summary>
 public record UserRole
 {

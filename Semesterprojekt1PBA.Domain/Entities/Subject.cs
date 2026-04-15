@@ -2,7 +2,11 @@
 using Semesterprojekt1PBA.Domain.ValueObjects;
 using System.Reflection.Metadata;
 
-namespace Semesterprojekt1PBA.Domain.Entities
+/// <summary>
+///     Author: Mikkel
+///     Represents a Subject such as: Danish, math, biology.
+/// </summary>
+public class Subject : Entity
 {
     /// <summary>
     /// Author: Mikkel

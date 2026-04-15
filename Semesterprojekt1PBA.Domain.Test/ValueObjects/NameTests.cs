@@ -1,18 +1,17 @@
-﻿using System.Collections;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjects;
+using System.Collections;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Unit tests for Name class constructor validering med forskellige input scenarier.
+/// Unit tests for Name class constructor validation with various input scenarios.
+/// Verifies that validation rules are enforced and exceptions are thrown for invalid input.
 /// </summary>
-/// <remarks>
-/// Verificerer at validerings regler håndhæves og exceptions kastes ved ugyldigt input.
-/// </remarks>
 public class NameTests
 {
     [Fact]
-    public void Constructor_WhenFirstNameIsEmpty_ThrowsArgumentException()
+    public void Constructor_WhenFirstNameIsEmpty_ThrowsErrorException()
     {
         // Arange
         var firstName = "";
@@ -21,34 +20,34 @@ public class NameTests
         var act = () => new Name(firstName, "Hansen");
 
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Fact]
-    public void Constructor_WhenFirstNameContainsNumbers_ThrowsArgumentException()
+    public void Constructor_WhenFirstNameContainsNumbers_ThrowsErrorException()
     {
         // Arange
         var firstName = "Peter123";
         // Act
         var act = () => new Name(firstName, "Hansen");
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Theory]
     [InlineData("P")]
     [InlineData("Pppppppppppppppppppppppppppppppppppppppppppp")]
-    public void Constructor_WhenFirstNameLengthIsOutOfArea_ThrowsArgumentException(string firstName)
+    public void Constructor_WhenFirstNameLengthIsOutOfArea_ThrowsErrorException(string firstName)
     {
         // Act
         var act = () => new Name(firstName, "Hansen");
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
 
     [Fact]
-    public void Constructor_WhenLastNameIsEmpty_ThrowsArgumentException()
+    public void Constructor_WhenLastNameIsEmpty_ThrowsErrorException()
     {
         // Arange
         var lastName = "";
@@ -56,41 +55,41 @@ public class NameTests
         // Act
         var act = () => new Name("Peter", lastName);
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Fact]
-    public void Constructor_WhenLastNameContainsNumbers_ThrowsArgumentException()
+    public void Constructor_WhenLastNameContainsNumbers_ThrowsErrorException()
     {
         // Arange
         var lastName = "Hansen123";
         // Act
         var act = () => new Name("Peter", lastName);
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Theory]
     [InlineData("P")]
     [InlineData("Pppppppppppppppppppppppppppppppppppppppppppp")]
-    public void Constructor_WhenLastNameLengthIsOutOfArea_ThrowsArgumentException(string lastName)
+    public void Constructor_WhenLastNameLengthIsOutOfArea_ThrowsErrorException(string lastName)
     {
         // Act
         var act = () => new Name("Peter", lastName);
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
 
     [Theory]
     [ClassData(typeof(InvalidNameData))]
-    public void Constructor_WhenInvalidNameIsUsed_ThrowsArgumentException(string firstName, string lastName)
+    public void Constructor_WhenInvalidNameIsUsed_ThrowsErrorException(string firstName, string lastName)
     {
         // Act
         var result = () => new Name(firstName, lastName);
 
         // Assert
-        Assert.Throws<ArgumentException>(result);
+        Assert.Throws<ErrorException>(result);
     }
 }
 

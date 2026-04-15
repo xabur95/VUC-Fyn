@@ -1,8 +1,14 @@
-﻿using Semesterprojekt1PBA.Domain.Policies;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.Policies;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities;
-
+/// <summary>
+/// Author: Michael
+/// Unit tests for role-based policy validation for Student, Teacher, and Admin roles.
+/// Verifies that each role policy accepts valid roles and throws exceptions for invalid roles,
+/// including scenarios where users have multiple roles.
+/// </summary>
 public class RolePolicyTests
 {
     [Fact]
@@ -19,13 +25,13 @@ public class RolePolicyTests
     }
 
     [Fact]
-    public void StudentPolicy_WhenInvalidRole_ThrowsInvalidOperationException()
+    public void StudentPolicy_WhenInvalidRole_ThrowsErrorException()
     {
         // Arrange
         var policy = new RolePolicies.StudentRolePolicy();
 
         // Assert
-        Assert.Throws<InvalidOperationException>(() =>
+        Assert.Throws<ErrorException>(() =>
             policy.Validate(RoleType.Teacher, new List<UserRole>()));
     }
 
@@ -43,13 +49,13 @@ public class RolePolicyTests
     }
 
     [Fact]
-    public void AdminPolicy_WhenInvalidRole_ThrowsInvalidOperationException()
+    public void AdminPolicy_WhenInvalidRole_ThrowsErrorException()
     {
         // Arrange
         var policy = new RolePolicies.AdminRolePolicy();
 
         // Assert
-        Assert.Throws<InvalidOperationException>(() =>
+        Assert.Throws<ErrorException>(() =>
             policy.Validate(RoleType.Student, new List<UserRole>()));
     }
 
@@ -78,14 +84,13 @@ public class RolePolicyTests
     }
 
     [Fact]
-    public void TeacherPolicy_WhenInvalidRole_ThrowsInvalidOperationException()
+    public void TeacherPolicy_WhenInvalidRole_ThrowsErrorException()
     {
         // Arrange
         var policy = new RolePolicies.TeacherRolePolicy();
 
         // Assert
-        Assert.Throws<InvalidOperationException>(() =>
-            policy.Validate(RoleType.Student, new List<UserRole>()));
+        Assert.Throws<ErrorException>(() => policy.Validate(RoleType.Student, new List<UserRole>()));
     }
 
 }

@@ -1,11 +1,11 @@
 ﻿using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Policies;
+using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Entities;
 /// <summary>
 /// Author: Michael
-/// Unit tests for at verificere User class adfærd.
+/// Unit tests for verifying User class behavior.
 /// </summary>
 public class UserTest
 {
@@ -38,21 +38,20 @@ public class UserTest
 
     [Theory]
     [MemberData(nameof(InvalidUserData))]
-    public void Create_WhenInvalidData_ThrowsArgumentException(string firstName, string lastName, string email)
+    public void Create_WhenInvalidData_ThrowsErrorException(string firstName, string lastName, string email)
     {
         // Act
         var user = () => User.Create(firstName, lastName, email, RoleType.Admin);
 
         // Assert
-        Assert.Throws<ArgumentException>(user);
+        Assert.Throws<ErrorException>(user);
     }
 
     [Fact]
     public void AssignRole_WhenRoleIsValid_ShouldAssignRole()
     {
         // Arrange
-        var user = User.Create("Carl", "Carlson", "carl@gmail.com",
-            RoleType.Teacher);
+        var user = User.Create("Carl", "Carlson", "carl@gmail.com", RoleType.Teacher);
 
         // Act
         user.AssignRole(new UserRole(RoleType.Admin));
@@ -62,22 +61,22 @@ public class UserTest
     }
 
     [Fact]
-    public void AssignRole_WhenRoleIsAlreadyAssigned_ThrowsInvalidOperationException()
+    public void AssignRole_WhenRoleIsAlreadyAssigned_ThrowsErrorException()
     {
         // Arrange
         var user = User.Create("Apu", "Nahasapeemapetilon", "apu@indiangmail.com",
             RoleType.Student);
 
         // Assert
-        Assert.Throws<InvalidOperationException>(() => user.AssignRole(new UserRole(RoleType.Student)));
+        Assert.Throws<ErrorException>(() => user.AssignRole(new UserRole(RoleType.Student)));
     }
 
     [Fact]
     public void RevokeRole_WhenRoleExists_RemovesRole()
-    {
-        // Arrange
+    {                                                                                        // Arrange
         var user = User.Create("Lenny", "Leonard", "leeeennnyyy@wallmart.com",
-            RoleType.Teacher);  
+            RoleType.Teacher);
+        user.AssignRole(new UserRole(RoleType.Admin));
 
         // Act
         user.RevokeRole(new UserRole(RoleType.Teacher));
@@ -93,7 +92,7 @@ public class UserTest
         var user = User.Create("Maggie", "Simpson", "thababy@tahoo.com", RoleType.Student);
         
         // Assert
-        Assert.Throws<InvalidOperationException>(() => user.RevokeRole(new UserRole(RoleType.Admin)));
+        Assert.Throws<ErrorException>(() => user.RevokeRole(new UserRole(RoleType.Admin)));
     }
 
     [Fact]

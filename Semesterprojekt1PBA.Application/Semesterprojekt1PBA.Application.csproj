@@ -1,8 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\Semesterprojekt1PBA.Domain\Semesterprojekt1PBA.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Abstractions\**" />
+		<EmbeddedResource Remove="Abstractions\**" />
+		<None Remove="Abstractions\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Semesterprojekt1PBA.Domain\Semesterprojekt1PBA.Domain.csproj" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentResults" Version="4.0.0" />
@@ -16,10 +22,10 @@
     <Folder Include="Features\Class\Query\" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 </Project>

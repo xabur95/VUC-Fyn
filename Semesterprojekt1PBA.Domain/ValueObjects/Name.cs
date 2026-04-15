@@ -1,14 +1,13 @@
 ﻿using System.Text.RegularExpressions;
+using Semesterprojekt1PBA.Domain.Helpers;
 
 namespace Semesterprojekt1PBA.Domain.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en persons navn med valideret fornavn og efternavn komponenter.
+/// Represents a person's name with validated first name and last name components.
+/// First name and last name are validated to ensure they are not empty, contain only alphabetic characters,
+/// and are between 2 and 40 characters in length. This record is immutable after creation.
 /// </summary>
-/// <remarks>
-/// Fornavn og efternavn bliver valideret for at sikre de ikke er tomme, indeholder kun alfabetiske tegn,
-/// og er mellem 2 og 40 tegn i længde. Denne record er immutable efter oprettelse.
-/// </remarks>
 public record Name
 {
     public string FirstName { get; init; }
@@ -40,7 +39,7 @@ public record Name
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentException($"{paramName} cannot be null or whitespace.");
+            throw new ErrorException($"{paramName} cannot be null or whitespace.", errorCode: "INVALID_NAME");
         }
     }
 
@@ -48,7 +47,7 @@ public record Name
     {
         if (!Regex.IsMatch(value, "^[a-zA-Z]+$"))
         {
-            throw new ArgumentException($"{paramName} cannot contain special characters.");
+            throw new ErrorException($"{paramName} cannot contain special characters.", errorCode: "INVALID_NAME");
         }
     }
 
@@ -56,7 +55,7 @@ public record Name
     {
         if (value.Length < min || value.Length > max)
         {
-            throw new ArgumentException($"{paramName} must be between {min} and {max} characters long.");
+            throw new ErrorException($"{paramName} must be between {min} and {max} characters long", errorCode: "INVALID_NAME");
         }
     }
 }
