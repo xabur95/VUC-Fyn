@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Application.Features.Subjects.Command
