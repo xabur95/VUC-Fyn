@@ -1,7 +1,4 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
@@ -13,17 +10,19 @@ namespace Semesterprojekt1PBA.Domain.Entities
     public class Topic : Entity
     {
         //Properties
-        public string Name 
-        { 
+        public string Name
+        {
             get;
             private set;
         }
+         = null!;
 
         //Constructor
         protected Topic() { } // For EF Core
 
         private Topic(string name) 
         {
+            Id = Guid.NewGuid();
             SetName(name);
         }
 
@@ -35,7 +34,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
         private void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ErrorException("Topic name cannot be empty.", nameof(name));
+                throw new ErrorException("Topic name cannot be empty.", "INVALID_TOPIC_NAME");
 
             Name = name;
         }

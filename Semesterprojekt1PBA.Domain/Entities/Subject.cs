@@ -1,6 +1,4 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
-using Semesterprojekt1PBA.Domain.ValueObjects;
-using System.Reflection.Metadata;
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
@@ -12,13 +10,13 @@ namespace Semesterprojekt1PBA.Domain.Entities
     {
         //Fields
         private readonly List<Topic> _topics = [];
-        
+
         //Properties
         public string Name
         {
             get;
             protected set;
-        }
+        } = null!;
         public Level Level
         {
             get;
@@ -31,22 +29,17 @@ namespace Semesterprojekt1PBA.Domain.Entities
         //Constructors
         protected Subject () { } // for EF Core
 
-        private Subject(string name, Level level, List<Topic> topics)
+        private Subject(string name, Level level)
         {
+            Id = Guid.NewGuid();
             SetName(name);
             Level = level;
-            _topics = topics;
         }
 
         //Methods
         public static Subject Create(string name, Level level)
         {
-            return new Subject(name, level, []);
-        }
-
-        public static Subject Create(string name, Level level, List<Topic> topics)
-        {
-            return new Subject(name, level, topics);
+            return new Subject(name, level);
         }
 
         public void AddTopic(Topic topic)
@@ -60,18 +53,10 @@ namespace Semesterprojekt1PBA.Domain.Entities
             _topics.Remove(topic);
         }
 
-        /* 
-        //This should probably be in it's own service since it's useful for several entities.
-        protected void AssureUserIsAuthorised(User user)
-        {
-            if (user is not Teacher and not Admin)
-                throw new UnauthorizedAccessException("User most be either a teacher or an admin");
-        }*/
-
         private void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ErrorException("Subject name cannot be empty.", nameof(name));
+                throw new ErrorException("Subject name cannot be empty.", "INVALID_SUBJECT_NAME");
 
             Name = name;
         }
