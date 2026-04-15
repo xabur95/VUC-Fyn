@@ -28,19 +28,17 @@ namespace Semesterprojekt1PBA.Domain.Entities
 
         #region Constructros
         private AssignmentSheet() { } //For EF
-        private AssignmentSheet(User author, Subject subject, List<Topic> topics, List<Question> questions)
+        private AssignmentSheet(User author, Subject subject)
         {
             Author = author;
             Subject = subject;
-            _topics = topics;
-            _questions = questions;
         }
         #endregion
 
         #region Methods
         public static AssignmentSheet Create(User author, Subject subject)
         {
-            return new AssignmentSheet(author, subject, [], []);
+            return new AssignmentSheet(author, subject);
         }
 
         public void AddTopic(Topic topic)
