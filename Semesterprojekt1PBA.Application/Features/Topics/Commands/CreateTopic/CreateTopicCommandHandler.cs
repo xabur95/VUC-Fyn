@@ -27,9 +27,14 @@ namespace Semesterprojekt1PBA.Application.Features.Topics.Commands.CreateTopic
 
                 return topic.Id;
             }
+            catch (ErrorException ex)
+            {
+                _logger.LogError(ex, "Domain error occurred while creating Topic. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}", ex.ErrorCode, ex.UserMessage);
+                throw;
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Domain error occurred while creating subject. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}", ex.ErrorCode, ex.UserMessage);
+                _logger.LogError(ex, "An unexpected error occurred while creating topic.");
                 throw;
             }
         }

@@ -32,6 +32,11 @@ namespace Semesterprojekt1PBA.Application.Features.Subjects.Command
                 _logger.LogError(ex, "Domain error occurred while creating subject. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}", ex.ErrorCode, ex.UserMessage);
                 throw;
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while creating subject.");
+                throw;
+            }
         }
     }
 }
