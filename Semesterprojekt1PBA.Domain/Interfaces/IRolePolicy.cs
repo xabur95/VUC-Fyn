@@ -3,7 +3,8 @@
 namespace Semesterprojekt1PBA.Domain.Interfaces;
 /// <summary>
 /// Author: Michael
-/// Definerer kontrakt for validering om en ny rolletildeling er tilladt baseret på brugerens nuværende roller.
+/// Defines the contract for validating whether a new role assignment is permitted
+/// based on the user's current roles.
 /// </summary>
 public interface IRolePolicy
 {
