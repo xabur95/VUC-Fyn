@@ -4,8 +4,6 @@ using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.UpdateUser;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Interfaces;
-using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 /// <summary>
@@ -21,7 +19,8 @@ public class UpdateUserCommandHandlerTests
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
         var mockLogger = new Mock<ILogger>();
-        var user = User.Create("Homer", "Simpson", "dooh@gmail.com", RoleType.Student);
+        var user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "12345", DateOnly.FromDateTime(DateTime.Now),
+            null);
         mockRepository.Setup(repo => repo.GetByIdAsync(user.Id)).ReturnsAsync(user);
         var updateUserCommandHandler = new UpdateUserCommandHandler(mockRepository.Object, mockLogger.Object);
         var command = new UpdateUserCommand

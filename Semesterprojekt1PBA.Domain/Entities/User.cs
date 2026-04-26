@@ -71,16 +71,7 @@ public class User : Entity
         _roles.Add(role);
     }
 
-    public static User Create(string firstName, string lastName, string email, RoleType roleType)
-    {
-        var policy = CreatePolicy(roleType);
-
-        var user = new User(firstName, lastName, email, policy);
-
-        user.AssignRole(new UserRole(roleType));
-
-        return user;
-    }
+ 
 
     public void Update(string firstName, string lastName, string email)
     {
