@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateStudent;
 using Semesterprojekt1PBA.Domain.Helpers;
+using System.Globalization;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.ImportStudents;
 /// <summary>
@@ -40,7 +41,7 @@ public class ImportStudentsFromCsvCommandHandler : IRequestHandler<ImportStudent
                     LastName = columns[3],
                     Email = columns[9],
                     Knr = columns[0],
-                    Tilmeldt = DateOnly.ParseExact(columns[4], "dd.MM.yy", null),
+                    Tilmeldt = DateOnly.ParseExact(columns[4], "dd.MM.yy", CultureInfo.InvariantCulture),
                     Ophørt = null
                 });
 

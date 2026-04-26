@@ -24,7 +24,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetByIdAsync(Guid id)
     {
-        var user = await _appDbContext.Users.FindAsync(id);
+        var user = await _appDbContext.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == id);
 
         if (user is null)
         {
@@ -43,7 +43,7 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetByRoleAsync(RoleType roleType)
     {
-        var users = _appDbContext.Users.Where(u => u.Roles.Any(r => r.RoleType == roleType));
+        var users = _appDbContext.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.RoleType == roleType));
 
         return await users.ToListAsync();
     }

@@ -6,11 +6,10 @@ using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
-
 /// <summary>
-///     Author: Michael
-///     Unit tests for DeactivateUserCommandHandler. Verifies that the handler returns the correct result
-///     and interacts with IUserRepository as expected when deactivating a user.
+/// Author: Michael
+/// Unit tests for DeactivateUserCommandHandler. Verifies that the handler returns the correct result
+/// and interacts with IUserRepository as expected when deactivating a user.
 /// </summary>
 public class DeactivateUserCommandHandlerTests
 {
