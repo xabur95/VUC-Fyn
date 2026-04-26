@@ -40,7 +40,7 @@ public class ImportStudentsFromCsvCommandHandler : IRequestHandler<ImportStudent
                     LastName = columns[3],
                     Email = columns[9],
                     Knr = columns[0],
-                    Tilmeldt = DateOnly.Parse(columns[4]),
+                    Tilmeldt = DateOnly.ParseExact(columns[4], "dd.MM.yy", null),
                     Ophørt = null
                 });
 

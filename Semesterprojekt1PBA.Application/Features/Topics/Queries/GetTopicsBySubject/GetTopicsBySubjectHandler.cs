@@ -18,7 +18,7 @@ namespace Semesterprojekt1PBA.Application.Features.Topics.Queries.GetTopicsBySub
         {
             var topics = await _topicRepository.GetTopicsBySubjectAsync(request.subject);
 
-           return topics.Select(topic => new GetTopicsBySubjectResponse(topic.Name)).ToList();
+            return topics.Select(topic => new GetTopicsBySubjectResponse(topic.Name)).ToList();
         }
     }
 }

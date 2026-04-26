@@ -4,13 +4,13 @@ using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.DeactivateUser;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
+
 /// <summary>
-/// Author: Michael
-/// Unit tests for DeactivateUserCommandHandler. Verifies that the handler returns the correct result
-/// and interacts with IUserRepository as expected when deactivating a user.
+///     Author: Michael
+///     Unit tests for DeactivateUserCommandHandler. Verifies that the handler returns the correct result
+///     and interacts with IUserRepository as expected when deactivating a user.
 /// </summary>
 public class DeactivateUserCommandHandlerTests
 {
@@ -20,7 +20,7 @@ public class DeactivateUserCommandHandlerTests
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
         var mockLogger = new Mock<ILogger>();
-        var user = User.Create("Homer", "Simpson", "dooh@gmail.com", RoleType.Student);
+        var user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
         mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(user);
         var deactivateUserCommandHandler = new DeactivateUserCommandHandler(mockRepository.Object, mockLogger.Object);
         var command = new DeactivateUserCommand { Id = user.Id };

@@ -12,7 +12,7 @@ public class Student : User
     public DateOnly StartDate { get; private set; }
     public DateOnly? EndDate { get; private set; }
 
-    private Student(string firstName, string lastName, string email, string knr, DateOnly startDate, DateOnly? endDate)
+    protected Student(string firstName, string lastName, string email, string knr, DateOnly startDate, DateOnly? endDate)
         : base(firstName, lastName, email, RoleType.Student)
     {
         Knr = knr;
