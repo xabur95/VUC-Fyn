@@ -26,8 +26,9 @@ namespace Semesterprojekt1PBA.Domain.Entities
         public IReadOnlyCollection<Question> Questions => _questions;
         #endregion
 
-        #region Constructros
+        #region Constructor
         private AssignmentSheet() { } //For EF
+
         private AssignmentSheet(User author, Subject subject)
         {
             Author = author;
