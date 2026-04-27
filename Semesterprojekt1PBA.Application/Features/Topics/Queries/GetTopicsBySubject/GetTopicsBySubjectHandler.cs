@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Semesterprojekt1PBA.Application.Dto.Topics;
-using Semesterprojekt1PBA.Domain.Interfaces;
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 
 namespace Semesterprojekt1PBA.Application.Features.Topics.Queries.GetTopicsBySubject
 {
