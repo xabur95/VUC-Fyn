@@ -10,7 +10,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
     public class AssignmentSheet:Entity
     {
         #region Properties
-        public User Author 
+        public Teacher Author 
         { 
             get; 
             protected set; 
@@ -29,7 +29,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
         #region Constructor
         private AssignmentSheet() { } //For EF
 
-        private AssignmentSheet(User author, Subject subject)
+        private AssignmentSheet(Teacher author, Subject subject)
         {
             Author = author;
             Subject = subject;
@@ -37,7 +37,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
         #endregion
 
         #region Methods
-        public static AssignmentSheet Create(User author, Subject subject)
+        public static AssignmentSheet Create(Teacher author, Subject subject)
         {
             return new AssignmentSheet(author, subject);
         }
