@@ -9,8 +9,8 @@ public class Class : Entity
 
     #region Properties
 
-    public Title Title { get; protected set; }
-    public DateRange ClassDateRange { get; protected set; }
+    public Title Title { get; private set; }
+    public DateRange ClassDateRange { get; private set; }
 
 
     private readonly List<User> _teachers = [];
