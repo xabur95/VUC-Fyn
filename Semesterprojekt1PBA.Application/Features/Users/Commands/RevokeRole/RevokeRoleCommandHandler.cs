@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.RevokeRole;
 /// <summary>

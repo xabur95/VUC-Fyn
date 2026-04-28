@@ -4,7 +4,7 @@ using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.DeactivateUser;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 /// <summary>

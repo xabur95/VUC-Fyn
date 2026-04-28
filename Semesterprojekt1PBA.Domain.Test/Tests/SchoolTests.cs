@@ -1,5 +1,5 @@
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Domain.Test.Tests;
 

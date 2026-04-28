@@ -1,7 +1,7 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
 using System.Text.RegularExpressions;
 
-namespace Semesterprojekt1PBA.Domain.ValueObjects;
+namespace Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 /// <summary>
 /// Author: Michael
 /// Represents an email address value object that ensures the value is in a valid email format.

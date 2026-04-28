@@ -1,4 +1,4 @@
-﻿namespace Semesterprojekt1PBA.Domain.ValueObjects;
+﻿namespace Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 /// <summary>
 /// Author: Michael
 /// Represents a user's role in the system.

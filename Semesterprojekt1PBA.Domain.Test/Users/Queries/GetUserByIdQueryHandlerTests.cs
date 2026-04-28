@@ -4,7 +4,7 @@ using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Queries;
 /// <summary>
