@@ -1,11 +1,10 @@
 ﻿namespace Semesterprojekt1PBA.Domain.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Angiver mulige bruger roller i systemet.
+/// Specifies the possible user roles in the system.
+/// Use this enum to distinguish between types such as Student, Teacher, and Admin
+/// when managing access and logic.
 /// </summary>
-/// <remarks>
-/// Brug denne enum til at skelne mellem typer som student, lærer og Admin ved styring af adgang og logik.
-/// </remarks>
 public enum RoleType
 {
     Student,

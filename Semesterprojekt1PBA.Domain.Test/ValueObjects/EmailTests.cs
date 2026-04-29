@@ -1,13 +1,12 @@
-﻿using Semesterprojekt1PBA.Domain.ValueObjects;
+﻿using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Test.ValueObjects;
 /// <summary>
 /// Author: Michael
-/// Unit tests for Email class der verificerer håndtering af gyldige og ugyldige email adresser.
+/// Unit tests for the Email class that verify handling of valid and invalid email addresses.
+/// Tests that an ArgumentException is thrown for invalid emails and that valid emails are created successfully.
 /// </summary>
-/// <remarks>
-/// Tester at ArgumentException kastes for ugyldige emails og at gyldige emails oprettes succesfuldt.
-/// </remarks>
 public class EmailTests
 {
     public static IEnumerable<object[]> ValidEmailData =>
@@ -18,24 +17,23 @@ public class EmailTests
             new object[] {"homer@simpson.com"}
         };
 
-
     [Theory]
     [InlineData("test")]
     [InlineData("test@")]
     [InlineData("@gmail.com")]
     [InlineData("test@gmail")]
     [InlineData("testgmail.com")]
-    public void Constructor_WhenEmailIsInvalid_ThrowsArgumentException(string email)
+    public void Constructor_WhenEmailIsInvalid_ThrowsErrorException(string email)
     {
         // Act
         var act = () => new Email(email);
 
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Fact]
-    public void Constructor_WhenEmailIsEmpty_ThrowsArgumentException()
+    public void Constructor_WhenEmailIsEmpty_ThrowsErrorException()
     {
         // Arrange
         var email = "";
@@ -44,7 +42,7 @@ public class EmailTests
         var act = () => new Email(email);
 
         // Assert
-        Assert.Throws<ArgumentException>(act);
+        Assert.Throws<ErrorException>(act);
     }
 
     [Theory]

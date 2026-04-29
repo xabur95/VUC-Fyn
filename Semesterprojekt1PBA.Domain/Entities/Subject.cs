@@ -1,12 +1,17 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
 
-namespace Semesterprojekt1PBA.Domain.Entities
+
+/// <summary>
+/// Author: Mikkel
+/// Represents a Subject such as: Danish, math, biology.
+/// </summary>
+public class Subject : Entity
 {
-    /// <summary>
-    /// Author: Mikkel
-    /// Represents a Subject such as: Danish, math, biology.
-    /// </summary>
-    public class Subject : Entity
+    //Fields
+    private readonly List<Topic> _topics = [];
+
+    //Properties
+    public string Name
     {
         //Fields
         private readonly List<Topic> _topics = [];
@@ -23,11 +28,8 @@ namespace Semesterprojekt1PBA.Domain.Entities
             protected set;
         }
 
-        public IReadOnlyCollection<Topic> Topics => _topics.AsReadOnly();     
-           
+    public IReadOnlyCollection<Topic> Topics => _topics.AsReadOnly();
 
-        //Constructors
-        protected Subject () { } // for EF Core
 
         private Subject(string name, Level level)
         {
@@ -42,32 +44,36 @@ namespace Semesterprojekt1PBA.Domain.Entities
             return new Subject(name, level);
         }
 
-        public void AddTopic(Topic topic)
-        {
-            AssureUniqueTopic(topic);
-            _topics.Add(topic);
-        }
+    public static Subject Create(string name, Level level, List<Topic> topics)
+    {
+        return new Subject(name, level, topics);
+    }
 
-        public void DeleteTopic(Topic topic)
-        {
-            _topics.Remove(topic);
-        }
+    public void AddTopic(Topic topic)
+    {
+        AssureUniqueTopic(topic);
+        _topics.Add(topic);
+    }
 
         private void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ErrorException("Subject name cannot be empty.", "INVALID_SUBJECT_NAME");
 
-            Name = name;
-        }
+    private void SetName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ErrorException("Subject name cannot be empty.", nameof(name));
 
-        private void AssureUniqueTopic(Topic newTopic)
+        Name = name;
+    }
+
+    private void AssureUniqueTopic(Topic newTopic)
+    {
+        if (_topics.Any(t =>
+            t.Name.Equals(newTopic.Name, StringComparison.OrdinalIgnoreCase)))
         {
-            if (_topics.Any(t =>
-                t.Name.Equals(newTopic.Name, StringComparison.OrdinalIgnoreCase)))
-            {
-                throw new ErrorException("Topic already exists in this subject.");
-            }
+            throw new ErrorException("Topic already exists in this subject.");
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         [Fact]
         public void Create_WithStartInPast_ThrowsErrorException()
         {
-            // Arrange
+            // Arrange 
             var title = "Past Class";
             var start = DateOnly.FromDateTime(DateTime.Now.AddDays(-1));
             var end = DateOnly.FromDateTime(DateTime.Now.AddDays(2));

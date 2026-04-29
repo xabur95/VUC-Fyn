@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Semesterprojekt1PBA.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Semesterprojekt1PBA.Application.Helpers;
+
 public class MediatorPipelineBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork)
     : IPipelineBehavior<TRequest, TResponse>
 {
@@ -31,7 +29,7 @@ public class MediatorPipelineBehavior<TRequest, TResponse>(IUnitOfWork unitOfWor
 
             return response;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             if (isTransactionalCommand && beginTransactionHasRun)
                 await unitOfWork.RollbackAsync();
