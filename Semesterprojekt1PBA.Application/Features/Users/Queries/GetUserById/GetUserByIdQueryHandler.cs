@@ -11,10 +11,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;
 /// </summary>
 public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, GetUserByIdResponse>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<GetUserByIdQueryHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public GetUserByIdQueryHandler(IUserRepository userRepository, ILogger logger)
+    public GetUserByIdQueryHandler(IUserRepository userRepository, ILogger<GetUserByIdQueryHandler> logger)
     {
         _logger = logger;
         _userRepository = userRepository;

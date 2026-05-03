@@ -18,7 +18,7 @@ public class UpdateUserCommandHandlerTests
     {
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
-        var mockLogger = new Mock<ILogger>();
+        var mockLogger = new Mock<ILogger<UpdateUserCommandHandler>>();
         var user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "12345", DateOnly.FromDateTime(DateTime.Now),
             null);
         mockRepository.Setup(repo => repo.GetByIdAsync(user.Id)).ReturnsAsync(user);

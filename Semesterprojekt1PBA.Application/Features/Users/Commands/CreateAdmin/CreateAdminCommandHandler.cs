@@ -16,10 +16,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Guid>
 {
     private readonly IUserRepository _userRepository;
-    private readonly ILogger _logger;
+    private readonly ILogger<CreateAdminCommandHandler> _logger;
    
 
-    public CreateAdminCommandHandler(IUserRepository userRepository, ILogger logger)
+    public CreateAdminCommandHandler(IUserRepository userRepository, ILogger<CreateAdminCommandHandler> logger)
     {
         _userRepository = userRepository;
         _logger = logger;

@@ -16,10 +16,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.CreateTeacher;
 
 public class CreateTeacherCommandHandler : IRequestHandler<CreateTeacherCommand, Guid>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<CreateTeacherCommandHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public CreateTeacherCommandHandler(IUserRepository userRepository, ILogger logger)
+    public CreateTeacherCommandHandler(IUserRepository userRepository, ILogger<CreateTeacherCommandHandler> logger)
     {
         _userRepository = userRepository;
         _logger = logger;

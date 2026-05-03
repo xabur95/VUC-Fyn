@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Semesterprojekt1PBA.Domain\Semesterprojekt1PBA.Domain.csproj" />
     <ProjectReference Include="..\Semesterprojekt1PBA.Infrastructure\Semesterprojekt1PBA.Infrastructure.csproj" />
     <ProjectReference Include="..\Semesterprojekt1PBA.DatabaseMigration\Semesterprojekt1PBA.DatabaseMigration.csproj" />
+    <ProjectReference Include="..\Semesterprojekt1PBA.Presentation\Semesterprojekt1PBA.Presentation.csproj" />
   </ItemGroup>
 
 </Project>
