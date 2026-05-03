@@ -12,6 +12,11 @@ public class Student : User
     public DateOnly StartDate { get; private set; }
     public DateOnly? EndDate { get; private set; }
 
+    protected Student()
+    {
+        _rolePolicy = CreatePolicy(RoleType.Student);
+    }
+
     protected Student(string firstName, string lastName, string email, string knr, DateOnly startDate, DateOnly? endDate)
         : base(firstName, lastName, email, RoleType.Student)
     {

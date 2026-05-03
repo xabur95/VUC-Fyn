@@ -43,7 +43,7 @@ public class ImportStudentsFromCsvCommandHandler : IRequestHandler<ImportStudent
                     Knr = columns[0],
                     Tilmeldt = DateOnly.ParseExact(columns[4], "dd.MM.yy", CultureInfo.InvariantCulture),
                     Ophørt = null
-                });
+                }, cancellationToken);
 
                 line = await reader.ReadLineAsync();
             }

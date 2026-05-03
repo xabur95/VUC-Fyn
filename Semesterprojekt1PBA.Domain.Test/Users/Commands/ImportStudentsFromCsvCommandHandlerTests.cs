@@ -15,7 +15,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 public class ImportStudentsFromCsvCommandHandlerTests
 {
     [Fact]
-    public async Task Handle_WhenCsvHasOneStudentRow_SendsCreateUserCommandOnce()
+    public async Task Handle_WhenCsvHasOneStudentRow_SendsCreateStudentCommandOnce()
     {
         // Arrange
         var csv = "K.nr.;K.id.;Fornavn;Efternavn;Tilmeldt;Ophørt;Pause;Bemærkning;Telefon;Mail;Adresse;Post/By;F.dato\n100001;;Jens;Hansen;23.08.25;;;;12345678;jens@hansen.dk;Bondegaard 4;9999 Landsby; 190210";

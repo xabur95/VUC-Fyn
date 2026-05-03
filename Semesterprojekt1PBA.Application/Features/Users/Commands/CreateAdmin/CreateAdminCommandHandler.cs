@@ -15,13 +15,14 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 /// </summary>
 public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Guid>
 {
-    private readonly ILogger _logger;
     private readonly IUserRepository _userRepository;
+    private readonly ILogger _logger;
+   
 
-    public CreateAdminCommandHandler(ILogger logger, IUserRepository userRepository)
+    public CreateAdminCommandHandler(IUserRepository userRepository, ILogger logger)
     {
-        _logger = logger;
         _userRepository = userRepository;
+        _logger = logger;
     }
 
     public async Task<Guid> Handle(CreateAdminCommand request, CancellationToken cancellationToken)

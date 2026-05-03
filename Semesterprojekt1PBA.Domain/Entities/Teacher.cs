@@ -4,9 +4,13 @@ namespace Semesterprojekt1PBA.Domain.Entities;
 
 public class Teacher : User
 {
-    protected Teacher() { }
+    protected Teacher()
+    {
+        _rolePolicy = CreatePolicy(RoleType.Teacher);
+    }
 
-    protected Teacher(string firstName, string lastName, string email) :base(firstName, lastName, email, RoleType.Teacher) { }
+    protected Teacher(string firstName, string lastName, string email) :base(firstName, lastName, email, RoleType.Teacher) 
+    { }
 
     public static Teacher Create(string firstName, string lastName, string email)
     {

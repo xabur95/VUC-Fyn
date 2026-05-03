@@ -6,13 +6,13 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 namespace Semesterprojekt1PBA.Domain.Entities;
 /// <summary>
 /// Author: Michael
-/// Represents an application user with identity, contact information, roles, and activation status.
-/// Handles role assignment and removal with validation via role policy.
-/// Instances are created via the static Create method, which ensures initial role assignment.
+/// Abstrakt basisklasse for brugere i systemet med identitet, kontaktoplysninger, roller og aktiveringsstatus.
+/// Håndterer rolletildeling og -fjernelse med validering via rollepolitik.
+/// Instantieres via de statiske Create-metoder på de konkrete subklasser: Student, Teacher og Admin.
 /// </summary>
 public class User : Entity
 {
-    private readonly IRolePolicy _rolePolicy = null!;
+    protected IRolePolicy _rolePolicy = null!;
     private readonly List<UserRole> _roles = [];
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
@@ -82,7 +82,7 @@ public class User : Entity
         Email = userEmail;
     }
 
-    private static IRolePolicy CreatePolicy(RoleType roleType)
+    protected static IRolePolicy CreatePolicy(RoleType roleType)
     {
         switch (roleType)
         {

@@ -28,7 +28,7 @@ public class UserRepository : IUserRepository
 
         if (user is null)
         {
-            throw new ErrorException($"User with {id} not found", errorCode: "USER_NOT_FOUND");
+            throw new ErrorException($"User with id '{id}' was not found.", errorCode: "USER_NOT_FOUND");
         }
 
         return user;
