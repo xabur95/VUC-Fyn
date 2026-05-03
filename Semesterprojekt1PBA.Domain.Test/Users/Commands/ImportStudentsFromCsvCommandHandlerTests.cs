@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Moq;
-using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateUser;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.ImportStudents;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateStudent;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 /// <summary>
@@ -15,7 +15,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 public class ImportStudentsFromCsvCommandHandlerTests
 {
     [Fact]
-    public async Task Handle_WhenCsvHasOneStudentRow_SendsCreateUserCommandOnce()
+    public async Task Handle_WhenCsvHasOneStudentRow_SendsCreateStudentCommandOnce()
     {
         // Arrange
         var csv = "K.nr.;K.id.;Fornavn;Efternavn;Tilmeldt;Ophørt;Pause;Bemærkning;Telefon;Mail;Adresse;Post/By;F.dato\n100001;;Jens;Hansen;23.08.25;;;;12345678;jens@hansen.dk;Bondegaard 4;9999 Landsby; 190210";
@@ -28,6 +28,6 @@ public class ImportStudentsFromCsvCommandHandlerTests
         var result = await importStudentsCommandHandler.Handle(new ImportStudentsFromCsvCommand { CsvFile = stream}, CancellationToken.None);
 
         // Assert
-        mockMediator.Verify(r => r.Send(It.IsAny<CreateUserCommand>(), It.IsAny<CancellationToken>()), Times.Once());
+        mockMediator.Verify(r => r.Send(It.IsAny<CreateStudentCommand>(), It.IsAny<CancellationToken>()), Times.Once());
     }
 }
