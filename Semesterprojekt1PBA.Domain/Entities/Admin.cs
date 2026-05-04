@@ -1,7 +1,12 @@
 ﻿using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
-
+/// <summary>
+/// Author: Michael
+/// Represents a user with administrative privileges and capabilities.
+/// The Admin class provides functionality specific to users who require elevated permissions within the
+/// system. Instances of this class are intended to be created using the static Create method to ensure proper role
+/// assignment.</summary>
 public class Admin : User
 {
     protected Admin()

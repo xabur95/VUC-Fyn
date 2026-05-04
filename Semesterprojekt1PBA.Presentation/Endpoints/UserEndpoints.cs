@@ -13,7 +13,13 @@ using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUsersByRole;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Presentation.Endpoints;
-
+/// <summary>
+/// Author: Michael
+/// Provides extension methods for mapping user-related API endpoints to a WebApplication instance.
+/// This class defines endpoints for creating, updating, deactivating, and retrieving users, as well as
+/// assigning and revoking user roles. The endpoints are intended to be registered during application startup to enable
+/// user management functionality in the API.
+/// </summary>
 public static class UserEndpoints
 {
     public static void MapUserEndpoints(this WebApplication app)

@@ -13,7 +13,6 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.CreateTeacher;
 /// repository. Logging is performed for both domain-specific and general exceptions encountered during the operation.
 /// This class is typically used within a MediatR pipeline to process teacher creation requests.
 /// </summary>
-
 public class CreateTeacherCommandHandler : IRequestHandler<CreateTeacherCommand, Guid>
 {
     private readonly ILogger<CreateTeacherCommandHandler> _logger;

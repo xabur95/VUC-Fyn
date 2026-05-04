@@ -4,7 +4,6 @@ using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Helpers;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.UpdateUser;
-
 /// <summary>
 /// Author: Michael
 /// Handles the update of a user by processing an UpdateUserCommand.

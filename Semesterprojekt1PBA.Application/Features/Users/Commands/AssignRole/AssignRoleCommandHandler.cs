@@ -5,7 +5,6 @@ using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
-
 /// <summary>
 /// Author: Michael
 /// Handles the AssignRoleCommand by retrieving the user, assigning the role,
