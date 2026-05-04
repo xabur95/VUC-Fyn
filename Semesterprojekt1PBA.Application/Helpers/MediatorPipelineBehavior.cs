@@ -25,6 +25,11 @@ public class MediatorPipelineBehavior<TRequest, TResponse>(IUnitOfWork unitOfWor
             var response = await next();
 
             if (isTransactionalCommand)
+            {
+                await unitOfWork.SaveChangesAsync();
+            }
+
+            if (isTransactionalCommand)
                 await unitOfWork.CommitAsync();
 
             return response;

@@ -1,7 +1,4 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path="TextFile1.txt" />
-  </Folder>
   <Project Path="Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj" />
   <Project Path="Semesterprojekt1PBA.Application/Semesterprojekt1PBA.Application.csproj" />
   <Project Path="Semesterprojekt1PBA.DatabaseMigration/Semesterprojekt1PBA.DatabaseMigration.csproj" />

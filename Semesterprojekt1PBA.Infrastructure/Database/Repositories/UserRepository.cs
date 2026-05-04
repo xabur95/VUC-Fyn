@@ -18,8 +18,6 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user)
     {
         await _appDbContext.Users.AddAsync(user);
-
-        await _appDbContext.SaveChangesAsync();
     }
 
     public async Task<User> GetByIdAsync(Guid id)
@@ -38,7 +36,6 @@ public class UserRepository : IUserRepository
     {
         _appDbContext.Users.Update(user);
 
-        await _appDbContext.SaveChangesAsync();
     }
 
     public async Task<List<User>> GetByRoleAsync(RoleType roleType)
