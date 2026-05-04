@@ -89,7 +89,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S3", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var student = User.Create("Stu", "Dent", "stu@example.com", RoleType.Student);
+            var student = Student.Create("Stu", "Dent", "stu@example.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
 
             // Act
             cls.AddStudent(student);
@@ -104,7 +104,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S4", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var teacherUser = User.Create("Teach", "Er", "t@example.com", RoleType.Teacher);
+            var teacherUser = Teacher.Create("Teach", "Er", "t@example.com");
 
             // Act & Assert
             Assert.Throws<ErrorException>(() => cls.AddStudent(teacherUser));
@@ -115,7 +115,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S5", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var student = User.Create("Dup", "User", "dup@example.com", RoleType.Student);
+            var student = Student.Create("Dup", "User", "dup@example.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
             cls.AddStudent(student);
 
             // Act & Assert
@@ -127,7 +127,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S6", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var teacher = User.Create("Bo", "Teacher", "teach@example.com", RoleType.Teacher);
+            var teacher = Teacher.Create("Bo", "Teacher", "teach@example.com");
 
             // Act
             cls.AddTeacher(teacher);
@@ -142,7 +142,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S7", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var student = User.Create("Not", "Teacher", "nont@example.com", RoleType.Student);
+            var student = Student.Create("Not", "Teacher", "nont@example.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
 
             // Act & Assert
             Assert.Throws<ErrorException>(() => cls.AddTeacher(student));
@@ -153,7 +153,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S8", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var teacher = User.Create("DupT", "Eacher", "dupt@example.com", RoleType.Teacher);
+            var teacher = Teacher.Create("DupT", "Eacher", "dupt@example.com");
             cls.AddTeacher(teacher);
 
             // Act & Assert

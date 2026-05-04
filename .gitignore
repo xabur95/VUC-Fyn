@@ -37,6 +37,7 @@ secrets.json
 # ===== Local Dev Tools =====
 local-CLAUDE.md
 *CLAUDE.md
+.claude/
 
 # ===== Visual Studio 2022 =====
 .vs/
