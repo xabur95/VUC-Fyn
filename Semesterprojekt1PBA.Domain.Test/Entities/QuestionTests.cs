@@ -13,10 +13,10 @@ public class QuestionTests
     // ---------- helpers ----------
 
     private static User NewTeacher(string email = "teach@vucfyn.dk") =>
-        User.Create("Tina", "Teacher", email, RoleType.Teacher);
+        Teacher.Create("Tina", "Teacher", email);
 
     private static User NewStudent(string email = "stud@vucfyn.dk") =>
-        User.Create("Sam", "Student", email, RoleType.Student);
+        Student.Create("Sam", "Student", email, "12345", DateOnly.FromDateTime(DateTime.Now), null);
 
     private static Question NewQuestion(User? creator = null) =>
         Question.Create(
