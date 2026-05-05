@@ -2,8 +2,11 @@
 
 	<ItemGroup>
 		<Compile Remove="Abstractions\**" />
+		<Compile Remove="Features\Class\Query\**" />
 		<EmbeddedResource Remove="Abstractions\**" />
+		<EmbeddedResource Remove="Features\Class\Query\**" />
 		<None Remove="Abstractions\**" />
+		<None Remove="Features\Class\Query\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -19,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Dto\Class\Query\" />
-    <Folder Include="Features\Class\Query\" />
   </ItemGroup>
 
 	<PropertyGroup>

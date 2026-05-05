@@ -21,7 +21,7 @@ public class GetUserByIdQueryHandlerTests
     public GetUserByIdQueryHandlerTests()
     {
         _mockRepository = new Mock<IUserRepository>();
-        _user = User.Create("Homer", "Simpson", "dooh@gmail.com", RoleType.Student);
+        _user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
         _mockLogger = new Mock<ILogger>();
     }
 
