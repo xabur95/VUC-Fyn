@@ -37,9 +37,10 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task UpdateAsync(User user)
+    public Task UpdateAsync(User user)
     {
         _appDbContext.Users.Update(user);
+        return Task.CompletedTask;
     }
 
     public async Task<List<User>> GetByRoleAsync(RoleType roleType)

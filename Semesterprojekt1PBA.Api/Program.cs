@@ -7,12 +7,14 @@ using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Infrastructure.Database;
 using Semesterprojekt1PBA.Infrastructure.Database.Repositories;
+using Semesterprojekt1PBA.Api;
 using Semesterprojekt1PBA.Presentation.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
+builder.Services.AddExceptionHandler<ErrorExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITopicRepository, TopicRepository>(); 
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
@@ -39,6 +41,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.MapUserEndpoints();

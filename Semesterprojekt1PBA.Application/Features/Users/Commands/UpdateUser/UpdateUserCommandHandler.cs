@@ -26,11 +26,6 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
         {
             var user = await _userRepository.GetByIdAsync(request.Id);
 
-            if (user is null)
-            {
-                throw new ErrorException($"User with id '{request.Id}' was not found.", "USER_NOT_FOUND");
-            }
-
             user.Update(request.FirstName, request.LastName, request.Email);
 
             await _userRepository.UpdateAsync(user);

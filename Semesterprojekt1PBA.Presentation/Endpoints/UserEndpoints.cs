@@ -70,7 +70,7 @@ public static class UserEndpoints
         });
 
         // Revoke Role
-        app.MapDelete("/users/{id}/roles", async (IMediator mediator, Guid id, RoleType roleType) =>
+        app.MapDelete("/users/{id}/roles/{roleType}", async (IMediator mediator, Guid id, RoleType roleType) =>
         {
             await mediator.Send(new RevokeRoleCommand { Id = id, RoleType = roleType });
             return Results.Ok();
