@@ -1,10 +1,4 @@
-﻿﻿using Semesterprojekt1PBA.Domain.Helpers;
-=========
-﻿using Semesterprojekt1PBA.Domain.Entities;
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
-=========
-﻿using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Helpers;
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
