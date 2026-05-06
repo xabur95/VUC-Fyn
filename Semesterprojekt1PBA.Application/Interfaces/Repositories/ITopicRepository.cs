@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Semesterprojekt1PBA.Domain.Interfaces
+namespace Semesterprojekt1PBA.Application.Interfaces.Repositories
 {
     public interface ITopicRepository
     {
         Task AddAsync(Topic topic);
-        Task<IReadOnlyCollection<Topic>> GetTopicsBySubjectAsync(Subject subject);
+        Task<IReadOnlyCollection<Topic>> GetTopicsBySubjectAsync(Guid subject);
         Task UpdateAsync(Topic topic);
     }
 }

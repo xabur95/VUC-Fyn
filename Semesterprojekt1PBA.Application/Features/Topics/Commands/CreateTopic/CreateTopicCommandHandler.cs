@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
-using Semesterprojekt1PBA.Domain.Interfaces;
 
 namespace Semesterprojekt1PBA.Application.Features.Topics.Commands.CreateTopic
 {

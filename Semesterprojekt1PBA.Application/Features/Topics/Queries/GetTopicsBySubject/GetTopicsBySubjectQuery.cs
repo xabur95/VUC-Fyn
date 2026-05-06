@@ -7,6 +7,6 @@ namespace Semesterprojekt1PBA.Application.Features.Topics.Queries.GetTopicsBySub
 {
     public record GetTopicsBySubjectQuery : IRequest<IReadOnlyCollection<GetTopicsBySubjectResponse>>
     {
-        public Subject subject { get; set; }
+        public Guid Subject { get; set; }
     }
 }
