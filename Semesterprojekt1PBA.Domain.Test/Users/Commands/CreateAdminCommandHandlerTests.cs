@@ -4,6 +4,7 @@ using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
+using Semesterprojekt1PBA.Domain.Helpers;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 /// <summary>
@@ -60,5 +61,28 @@ public class CreateAdminCommandHandlerTests
 
         // Assert
         _mockRepository.Verify(r => r.AddAsync(It.IsAny<Admin>()), Times.Once);
+    }
+
+    [Theory]
+    [InlineData("", "Simpson", "marge@springfield.com")]
+    [InlineData("Marge", "", "marge@springfield.com")]
+    [InlineData("Marge", "Simpson", "not-an-email")]
+    [InlineData("Marge", "Simpson", "")]
+    public async Task CreateAdminCommand_WhenDataIsInvalid_ThrowsErrorException(string firstName, string lastName, string email)
+    {
+        // Arrange
+        var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
+        var command = new CreateAdminCommand
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email
+        };
+
+        // Act
+        var act = () => handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<ErrorException>();
     }
 }
