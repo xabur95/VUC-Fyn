@@ -5,9 +5,9 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 namespace Semesterprojekt1PBA.Application.Features.Users.Queries.GetUsersByRole;
 /// <summary>
 /// Author: Michael
-/// Repræsenterer en query til at hente alle brugere med en bestemt rolle via MediatR.
-/// Anvendes typisk i rollebaserede adgangs- eller administrationssenarier.
-/// </summary>
+/// Represents a query to retrieve a list of users assigned to a specified role.
+/// Use this query with a mediator to obtain all users associated with the given role type. The result
+/// contains user information relevant to the specified role.</summary>
 
 public record GetUsersByRoleQuery : IRequest<List<GetUsersByRoleResponse>>
 {

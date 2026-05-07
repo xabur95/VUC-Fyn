@@ -20,6 +20,11 @@ namespace Semesterprojekt1PBA.Infrastructure.Database
             _transaction = await _database.Database.BeginTransactionAsync(isolationLevel);
         }
 
+        async Task IUnitOfWork.SaveChangesAsync()
+        {
+            await _database.SaveChangesAsync();
+        }
+
         async Task IUnitOfWork.CommitAsync()
         {
             if (_transaction == null) throw new Exception("You must call 'BeginTransaction' before Commit is called");

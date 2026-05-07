@@ -12,10 +12,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Queries.GetUsersByRole;
 /// </summary>
 public class GetUsersByRoleQueryHandler : IRequestHandler<GetUsersByRoleQuery, List<GetUsersByRoleResponse>>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<GetUsersByRoleQueryHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public GetUsersByRoleQueryHandler(IUserRepository userRepository, ILogger logger)
+    public GetUsersByRoleQueryHandler(IUserRepository userRepository, ILogger<GetUsersByRoleQueryHandler> logger)
     {
         _logger = logger;
         _userRepository = userRepository;

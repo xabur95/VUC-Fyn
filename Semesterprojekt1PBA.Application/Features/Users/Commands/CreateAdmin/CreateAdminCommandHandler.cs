@@ -8,18 +8,17 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 /// <summary>
 /// Author: Michael
 /// Handles the creation of a new admin by processing a CreateAdminCommand and returning the unique identifier of
-/// the created admin.
-/// This handler coordinates the creation of a admin entity and persists it using the provided user
+/// the created admin. This handler coordinates the creation of a admin entity and persists it using the provided user
 /// repository. Logging is performed for both domain-specific and general exceptions encountered during the operation.
 /// This class is typically used within a MediatR pipeline to process admin creation requests.
 /// </summary>
 public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Guid>
 {
     private readonly IUserRepository _userRepository;
-    private readonly ILogger _logger;
+    private readonly ILogger<CreateAdminCommandHandler> _logger;
    
 
-    public CreateAdminCommandHandler(IUserRepository userRepository, ILogger logger)
+    public CreateAdminCommandHandler(IUserRepository userRepository, ILogger<CreateAdminCommandHandler> logger)
     {
         _userRepository = userRepository;
         _logger = logger;

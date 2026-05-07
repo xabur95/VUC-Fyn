@@ -6,10 +6,12 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 namespace Semesterprojekt1PBA.Domain.Entities;
 /// <summary>
 /// Author: Michael
-/// Abstrakt basisklasse for brugere i systemet med identitet, kontaktoplysninger, roller og aktiveringsstatus.
-/// Håndterer rolletildeling og -fjernelse med validering via rollepolitik.
-/// Instantieres via de statiske Create-metoder på de konkrete subklasser: Student, Teacher og Admin.
-/// </summary>
+/// Represents an application user with identity, contact information, roles, and activation status.
+/// The User class provides methods to assign and revoke roles, update user details, and manage
+/// activation state. Role assignment and revocation are subject to policy validation and may throw exceptions if
+/// constraints are violated. This class is intended to be used as an aggregate root for user-related operations and
+/// enforces business rules around role management.</summary>
+
 public class User : Entity
 {
     protected IRolePolicy _rolePolicy = null!;

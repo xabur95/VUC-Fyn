@@ -10,10 +10,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.DeactivateUser
 /// </summary>
 public class DeactivateUserCommandHandler : IRequestHandler<DeactivateUserCommand, Unit>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<DeactivateUserCommandHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public DeactivateUserCommandHandler(IUserRepository userRepository, ILogger logger)
+    public DeactivateUserCommandHandler(IUserRepository userRepository, ILogger<DeactivateUserCommandHandler> logger)
     {
         _logger = logger;
         _userRepository = userRepository;

@@ -9,9 +9,9 @@ namespace Semesterprojekt1PBA.Application.Features.Subjects.Command
     public class CreateSubjectCommandHandler : IRequestHandler<CreateSubjectCommand, Guid>
     {
         private readonly ISubjectRepository _subjectRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<CreateSubjectCommandHandler> _logger;
 
-        public CreateSubjectCommandHandler(ISubjectRepository subjectRepository, ILogger logger)
+        public CreateSubjectCommandHandler(ISubjectRepository subjectRepository, ILogger<CreateSubjectCommandHandler> logger)
         {
             _subjectRepository = subjectRepository;
             _logger = logger;

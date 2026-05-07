@@ -5,7 +5,12 @@ using Semesterprojekt1PBA.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Semesterprojekt1PBA.Infrastructure.Database.Repositories;
-
+/// <summary>
+/// Author: Michael
+/// The UserRepository implements the IUserRepository interface to encapsulate data access logic for
+/// users. It supports asynchronous operations for adding, updating, and retrieving users, including filtering by user
+/// roles. All methods interact with the underlying AppDbContext and are intended for use in application-level data
+/// management scenarios.</summary>
 public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _appDbContext;
@@ -18,13 +23,11 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user)
     {
         await _appDbContext.Users.AddAsync(user);
-
-        await _appDbContext.SaveChangesAsync();
     }
 
     public async Task<User> GetByIdAsync(Guid id)
     {
-        var user = await _appDbContext.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _appDbContext.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
 
         if (user is null)
         {
@@ -34,16 +37,15 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task UpdateAsync(User user)
+    public Task UpdateAsync(User user)
     {
         _appDbContext.Users.Update(user);
-
-        await _appDbContext.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 
     public async Task<List<User>> GetByRoleAsync(RoleType roleType)
     {
-        var users = _appDbContext.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.RoleType == roleType));
+        var users = _appDbContext.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.RoleType == roleType) && u.IsActive);
 
         return await users.ToListAsync();
     }

@@ -13,10 +13,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.RevokeRole;
 /// </summary>
 public class RevokeRoleCommandHandler : IRequestHandler<RevokeRoleCommand, Unit>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<RevokeRoleCommandHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public RevokeRoleCommandHandler(IUserRepository userRepository, ILogger logger)
+    public RevokeRoleCommandHandler(IUserRepository userRepository, ILogger<RevokeRoleCommandHandler> logger)
     {
         _logger = logger;
         _userRepository = userRepository;
