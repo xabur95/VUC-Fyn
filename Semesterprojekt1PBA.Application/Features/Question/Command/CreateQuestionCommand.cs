@@ -1,9 +1,9 @@
-using FluentResults;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Dto.Question.Command;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
+using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.Interfaces;
@@ -11,7 +11,7 @@ using Semesterprojekt1PBA.Domain.Interfaces;
 namespace Semesterprojekt1PBA.Application.Features.Question.Command;
 
 public record CreateQuestionCommand(CreateQuestionRequest CreateQuestionRequest)
-    : IRequest<Result<Guid>>, ITransactionalCommand;
+    : IRequest<Guid>, ITransactionalCommand;
 
 public class CreateQuestionCommandHandler(
     ILogger logger,
@@ -19,16 +19,16 @@ public class CreateQuestionCommandHandler(
     IUserRepository userRepository,
     ITagRepository tagRepository,
     ISubjectRepository subjectRepository)
-    : IRequestHandler<CreateQuestionCommand, Result<Guid>>
+    : IRequestHandler<CreateQuestionCommand, Guid>
 {
-  public async Task<Result<Guid>> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
+  public async Task<Guid> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
   {
     try
     {
       var req = request.CreateQuestionRequest;
 
-      // Load creator
-      var creator = await userRepository.GetByIdAsync(req.CreatedByUserId);
+      // Load creator (must be a Teacher)
+      var creator = await userRepository.GetByIdAsync<Teacher>(req.CreatedByUserId);
 
       // Load optional parent question
       Domain.Entities.Question? parentQuestion = null;
@@ -69,17 +69,17 @@ public class CreateQuestionCommandHandler(
       // Save
       await questionRepository.CreateQuestionAsync(question);
 
-      return Result.Ok(question.Id).WithSuccess("Question created successfully.");
+      return question.Id;
     }
     catch (ErrorException ex)
     {
       logger.LogError(ex, "Domain error occurred while creating the question. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}", ex.ErrorCode, ex.UserMessage);
-      return Result.Fail(ex.UserMessage ?? "Failed to create Question due to a domain error.");
+      throw;
     }
     catch (Exception e)
     {
       logger.LogError(e, "An error occurred while creating the question.");
-      return Result.Fail("Failed to create Question.");
+      throw;
     }
   }
 }

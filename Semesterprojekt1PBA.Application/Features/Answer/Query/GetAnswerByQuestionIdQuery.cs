@@ -1,4 +1,3 @@
-using FluentResults;
 using MediatR;
 using Semesterprojekt1PBA.Application.Dto.Answer.Query;
 
@@ -9,4 +8,4 @@ namespace Semesterprojekt1PBA.Application.Features.Answer.Query;
 /// the Question aggregate, we load via QuestionId.
 /// </summary>
 public record GetAnswerByQuestionIdQuery(Guid QuestionId)
-    : IRequest<Result<GetAnswerResponse>>;
+    : IRequest<GetAnswerResponse>;

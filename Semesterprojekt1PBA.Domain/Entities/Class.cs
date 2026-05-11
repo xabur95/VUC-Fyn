@@ -9,16 +9,16 @@ public class Class : Entity
 
     #region Properties
 
-    public Title Title { get; private set; }
-    public DateRange ClassDateRange { get; private set; }
+    public Title Title { get; private set; } = null!;
+    public DateRange ClassDateRange { get; private set; } = null!;
 
 
-    private readonly List<User> _teachers = [];
-    private readonly List<User> _students = [];
+    private readonly List<Teacher> _teachers = [];
+    private readonly List<Student> _students = [];
     private readonly List<Subject> _subjects = [];
 
-    public IReadOnlyCollection<User> Teachers => _teachers;
-    public IReadOnlyCollection<User> Students => _students;
+    public IReadOnlyCollection<Teacher> Teachers => _teachers;
+    public IReadOnlyCollection<Student> Students => _students;
     public IReadOnlyCollection<Subject>? Subjects => _subjects;
 
 
@@ -41,7 +41,7 @@ public class Class : Entity
         ClassDateRange = DateRange.Create(startDate, endDate);
     }
 
-    private Class(Title title, DateOnly startDate, DateOnly endDate, IEnumerable<User> students,
+    private Class(Title title, DateOnly startDate, DateOnly endDate, IEnumerable<Student> students,
         IEnumerable<Subject> subjects, IEnumerable<Class> otherClasses)
     {
         var otherSchoolTitles = otherClasses.Select(s => s.Title.Value);
@@ -61,7 +61,7 @@ public class Class : Entity
         return new Class(title, startDate, endDate, otherClasses);
     }
 
-    public static Class Create(Title title, DateOnly startDate, DateOnly endDate, IEnumerable<User> students,
+    public static Class Create(Title title, DateOnly startDate, DateOnly endDate, IEnumerable<Student> students,
         IEnumerable<Subject> subjects, IEnumerable<Class> otherClasses)
     {
         return new Class(title, startDate, endDate, students, subjects, otherClasses);
@@ -78,16 +78,14 @@ public class Class : Entity
     }
 
     
-    public void AddStudent(User student)
+    public void AddStudent(Student student)
     {
-        AssureCorrectRole(RoleType.Student, student);
         AssureNoDuplicateUser(student, _students);
         _students.Add(student);
     }
 
-    public void AddTeacher(User teacher)
+    public void AddTeacher(Teacher teacher)
     {
-        AssureCorrectRole(RoleType.Teacher, teacher);
         AssureNoDuplicateUser(teacher, _teachers);
         _teachers.Add(teacher);
     }
@@ -95,25 +93,17 @@ public class Class : Entity
     #endregion
 
     #region Relation Business Logic Methods
-    protected void AssureNoDuplicateUser(User user, List<User> otherUsers)
+    protected void AssureNoDuplicateUser<T>(T user, IEnumerable<T> otherUsers) where T : User
     {
         if (otherUsers.Any(u => u.Id == user.Id))
             throw new ErrorException(
                 "This teacher/student has already been added to this Class.");
     }
 
-    protected void AssureNoDuplicateSubject(Subject subjectToCreate, List<Subject> subjects)
+    protected void AssureNoDuplicateSubject(Subject subjectToCreate, IEnumerable<Subject> subjects)
     {
         if (subjects.Any(c => c.Name == subjectToCreate.Name))
             throw new ErrorException("This subject has already been added to this class.");
-    }
-
-    protected void AssureCorrectRole(RoleType roleType, User user)
-    {
-        if (!user.Roles.Any(r => r.RoleType == roleType))
-        {
-            throw new ErrorException("Invalid role type for Class.Expected Teacher or Student.");
-        }
     }
 
     #endregion

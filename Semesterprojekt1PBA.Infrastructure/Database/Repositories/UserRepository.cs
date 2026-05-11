@@ -37,6 +37,18 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    public async Task<T> GetByIdAsync<T>(Guid id) where T : User
+    {
+        var user = await _appDbContext.Users.Include(u => u.Roles).OfType<T>().FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
+
+        if (user is null)
+        {
+            throw new ErrorException($"User with id '{id}' was not found or is not the expected type.", errorCode: "USER_NOT_FOUND");
+        }
+
+        return user;
+    }
+
     public Task UpdateAsync(User user)
     {
         _appDbContext.Users.Update(user);

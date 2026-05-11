@@ -12,10 +12,10 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities;
 /// </summary>
 public class AnswerTests
 {
-    private static User NewTeacher(string email = "teach@vucfyn.dk") =>
+    private static Teacher NewTeacher(string email = "teach@vucfyn.dk") =>
         Teacher.Create("Tina", "Teacher", email);
 
-    private static Question NewQuestion(User creator) =>
+    private static Question NewQuestion(Teacher creator) =>
         Question.Create(creator, "Q", "Text", 10, ActiveStatus.Active);
 
     [Fact]

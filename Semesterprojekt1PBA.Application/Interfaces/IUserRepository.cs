@@ -11,6 +11,7 @@ public interface IUserRepository
 {
     Task AddAsync(User user);
     Task<User> GetByIdAsync(Guid id);
+    Task<T> GetByIdAsync<T>(Guid id) where T : User;
     Task UpdateAsync(User user);
     Task<List<User>> GetByRoleAsync(RoleType roleType);
 }

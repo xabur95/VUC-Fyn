@@ -18,8 +18,6 @@ namespace Semesterprojekt1PBA.Domain.Entities
         // EF Core binds to this constructor by parameter-name → property-name matching.
         internal Answer(Guid questionId, Title title, string text, Guid createdByUserId)
         {
-            if (questionId == Guid.Empty)
-                throw new ErrorException("QuestionId is required for an answer.", "ANSWER_INVALID");
             if (string.IsNullOrWhiteSpace(text))
                 throw new ErrorException("Answer text cannot be empty.", "ANSWER_INVALID");
             if (createdByUserId == Guid.Empty)

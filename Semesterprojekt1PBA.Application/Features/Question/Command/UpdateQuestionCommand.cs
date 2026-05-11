@@ -1,23 +1,23 @@
-using FluentResults;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Dto.Question.Command;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
+using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
 
 namespace Semesterprojekt1PBA.Application.Features.Question.Command;
 
 public record UpdateQuestionCommand(UpdateQuestionRequest UpdateQuestionRequest)
-    : IRequest<Result<bool>>, ITransactionalCommand;
+    : IRequest<bool>, ITransactionalCommand;
 
 public class UpdateQuestionCommandHandler(
     ILogger logger,
     IQuestionRepository questionRepository,
     IUserRepository userRepository)
-    : IRequestHandler<UpdateQuestionCommand, Result<bool>>
+    : IRequestHandler<UpdateQuestionCommand, bool>
 {
-    public async Task<Result<bool>> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -25,7 +25,7 @@ public class UpdateQuestionCommandHandler(
 
             // Load
             var question = await questionRepository.GetQuestionByIdAsync(req.QuestionId);
-            var editor = await userRepository.GetByIdAsync(req.EditorUserId);
+            var editor = await userRepository.GetByIdAsync<Teacher>(req.EditorUserId);
 
             //TODO: if the question is being used in any AssignmentSheet, then it throws and ErrorEXception 
 
@@ -41,17 +41,17 @@ public class UpdateQuestionCommandHandler(
             // Save
             await questionRepository.UpdateQuestionAsync(question);
 
-            return Result.Ok().WithSuccess("Question updated successfully.");
+            return true;
         }
         catch (ErrorException ex)
         {
             logger.LogError(ex, "Domain error occurred while updating the question. ErrorCode: {ErrorCode}, UserMessage: {UserMessage}", ex.ErrorCode, ex.UserMessage);
-            return Result.Fail(ex.UserMessage ?? "Failed to update Question due to a domain error.");
+            throw;
         }
         catch (Exception e)
         {
             logger.LogError(e, "Error updating question with id {Id}", request.UpdateQuestionRequest.QuestionId);
-            return Result.Fail("Something went wrong while updating the question.");
+            throw;
         }
     }
 }

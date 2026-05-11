@@ -1,8 +1,7 @@
-using FluentResults;
 using MediatR;
 using Semesterprojekt1PBA.Application.Dto.Question.Query;
 
 namespace Semesterprojekt1PBA.Application.Features.Question.Query;
 
 public record GetAllQuestionsQuery()
-    : IRequest<Result<IEnumerable<GetQuestionResponse>>>;
+    : IRequest<IEnumerable<GetQuestionResponse>>;

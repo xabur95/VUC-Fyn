@@ -1,23 +1,23 @@
-using FluentResults;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Application.Dto.Answer.Command;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
+using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
 
 namespace Semesterprojekt1PBA.Application.Features.Answer.Command;
 
 public record UpdateAnswerCommand(UpdateAnswerRequest UpdateAnswerRequest)
-    : IRequest<Result<bool>>, ITransactionalCommand;
+    : IRequest<bool>, ITransactionalCommand;
 
 public class UpdateAnswerCommandHandler(
     ILogger logger,
     IQuestionRepository questionRepository,
     IUserRepository userRepository)
-    : IRequestHandler<UpdateAnswerCommand, Result<bool>>
+    : IRequestHandler<UpdateAnswerCommand, bool>
 {
-  public async Task<Result<bool>> Handle(UpdateAnswerCommand request, CancellationToken cancellationToken)
+  public async Task<bool> Handle(UpdateAnswerCommand request, CancellationToken cancellationToken)
   {
     try
     {
@@ -27,7 +27,7 @@ public class UpdateAnswerCommandHandler(
 
       // Load aggregate root + editor
       var question = await questionRepository.GetQuestionByIdAsync(req.QuestionId);
-      var editor = await userRepository.GetByIdAsync(req.EditorUserId);
+      var editor = await userRepository.GetByIdAsync<Teacher>(req.EditorUserId);
 
       // Do — domain enforces ownership and answer existence
       question.UpdateAnswer(editor, req.Title, req.Text);
@@ -35,18 +35,18 @@ public class UpdateAnswerCommandHandler(
       // Save
       await questionRepository.UpdateQuestionAsync(question);
 
-      return Result.Ok().WithSuccess("Answer updated successfully.");
+      return true;
     }
     catch (ErrorException ex)
     {
       logger.LogError(ex, "Domain error while updating answer on question {QuestionId}. ErrorCode: {ErrorCode}",
           request.UpdateAnswerRequest.QuestionId, ex.ErrorCode);
-      return Result.Fail(ex.UserMessage ?? "Failed to update Answer due to a domain error.");
+      throw;
     }
     catch (Exception e)
     {
       logger.LogError(e, "Error updating answer on question {QuestionId}", request.UpdateAnswerRequest.QuestionId);
-      return Result.Fail("Something went wrong while updating the answer.");
+      throw;
     }
   }
 }

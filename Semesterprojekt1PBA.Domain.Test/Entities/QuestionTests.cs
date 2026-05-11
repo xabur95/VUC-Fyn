@@ -12,13 +12,10 @@ public class QuestionTests
 {
     // ---------- helpers ----------
 
-    private static User NewTeacher(string email = "teach@vucfyn.dk") =>
+    private static Teacher NewTeacher(string email = "teach@vucfyn.dk") =>
         Teacher.Create("Tina", "Teacher", email);
 
-    private static User NewStudent(string email = "stud@vucfyn.dk") =>
-        Student.Create("Sam", "Student", email, "12345", DateOnly.FromDateTime(DateTime.Now), null);
-
-    private static Question NewQuestion(User? creator = null) =>
+    private static Question NewQuestion(Teacher? creator = null) =>
         Question.Create(
             creator ?? NewTeacher(),
             title: "What is DDD?",
@@ -52,16 +49,7 @@ public class QuestionTests
         question.ParentQuestion.Should().BeNull();
     }
 
-    [Fact]
-    public void Create_WhenCreatorIsStudent_ShouldThrow()
-    {
-        var student = NewStudent();
-
-        var act = () => Question.Create(student, "T", "Text", 1, ActiveStatus.Active);
-
-        act.Should().Throw<ErrorException>()
-           .Which.ErrorCode.Should().Be("QUESTION_FORBIDDEN");
-    }
+   
 
     [Fact]
     public void Create_WhenCreatorIsInactive_ShouldThrow()

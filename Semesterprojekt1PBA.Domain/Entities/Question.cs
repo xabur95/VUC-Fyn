@@ -47,7 +47,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
     #region Factory
 
     public static Question Create(
-        User creator,
+        Teacher creator,
         Title title,
         string text,
         int points,
@@ -83,7 +83,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
 
     #region Behavior – mutations gated by ownership
 
-    public void Update(User editor, Title title, string text, int points, ActiveStatus activeStatus)
+    public void Update(Teacher editor, Title title, string text, int points, ActiveStatus activeStatus)
     {
       EnsureIsOwner(editor);
       EnsurePoints(points);
@@ -94,45 +94,45 @@ namespace Semesterprojekt1PBA.Domain.Entities
       ActiveStatus = activeStatus;
     }
 
-    public void UpdateActiveStatus(User editor, ActiveStatus activeStatus)
+    public void UpdateActiveStatus(Teacher editor, ActiveStatus activeStatus)
     {
       EnsureIsOwner(editor);
       ActiveStatus = activeStatus;
     }
 
-    public void AddTag(User editor, Tag tag)
+    public void AddTag(Teacher editor, Tag tag)
     {
       EnsureIsOwner(editor);
       AddTagInternal(tag);
     }
 
-    public void RemoveTag(User editor, Tag tag)
+    public void RemoveTag(Teacher editor, Tag tag)
     {
       EnsureIsOwner(editor);
       if (tag is null) return;
       _tags.RemoveAll(t => t.Equals(tag));
     }
 
-    public void AddSubject(User editor, Subject subject)
+    public void AddSubject(Teacher editor, Subject subject)
     {
       EnsureIsOwner(editor);
       AddSubjectInternal(subject);
     }
 
-    public void RemoveSubject(User editor, Subject subject)
+    public void RemoveSubject(Teacher editor, Subject subject)
     {
       EnsureIsOwner(editor);
       if (subject is null) return;
       _subjects.RemoveAll(s => s.Equals(subject));
     }
 
-    public void SetParentQuestion(User editor, Question? parent)
+    public void SetParentQuestion(Teacher editor, Question? parent)
     {
       EnsureIsOwner(editor);
       SetParentQuestionInternal(parent);
     }
 
-    public void ClearParentQuestion(User editor)
+    public void ClearParentQuestion(Teacher editor)
     {
       EnsureIsOwner(editor);
       ParentQuestion = null;
@@ -142,7 +142,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
 
     #region Answer lifecycle (Question is the aggregate root)
 
-    public Answer SetAnswer(User editor, Title answerTitle, string answerText)
+    public Answer SetAnswer(Teacher editor, Title answerTitle, string answerText)
     {
       EnsureIsOwner(editor);
       if (Answer is not null)
@@ -152,7 +152,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
       return Answer;
     }
 
-    public void UpdateAnswer(User editor, Title answerTitle, string answerText)
+    public void UpdateAnswer(Teacher editor, Title answerTitle, string answerText)
     {
       EnsureIsOwner(editor);
       if (Answer is null)
@@ -161,7 +161,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
       Answer.UpdateContent(answerTitle, answerText);
     }
 
-    public void RemoveAnswer(User editor)
+    public void RemoveAnswer(Teacher editor)
     {
       EnsureIsOwner(editor);
       Answer = null;
@@ -210,7 +210,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
       ParentQuestion = parent;
     }
 
-    private static void EnsureUserCanCreate(User creator)
+    private static void EnsureUserCanCreate(Teacher creator)
     {
       if (creator is null)
         throw new ErrorException("Creator must be provided.", "QUESTION_INVALID");
@@ -220,7 +220,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
         throw new ErrorException("Only users with the Teacher role can create questions.", "QUESTION_FORBIDDEN");
     }
 
-    private void EnsureIsOwner(User user)
+    private void EnsureIsOwner(Teacher user)
     {
       if (user is null)
         throw new ErrorException("User must be provided.", "QUESTION_INVALID");
