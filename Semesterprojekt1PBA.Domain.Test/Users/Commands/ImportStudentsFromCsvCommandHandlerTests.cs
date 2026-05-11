@@ -19,7 +19,7 @@ public class ImportStudentsFromCsvCommandHandlerTests
     {
         // Arrange
         var csv = "K.nr.;K.id.;Fornavn;Efternavn;Tilmeldt;Ophørt;Pause;Bemærkning;Telefon;Mail;Adresse;Post/By;F.dato\n100001;;Jens;Hansen;23.08.25;;;;12345678;jens@hansen.dk;Bondegaard 4;9999 Landsby; 190210";
-        var mockLogger = new Mock<ILogger>();
+        var mockLogger = new Mock<ILogger<ImportStudentsFromCsvCommandHandler>>();
         var mockMediator = new Mock<IMediator>();
         MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
         var importStudentsCommandHandler = new ImportStudentsFromCsvCommandHandler(mockMediator.Object, mockLogger.Object);

@@ -12,10 +12,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.ImportStudents
 /// </summary>
 public class ImportStudentsFromCsvCommandHandler : IRequestHandler<ImportStudentsFromCsvCommand, Unit>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<ImportStudentsFromCsvCommandHandler> _logger;
     private readonly IMediator _mediator;
 
-    public ImportStudentsFromCsvCommandHandler(IMediator mediator, ILogger logger)
+    public ImportStudentsFromCsvCommandHandler(IMediator mediator, ILogger<ImportStudentsFromCsvCommandHandler> logger)
     {
         _logger = logger;
         _mediator = mediator;
