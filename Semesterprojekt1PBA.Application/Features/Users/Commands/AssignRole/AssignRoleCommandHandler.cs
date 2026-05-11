@@ -5,7 +5,6 @@ using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjects;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
-
 /// <summary>
 /// Author: Michael
 /// Handles the AssignRoleCommand by retrieving the user, assigning the role,
@@ -13,10 +12,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
 /// </summary>
 public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, Unit>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<AssignRoleCommandHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public AssignRoleCommandHandler(IUserRepository userRepository, ILogger logger)
+    public AssignRoleCommandHandler(IUserRepository userRepository, ILogger<AssignRoleCommandHandler> logger)
     {
         _userRepository = userRepository;
         _logger = logger;

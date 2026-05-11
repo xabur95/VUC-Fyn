@@ -16,13 +16,13 @@ public class GetUserByIdQueryHandlerTests
 {
     private readonly Mock<IUserRepository> _mockRepository;
     private readonly User _user;
-    private readonly Mock<ILogger> _mockLogger;
+    private readonly Mock<ILogger<GetUserByIdQueryHandler>> _mockLogger;
 
     public GetUserByIdQueryHandlerTests()
     {
         _mockRepository = new Mock<IUserRepository>();
         _user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
-        _mockLogger = new Mock<ILogger>();
+        _mockLogger = new Mock<ILogger<GetUserByIdQueryHandler>>();
     }
 
     [Fact]

@@ -18,7 +18,7 @@ public class AssignRoleCommandHandlerTests
     {
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
-        var mockLogger = new Mock<ILogger>();
+        var mockLogger = new Mock<ILogger<AssignRoleCommandHandler>>();
         var user = Teacher.Create("Homer", "Simpson", "dooh@gmail.com");
         mockRepository.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
         mockRepository.Setup(r => r.UpdateAsync(user));
