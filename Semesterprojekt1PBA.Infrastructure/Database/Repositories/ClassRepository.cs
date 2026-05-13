@@ -1,13 +1,64 @@
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Entities;
+using Semesterprojekt1PBA.Domain.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Semesterprojekt1PBA.Infrastructure.Database.Repositories;
 
+/// <summary>
+/// Author: Xabur
+/// The ClassRepository implements the IClassRepository interface to encapsulate data access logic for
+/// classes. It supports asynchronous operations for adding and retrieving classes, including filtering by school.
+/// All methods interact with the underlying AppDbContext and are intended for use in application-level data
+/// management scenarios.
+/// </summary>
 public class ClassRepository : IClassRepository
 {
-    public Task CreateClassAsync(Class clas) => throw new NotImplementedException();
+    private readonly AppDbContext _appDbContext;
 
-    public Task<IEnumerable<Class>> GetAllClassesInSchoolAsync(Guid schoolId) => throw new NotImplementedException();
+    public ClassRepository(AppDbContext appDbContext)
+    {
+        _appDbContext = appDbContext;
+    }
 
-    public Task<IEnumerable<Class>> GetAllClassesAsync() => throw new NotImplementedException();
+    public async Task CreateClassAsync(Class clas)
+    {
+        await _appDbContext.Classes.AddAsync(clas);
+    }
+
+    public async Task<Class> GetClassByIdAsync(Guid id)
+    {
+        var clas = await _appDbContext.Classes
+            .Include(c => c.Teachers)
+            .Include(c => c.Students)
+            .Include(c => c.Subjects)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (clas is null)
+        {
+            throw new ErrorException($"Class with id '{id}' was not found.", errorCode: "CLASS_NOT_FOUND");
+        }
+
+        return clas;
+    }
+
+    public async Task<IEnumerable<Class>> GetAllClassesInSchoolAsync(Guid schoolId)
+    {
+        return await _appDbContext.Schools
+            .Where(s => s.Id == schoolId)
+            .SelectMany(s => s.Classes)
+            .Include(c => c.Teachers)
+            .Include(c => c.Students)
+            .Include(c => c.Subjects)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Class>> GetAllClassesAsync()
+    {
+        return await _appDbContext.Classes
+            .Include(c => c.Teachers)
+            .Include(c => c.Students)
+            .Include(c => c.Subjects)
+            .ToListAsync();
+    }
 }

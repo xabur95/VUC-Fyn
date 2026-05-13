@@ -1,6 +1,6 @@
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -100,17 +100,6 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         }
 
         [Fact]
-        public void AddStudent_WithWrongRole_ThrowsErrorException()
-        {
-            // Arrange
-            var cls = Class.Create("S4", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var teacherUser = Teacher.Create("Teach", "Er", "t@example.com");
-
-            // Act & Assert
-            Assert.Throws<ErrorException>(() => cls.AddStudent(teacherUser));
-        }
-
-        [Fact]
         public void AddStudent_Duplicate_ThrowsErrorException()
         {
             // Arrange
@@ -135,17 +124,6 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
             // Assert
             Assert.Contains(teacher, cls.Teachers);
             Assert.Single(cls.Teachers);
-        }
-
-        [Fact]
-        public void AddTeacher_WithWrongRole_ThrowsErrorException()
-        {
-            // Arrange
-            var cls = Class.Create("S7", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var student = Student.Create("Not", "Teacher", "nont@example.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
-
-            // Act & Assert
-            Assert.Throws<ErrorException>(() => cls.AddTeacher(student));
         }
 
         [Fact]

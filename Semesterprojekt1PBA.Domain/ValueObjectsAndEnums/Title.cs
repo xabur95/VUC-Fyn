@@ -1,6 +1,6 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
 
-namespace Semesterprojekt1PBA.Domain.ValueObjects
+namespace Semesterprojekt1PBA.Domain.ValueObjectsAndEnums
 {
     public record Title
     {

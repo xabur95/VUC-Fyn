@@ -1,5 +1,5 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
@@ -11,12 +11,12 @@ namespace Semesterprojekt1PBA.Domain.Entities
     {
         #region Properties
 
-        public Title Title { get; protected set; }
+        public Title Title { get; protected set; } = null!;
 
-        private readonly List<User> _schoolResponsibles = [];
+        private readonly List<Admin> _schoolResponsibles = [];
         private readonly List<Class> _classes = [];
 
-        public IReadOnlyCollection<User> SchoolResponsibles => _schoolResponsibles;
+        public IReadOnlyCollection<Admin> SchoolResponsibles => _schoolResponsibles;
         public IReadOnlyCollection<Class> Classes => _classes;
 
         #endregion

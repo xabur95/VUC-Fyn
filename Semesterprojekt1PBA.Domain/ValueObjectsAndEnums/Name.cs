@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Semesterprojekt1PBA.Domain.Helpers;
 
-namespace Semesterprojekt1PBA.Domain.ValueObjects;
+namespace Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 /// <summary>
 /// Author: Michael
 /// Represents a person's name with validated first name and last name components.
