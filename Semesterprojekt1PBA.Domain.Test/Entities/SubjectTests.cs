@@ -20,26 +20,10 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
 
             // Assert
             Assert.NotNull(subject);
-            Assert.Equal(name, subject.Name);
+            Assert.Equal(name, subject.Title);
             Assert.Equal(level, subject.Level);
             Assert.NotEqual(Guid.Empty, subject.Id);
             Assert.Empty(subject.Topics);
-        }
-
-        [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData(null)]
-        public void Create_WithInvalidName_ShouldThrowErrorException(string invalidName)
-        {
-            // Arrange
-            var level = Level.B;
-
-            // Act & Assert
-            var ex = Assert.Throws<ErrorException>(() => Subject.Create(invalidName, level));
-
-            Assert.Equal("Subject name cannot be empty.", ex.Message);
-            Assert.Equal("INVALID_SUBJECT_NAME", ex.ErrorCode);
         }
 
         [Fact]

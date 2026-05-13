@@ -102,7 +102,7 @@ public class Class : Entity
 
     protected void AssureNoDuplicateSubject(Subject subjectToCreate, IEnumerable<Subject> subjects)
     {
-        if (subjects.Any(c => c.Name == subjectToCreate.Name))
+        if (subjects.Any(c => c.Title == subjectToCreate.Title))
             throw new ErrorException("This subject has already been added to this class.");
     }
 

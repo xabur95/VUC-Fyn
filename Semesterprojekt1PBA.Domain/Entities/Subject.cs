@@ -1,6 +1,5 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
-using System.Reflection.Metadata;
 
 namespace Semesterprojekt1PBA.Domain.Entities
 {
@@ -14,7 +13,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
         private readonly List<Topic> _topics = [];
 
         //Properties
-        public string Name
+        public Title Title
         {
             get;
             protected set;
@@ -31,17 +30,17 @@ namespace Semesterprojekt1PBA.Domain.Entities
         //Constructors
         protected Subject() { } // for EF Core
 
-        private Subject(string name, Level level)
+        private Subject(string title, Level level)
         {
             Id = Guid.NewGuid();
-            SetName(name);
+            SetTitle(title);
             Level = level;
         }
 
         //Methods
-        public static Subject Create(string name, Level level)
+        public static Subject Create(Title title, Level level)
         {
-            return new Subject(name, level);
+            return new Subject(title, level);
         }
 
         public void AddTopic(Topic topic)
@@ -55,12 +54,12 @@ namespace Semesterprojekt1PBA.Domain.Entities
             _topics.Remove(topic);
         }
 
-        private void SetName(string name)
+        private void SetTitle(string title)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(title))
                 throw new ErrorException("Subject name cannot be empty.", "INVALID_SUBJECT_NAME");
 
-            Name = name;
+            Title = title;
         }
 
         private void AssureUniqueTopic(Topic newTopic)

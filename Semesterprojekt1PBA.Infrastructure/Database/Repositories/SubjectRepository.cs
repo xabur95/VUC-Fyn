@@ -1,5 +1,5 @@
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Interfaces;
 
 namespace Semesterprojekt1PBA.Infrastructure.Database.Repositories;
 
