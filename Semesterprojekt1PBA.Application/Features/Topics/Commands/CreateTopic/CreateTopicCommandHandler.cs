@@ -9,9 +9,9 @@ namespace Semesterprojekt1PBA.Application.Features.Topics.Commands.CreateTopic
     public class CreateTopicCommandHandler : IRequestHandler<CreateTopicCommand, Guid>
     {
         private readonly ITopicRepository _topicRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<CreateTopicCommandHandler> _logger;
 
-        public CreateTopicCommandHandler(ITopicRepository topicRepository, ILogger logger)
+        public CreateTopicCommandHandler(ITopicRepository topicRepository, ILogger<CreateTopicCommandHandler> logger)
         {
             _topicRepository = topicRepository;
             _logger = logger;

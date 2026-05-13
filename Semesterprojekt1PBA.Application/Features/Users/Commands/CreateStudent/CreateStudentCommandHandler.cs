@@ -13,10 +13,10 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.CreateStudent;
 /// </summary>
 public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand, Guid>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<CreateStudentCommandHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public CreateStudentCommandHandler(IUserRepository userRepository, ILogger logger)
+    public CreateStudentCommandHandler(IUserRepository userRepository, ILogger<CreateStudentCommandHandler> logger)
     {
         _userRepository = userRepository;
         _logger = logger;

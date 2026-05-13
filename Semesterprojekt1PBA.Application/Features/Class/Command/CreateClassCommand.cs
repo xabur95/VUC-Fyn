@@ -16,7 +16,7 @@ namespace Semesterprojekt1PBA.Application.Features.Class.Command
         : IRequest<Result<bool>>, ITransactionalCommand;
 
     public class CreateClassCommandHandler(
-        ILogger logger,
+        ILogger<CreateClassCommandHandler> logger,
         IClassRepository classRepository,
         ISchoolRepository schoolRepository)
         : IRequestHandler<CreateClassCommand, Result<bool>>
