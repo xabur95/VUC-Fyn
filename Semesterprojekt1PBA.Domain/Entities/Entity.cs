@@ -7,8 +7,8 @@ namespace Semesterprojekt1PBA.Domain.Entities;
 /// </summary>
 public abstract class Entity : IEquatable<Entity>
 {
-    public Guid Id { get; protected set; }
-    [Timestamp] public byte[] RowVersion { get; protected set; }
+    public Guid Id { get; protected set; } = Guid.NewGuid();
+    [Timestamp] public byte[] RowVersion { get; protected set; } = null!;
 
     public bool Equals(Entity? other)
     {

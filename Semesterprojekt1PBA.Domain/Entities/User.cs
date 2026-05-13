@@ -1,7 +1,7 @@
 ﻿using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.Policies;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Domain.Entities;
 /// <summary>

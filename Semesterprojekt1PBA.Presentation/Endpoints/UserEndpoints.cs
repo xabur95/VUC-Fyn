@@ -10,7 +10,7 @@ using Semesterprojekt1PBA.Application.Features.Users.Commands.RevokeRole;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.UpdateUser;
 using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;
 using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUsersByRole;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Presentation.Endpoints;
 /// <summary>

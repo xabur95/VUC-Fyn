@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Semesterprojekt1PBA.Application.Interfaces;
-using Semesterprojekt1PBA.Domain.ValueObjects;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
 /// <summary>
