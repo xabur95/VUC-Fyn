@@ -30,17 +30,17 @@ namespace Semesterprojekt1PBA.Domain.Entities
         //Constructors
         protected Subject() { } // for EF Core
 
-        private Subject(string title, Level level)
+        private Subject(string title, Level level, IEnumerable<Subject> otherSubjects)
         {
-            Id = Guid.NewGuid();
-            SetTitle(title);
+            var otherSubjectTitles = otherSubjects.Select(s => s.Title.Value);
+            Title = Title.Create(title, otherSubjectTitles);
             Level = level;
         }
 
         //Methods
-        public static Subject Create(Title title, Level level)
+        public static Subject Create(Title title, Level level, IEnumerable<Subject> otherSubjects)
         {
-            return new Subject(title, level);
+            return new Subject(title, level, otherSubjects);
         }
 
         public void AddTopic(Topic topic)
@@ -52,14 +52,6 @@ namespace Semesterprojekt1PBA.Domain.Entities
         public void DeleteTopic(Topic topic)
         {
             _topics.Remove(topic);
-        }
-
-        private void SetTitle(string title)
-        {
-            if (string.IsNullOrWhiteSpace(title))
-                throw new ErrorException("Subject name cannot be empty.", "INVALID_SUBJECT_NAME");
-
-            Title = title;
         }
 
         private void AssureUniqueTopic(Topic newTopic)

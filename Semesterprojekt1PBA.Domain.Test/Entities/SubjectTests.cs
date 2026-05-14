@@ -14,9 +14,10 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
             // Arrange
             var name = "Math";
             var level = Level.A;
+            var otherSubjects = Array.Empty<Subject>();
 
             // Act
-            var subject = Subject.Create(name, level);
+            var subject = Subject.Create(name, level, otherSubjects);
 
             // Assert
             Assert.NotNull(subject);
@@ -30,7 +31,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         public void AddTopic_ShouldAddTopicToSubject()
         {
             // Arrange
-            var subject = Subject.Create("Biology", Level.C);
+            var subject = Subject.Create("Biology", Level.C, Array.Empty<Subject>());
             var topic = Topic.Create("Cells");
 
             // Act
@@ -45,7 +46,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         public void AddTopic_WithDuplicateName_ShouldThrowErrorException()
         {
             // Arrange
-            var subject = Subject.Create("Physics", Level.B);
+            var subject = Subject.Create("Physics", Level.B, Array.Empty<Subject>());
             var topic1 = Topic.Create("Energy");
             var topic2 = Topic.Create("energy"); // same name, different casing
 
@@ -61,7 +62,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         public void AddTopic_ShouldBeCaseInsensitiveForUniqueness()
         {
             // Arrange
-            var subject = Subject.Create("Chemistry", Level.A);
+            var subject = Subject.Create("Chemistry", Level.A, Array.Empty<Subject>());
             var topic1 = Topic.Create("Atoms");
             var topic2 = Topic.Create("atoms");
 
@@ -76,7 +77,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         public void DeleteTopic_ShouldRemoveTopic()
         {
             // Arrange
-            var subject = Subject.Create("History", Level.C);
+            var subject = Subject.Create("History", Level.C, Array.Empty<Subject>());
             var topic = Topic.Create("WW2");
 
             subject.AddTopic(topic);
@@ -92,7 +93,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         public void DeleteTopic_NonExistingTopic_ShouldDoNothing()
         {
             // Arrange
-            var subject = Subject.Create("Geography", Level.B);
+            var subject = Subject.Create("Geography", Level.B, Array.Empty<Subject>());
             var topic = Topic.Create("Maps");
 
             // Act

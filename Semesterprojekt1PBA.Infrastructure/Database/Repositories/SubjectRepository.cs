@@ -7,5 +7,10 @@ public class SubjectRepository : ISubjectRepository
 {
     public Task AddAsync(Subject subject) => throw new NotImplementedException();
 
-    public Task<IReadOnlyCollection<Subject>> GetByNameAsyc(string name) => throw new NotImplementedException();
+    public Task<IReadOnlyCollection<Subject>> GetAllSubjectsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IReadOnlyCollection<Subject>> GetByNameAsync(string name) => throw new NotImplementedException();
 }

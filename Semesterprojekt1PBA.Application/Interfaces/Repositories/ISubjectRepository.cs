@@ -8,7 +8,8 @@ namespace Semesterprojekt1PBA.Application.Interfaces.Repositories
     public interface ISubjectRepository
     {
         Task AddAsync(Subject subject);
-        Task<IReadOnlyCollection<Subject>> GetByNameAsyc(string name);
+        Task<IReadOnlyCollection<Subject>> GetByNameAsync(string name);
+        Task<IReadOnlyCollection<Subject>> GetAllSubjectsAsync();
 
     }
 }
