@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Semesterprojekt1PBA.Application.Dto.Topics;
-using Semesterprojekt1PBA.Domain.Interfaces;
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 
 namespace Semesterprojekt1PBA.Application.Features.Topics.Queries.GetTopicsBySubject
 {
@@ -16,7 +16,7 @@ namespace Semesterprojekt1PBA.Application.Features.Topics.Queries.GetTopicsBySub
 
         public async Task<IReadOnlyCollection<GetTopicsBySubjectResponse>> Handle(GetTopicsBySubjectQuery request, CancellationToken cancellationToken)
         {
-            var topics = await _topicRepository.GetTopicsBySubjectAsync(request.subject);
+            var topics = await _topicRepository.GetTopicsBySubjectAsync(request.Subject);
 
             return topics.Select(topic => new GetTopicsBySubjectResponse(topic.Name)).ToList();
         }

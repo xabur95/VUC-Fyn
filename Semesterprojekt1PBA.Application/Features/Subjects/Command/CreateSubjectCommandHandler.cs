@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
 using Microsoft.Extensions.Logging;
 using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 
 namespace Semesterprojekt1PBA.Application.Features.Subjects.Command
 {
@@ -21,7 +21,8 @@ namespace Semesterprojekt1PBA.Application.Features.Subjects.Command
         {
             try
             {
-                Subject subject = Subject.Create(request.Name, request.Level);
+                var otherSubjects = await _subjectRepository.GetAllSubjectsAsync();
+                Subject subject = Subject.Create(request.Name, request.Level, otherSubjects);
 
                 await _subjectRepository.AddAsync(subject);
 

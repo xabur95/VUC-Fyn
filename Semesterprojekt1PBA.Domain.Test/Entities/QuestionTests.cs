@@ -80,7 +80,7 @@ public class QuestionTests
         var teacher = NewTeacher();
         var parent = NewQuestion(teacher);
         var tag = Tag.Create("OOP", "Object-oriented");
-        var subject = Subject.Create("Math", Level.A);
+        var subject = Subject.Create("Math", Level.A, Array.Empty<Subject>());
 
         var question = Question.Create(
             teacher,
@@ -199,7 +199,7 @@ public class QuestionTests
     {
         var teacher = NewTeacher();
         var question = NewQuestion(teacher);
-        var subject = Subject.Create("Physics", Level.B);
+        var subject = Subject.Create("Physics", Level.B, Array.Empty<Subject>());
 
         question.AddSubject(teacher, subject);
 
@@ -211,7 +211,7 @@ public class QuestionTests
     {
         var teacher = NewTeacher();
         var question = NewQuestion(teacher);
-        var subject = Subject.Create("Physics", Level.B);
+        var subject = Subject.Create("Physics", Level.B, Array.Empty<Subject>());
 
         question.AddSubject(teacher, subject);
         question.AddSubject(teacher, subject);
@@ -224,7 +224,7 @@ public class QuestionTests
     {
         var teacher = NewTeacher();
         var question = NewQuestion(teacher);
-        var subject = Subject.Create("Physics", Level.B);
+        var subject = Subject.Create("Physics", Level.B, Array.Empty<Subject>());
         question.AddSubject(teacher, subject);
 
         question.RemoveSubject(teacher, subject);

@@ -27,7 +27,7 @@ public class GetQuestionByIdQueryHandler(
           question.CreatedByUserId,
           question.ParentQuestion?.Id,
           question.Tags.Select(t => new GetQuestionTagResponse(t.Id, t.Title.Value)),
-          question.Subjects.Select(s => new GetQuestionSubjectResponse(s.Id, s.Name)),
+          question.Subjects.Select(s => new GetQuestionSubjectResponse(s.Id, s.Title)),
           question.Answer is not null
               ? new GetQuestionAnswerResponse(
                   question.Answer.Id,
