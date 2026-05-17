@@ -20,6 +20,8 @@ builder.Services.AddScoped<ITopicRepository, TopicRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>(); 
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork<AppDbContext>>();
 
@@ -45,4 +47,11 @@ app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.MapUserEndpoints();
+app.MapSchoolEndpoints();
+app.MapClassEndpoints();
+app.MapQuestionEndpoints();
+app.MapAnswerEndpoints();
+app.MapSubjectEndpoints();
+app.MapTopicEndpoints();
+
 app.Run();

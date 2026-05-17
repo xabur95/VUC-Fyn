@@ -11,7 +11,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
     #region Properties
 
     public Title Title { get; private set; }
-    public string Text { get; private set; }
+    public string Text { get; private set; } = null!;
     public int Points { get; private set; }
     public ActiveStatus ActiveStatus { get; private set; }
     public Question? ParentQuestion { get; private set; }

@@ -8,13 +8,14 @@ namespace Semesterprojekt1PBA.Domain.Entities
     /// </summary>
     public class Tag : Entity
     {
-        public Title Title { get; private set; }
-        public string Description { get; private set; }
+        public Title Title { get; private set; } = null!;
+        public string Description { get; private set; } = null!;
+
+        protected Tag() { } // For EF Core
 
         // EF Core binds to this private constructor via parameter-name matching.
         private Tag(Title title, string description)
         {
-            Id = Guid.NewGuid();
             Title = title;
             Description = description ?? string.Empty;
         }

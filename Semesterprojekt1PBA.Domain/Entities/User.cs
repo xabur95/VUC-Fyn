@@ -34,15 +34,12 @@ public class User : Entity
         var userEmail = new Email(email);
         Email = userEmail;
 
-        Id = Guid.NewGuid();
-
         _rolePolicy = rolePolicy;
     }
     protected User(string firstName, string lastName, string email, RoleType roleType)
     {
         Name = new Name(firstName, lastName);
         Email = new Email(email);
-        Id = Guid.NewGuid();
         _rolePolicy = CreatePolicy(roleType);
     }
 

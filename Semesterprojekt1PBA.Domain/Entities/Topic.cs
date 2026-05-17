@@ -22,7 +22,6 @@ namespace Semesterprojekt1PBA.Domain.Entities
 
         private Topic(string name) 
         {
-            Id = Guid.NewGuid();
             SetName(name);
         }
 
