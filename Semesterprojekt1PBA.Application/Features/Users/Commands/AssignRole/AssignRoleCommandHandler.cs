@@ -10,7 +10,7 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
 /// Handles the AssignRoleCommand by retrieving the user, assigning the role,
 /// and persisting the changes via the repository.
 /// </summary>
-public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, Unit>
+public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, Unit>, ITransactionalCommand
 {
     private readonly ILogger<AssignRoleCommandHandler> _logger;
     private readonly IUserRepository _userRepository;

@@ -1,10 +1,15 @@
 using Evaluation.Web.Components;
+using Evaluation.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5187") });
+builder.Services.AddScoped<ApiClient>();
+builder.Services.AddScoped<AuthState>();
 
 var app = builder.Build();
 

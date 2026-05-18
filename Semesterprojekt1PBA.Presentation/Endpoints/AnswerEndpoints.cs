@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Semesterprojekt1PBA.Application.Dto.Answer.Command;
 using Semesterprojekt1PBA.Application.Features.Answer.Command;
 
@@ -27,7 +28,7 @@ public static class AnswerEndpoints
         });
 
         // Remove Answer from Question
-        app.MapDelete("/questions/{questionId}/answer", async (IMediator mediator, Guid questionId, RemoveAnswerRequest request) =>
+        app.MapDelete("/questions/{questionId}/answer", async (IMediator mediator, Guid questionId, [FromBody] RemoveAnswerRequest request) =>
         {
             var command = new RemoveAnswerCommand(request with { QuestionId = questionId });
             var result = await mediator.Send(command);

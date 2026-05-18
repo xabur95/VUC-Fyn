@@ -6,7 +6,7 @@ using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 namespace Semesterprojekt1PBA.Application.Features.Question.Query;
 
 public class GetAllQuestionsQueryHandler(
-    ILogger logger,
+    ILogger<GetAllQuestionsQueryHandler> logger,
     IQuestionRepository questionRepository)
     : IRequestHandler<GetAllQuestionsQuery, IEnumerable<GetQuestionResponse>>
 {

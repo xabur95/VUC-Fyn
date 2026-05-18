@@ -29,12 +29,7 @@ public class CreateAdminCommandHandlerTests
         // Arrange
         _mockRepository.Setup(r => r.AddAsync(It.IsAny<Admin>())).Returns(Task.CompletedTask);
         var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
-        var command = new CreateAdminCommand
-        {
-            FirstName = "Marge",
-            LastName = "Simpson",
-            Email = "marge@springfield.com"
-        };
+        var command = new CreateAdminCommand("Marge", "Simpson", "marge@springfield.com", "Password1");
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -49,12 +44,7 @@ public class CreateAdminCommandHandlerTests
         // Arrange
         _mockRepository.Setup(r => r.AddAsync(It.IsAny<Admin>())).Returns(Task.CompletedTask);
         var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
-        var command = new CreateAdminCommand
-        {
-            FirstName = "Marge",
-            LastName = "Simpson",
-            Email = "marge@springfield.com"
-        };
+        var command = new CreateAdminCommand("Marge", "Simpson", "marge@springfield.com", "Password1");
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -72,12 +62,7 @@ public class CreateAdminCommandHandlerTests
     {
         // Arrange
         var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
-        var command = new CreateAdminCommand
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            Email = email
-        };
+        var command = new CreateAdminCommand(firstName, lastName, email, "Password1");
 
         // Act
         var act = () => handler.Handle(command, CancellationToken.None);

@@ -13,52 +13,73 @@ namespace Semesterprojekt1PBA.Infrastructure.Database.Repositories;
 /// management scenarios.</summary>
 public class UserRepository : IUserRepository
 {
-    private readonly AppDbContext _appDbContext;
+  private readonly AppDbContext _appDbContext;
 
-    public UserRepository(AppDbContext appDbContext)
+  public UserRepository(AppDbContext appDbContext)
+  {
+    _appDbContext = appDbContext;
+  }
+
+  public async Task AddAsync(User user)
+  {
+    await _appDbContext.Users.AddAsync(user);
+  }
+
+  public async Task<User> GetByIdAsync(Guid id)
+  {
+    var user = await _appDbContext.Users.AsNoTracking()
+      .Include(u => u.Roles)
+      .FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
+
+    if (user is null)
     {
-        _appDbContext = appDbContext;
+      throw new ErrorException($"User with id '{id}' was not found.", errorCode: "USER_NOT_FOUND");
     }
 
-    public async Task AddAsync(User user)
+    return user;
+  }
+
+  public async Task<T> GetByIdAsync<T>(Guid id) where T : User
+  {
+    var user = await _appDbContext.Users.AsNoTracking()
+      .Include(u => u.Roles).OfType<T>()
+      .FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
+
+    if (user is null)
     {
-        await _appDbContext.Users.AddAsync(user);
+      throw new ErrorException($"User with id '{id}' was not found or is not the expected type.", errorCode: "USER_NOT_FOUND");
     }
 
-    public async Task<User> GetByIdAsync(Guid id)
-    {
-        var user = await _appDbContext.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
+    return user;
+  }
 
-        if (user is null)
-        {
-            throw new ErrorException($"User with id '{id}' was not found.", errorCode: "USER_NOT_FOUND");
-        }
+  public Task UpdateAsync(User user)
+  {
+    _appDbContext.Users.Update(user);
+    return Task.CompletedTask;
+  }
 
-        return user;
-    }
+  public async Task<List<User>> GetByRoleAsync(RoleType roleType)
+  {
+    var users = _appDbContext.Users.AsNoTracking().
+      Include(u => u.Roles)
+      .Where(u => u.Roles.Any(r => r.RoleType == roleType) && u.IsActive);
 
-    public async Task<T> GetByIdAsync<T>(Guid id) where T : User
-    {
-        var user = await _appDbContext.Users.Include(u => u.Roles).OfType<T>().FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
+    return await users.ToListAsync();
+  }
+  public async Task<IReadOnlyCollection<Email>> GetAllEmailsAsync()
+  {
+    return await _appDbContext.Set<User>()
+        .AsNoTracking()
+        .Select(u => u.Email)
+        .ToListAsync();
+  }
 
-        if (user is null)
-        {
-            throw new ErrorException($"User with id '{id}' was not found or is not the expected type.", errorCode: "USER_NOT_FOUND");
-        }
-
-        return user;
-    }
-
-    public Task UpdateAsync(User user)
-    {
-        _appDbContext.Users.Update(user);
-        return Task.CompletedTask;
-    }
-
-    public async Task<List<User>> GetByRoleAsync(RoleType roleType)
-    {
-        var users = _appDbContext.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.RoleType == roleType) && u.IsActive);
-
-        return await users.ToListAsync();
-    }
+  public async Task<User?> GetByEmailAsync(string email)
+  {
+    return await _appDbContext.Users
+       .AsNoTracking()
+        .Include(u => u.Roles)
+        .FirstOrDefaultAsync(u => u.Email.Value == email && u.IsActive);
+  }
 }

@@ -43,6 +43,12 @@ public class AppDbContext : DbContext
             entity.OwnsOne(u => u.Email, email =>
             {
                 email.Property(e => e.Value).HasColumnName("Email").HasMaxLength(256).IsRequired();
+                email.HasIndex(e => e.Value).IsUnique();
+            });
+
+            entity.OwnsOne(u => u.Password, password =>
+            {
+                password.Property(p => p.HashedValue).HasColumnName("Password").IsRequired();
             });
 
             entity.OwnsMany(u => u.Roles, r =>

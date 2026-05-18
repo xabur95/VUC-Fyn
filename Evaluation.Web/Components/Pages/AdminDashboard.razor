@@ -1,0 +1,164 @@
+@page "/admin-dashboard"
+@using Evaluation.Web.Services
+@inject ApiClient Api
+@inject AuthState Auth
+@inject NavigationManager Nav
+
+<h2>👑 Admin Dashboard</h2>
+<p class="text-muted">Welcome, @Auth.CurrentUser?.FirstName</p>
+
+<div class="row mt-4">
+    <!-- Teachers -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>Teachers</strong>
+                <button class="btn btn-sm btn-success" @onclick="() => _showCreateTeacher = true">+ Add</button>
+            </div>
+            <div class="card-body">
+                @if (_teachers is null)
+                {
+                    <p class="text-muted">Loading...</p>
+                }
+                else
+                {
+                    <table class="table table-sm">
+                        <thead><tr><th>Name</th><th>Email</th><th></th></tr></thead>
+                        <tbody>
+                            @foreach (var t in _teachers)
+                            {
+                                <tr>
+                                    <td>@t.FirstName @t.LastName</td>
+                                    <td>@t.Email</td>
+                                    <td><button class="btn btn-sm btn-outline-danger" @onclick="() => Deactivate(t.Id)">Deactivate</button></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
+        @if (_showCreateTeacher)
+        {
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h6>Create Teacher</h6>
+                    <input class="form-control mb-2" placeholder="First name" @bind="_newFirstName" />
+                    <input class="form-control mb-2" placeholder="Last name" @bind="_newLastName" />
+                    <input class="form-control mb-2" placeholder="Email" @bind="_newEmail" />
+                    <input class="form-control mb-2" type="password" placeholder="Password" @bind="_newPassword" />
+                    <button class="btn btn-primary btn-sm" @onclick="CreateTeacher">Save</button>
+                    <button class="btn btn-secondary btn-sm" @onclick="() => _showCreateTeacher = false">Cancel</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Students -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>Students</strong>
+                <button class="btn btn-sm btn-success" @onclick="() => _showCreateStudent = true">+ Add</button>
+            </div>
+            <div class="card-body">
+                @if (_students is null)
+                {
+                    <p class="text-muted">Loading...</p>
+                }
+                else
+                {
+                    <table class="table table-sm">
+                        <thead><tr><th>Name</th><th>Email</th><th></th></tr></thead>
+                        <tbody>
+                            @foreach (var s in _students)
+                            {
+                                <tr>
+                                    <td>@s.FirstName @s.LastName</td>
+                                    <td>@s.Email</td>
+                                    <td><button class="btn btn-sm btn-outline-danger" @onclick="() => Deactivate(s.Id)">Deactivate</button></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
+        @if (_showCreateStudent)
+        {
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h6>Create Student</h6>
+                    <input class="form-control mb-2" placeholder="First name" @bind="_stuFirstName" />
+                    <input class="form-control mb-2" placeholder="Last name" @bind="_stuLastName" />
+                    <input class="form-control mb-2" placeholder="Email" @bind="_stuEmail" />
+                    <input class="form-control mb-2" type="password" placeholder="Password" @bind="_stuPassword" />
+                    <input class="form-control mb-2" placeholder="KNR" @bind="_stuKnr" />
+                    <input class="form-control mb-2" type="date" @bind="_stuStartDate" />
+                    <button class="btn btn-primary btn-sm" @onclick="CreateStudent">Save</button>
+                    <button class="btn btn-secondary btn-sm" @onclick="() => _showCreateStudent = false">Cancel</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(_message))
+{
+    <div class="alert alert-info mt-2">@_message</div>
+}
+
+@code {
+    private List<UserDto>? _teachers;
+    private List<UserDto>? _students;
+    private string? _message;
+
+    // Create teacher fields
+    private bool _showCreateTeacher;
+    private string _newFirstName = "", _newLastName = "", _newEmail = "", _newPassword = "";
+
+    // Create student fields
+    private bool _showCreateStudent;
+    private string _stuFirstName = "", _stuLastName = "", _stuEmail = "", _stuPassword = "", _stuKnr = "";
+    private DateTime _stuStartDate = DateTime.Today.AddDays(1);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _teachers = await Api.GetUsersByRoleAsync("Teacher");
+        _students = await Api.GetUsersByRoleAsync("Student");
+    }
+
+    private async Task CreateTeacher()
+    {
+        await Api.CreateTeacherAsync(new CreateUserRequest(_newFirstName, _newLastName, _newEmail, _newPassword));
+        _newFirstName = _newLastName = _newEmail = _newPassword = "";
+        _showCreateTeacher = false;
+        _message = "Teacher created.";
+        await LoadData();
+    }
+
+    private async Task CreateStudent()
+    {
+        await Api.CreateStudentAsync(new CreateStudentRequest(
+            _stuFirstName, _stuLastName, _stuEmail, _stuPassword, _stuKnr,
+            DateOnly.FromDateTime(_stuStartDate), null));
+        _stuFirstName = _stuLastName = _stuEmail = _stuPassword = _stuKnr = "";
+        _showCreateStudent = false;
+        _message = "Student created.";
+        await LoadData();
+    }
+
+    private async Task Deactivate(Guid id)
+    {
+        await Api.DeactivateUserAsync(id);
+        _message = "User deactivated.";
+        await LoadData();
+    }
+}

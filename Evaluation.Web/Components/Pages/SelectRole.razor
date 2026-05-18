@@ -1,0 +1,36 @@
+@page "/select-role"
+@using Evaluation.Web.Services
+@inject AuthState Auth
+@inject NavigationManager Nav
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow" style="min-width: 400px;">
+        <div class="card-body text-center">
+            <h3 class="mb-4">Select Role</h3>
+            <p class="text-muted">Welcome, @Auth.CurrentUser?.FirstName! You have multiple roles.</p>
+
+            <div class="d-grid gap-2">
+                @foreach (var role in Auth.CurrentUser?.Roles ?? [])
+                {
+                    <button class="btn btn-outline-primary btn-lg" @onclick="() => Select(role.ToString())">
+                        @role
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (!Auth.IsLoggedIn)
+            Nav.NavigateTo("/login");
+    }
+
+    private void Select(string role)
+    {
+        Auth.SelectRole(role);
+        Nav.NavigateTo("/");
+    }
+}

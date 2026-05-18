@@ -7,7 +7,7 @@ using Semesterprojekt1PBA.Domain.Helpers;
 namespace Semesterprojekt1PBA.Application.Features.Answer.Query;
 
 public class GetAnswerByQuestionIdQueryHandler(
-    ILogger logger,
+    ILogger<GetAnswerByQuestionIdQueryHandler> logger,
     IQuestionRepository questionRepository)
     : IRequestHandler<GetAnswerByQuestionIdQuery, GetAnswerResponse>
 {

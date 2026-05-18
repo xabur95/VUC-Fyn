@@ -33,6 +33,8 @@ namespace Semesterprojekt1PBA.Domain.Entities
     // parameter names to property names (case-insensitive). No parameterless
     // constructor is needed, which means Title/Text are guaranteed non-null
     // for every materialized instance — no `null!` required.
+    protected Question() { }
+
     private Question(Title title, string text, int points, ActiveStatus activeStatus, Guid createdByUserId)
     {
       Title = title;

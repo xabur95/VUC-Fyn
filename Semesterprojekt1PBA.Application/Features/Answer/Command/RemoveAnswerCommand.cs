@@ -12,7 +12,7 @@ public record RemoveAnswerCommand(RemoveAnswerRequest RemoveAnswerRequest)
     : IRequest<bool>, ITransactionalCommand;
 
 public class RemoveAnswerCommandHandler(
-    ILogger logger,
+    ILogger<RemoveAnswerCommandHandler> logger,
     IQuestionRepository questionRepository,
     IUserRepository userRepository)
     : IRequestHandler<RemoveAnswerCommand, bool>

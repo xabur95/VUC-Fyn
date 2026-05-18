@@ -1,0 +1,148 @@
+@using Evaluation.Web.Services
+@inject ApiClient Api
+@inject AuthState Auth
+
+<h2>📚 Teacher Dashboard</h2>
+<p class="text-muted">Welcome, @Auth.CurrentUser?.FirstName</p>
+
+<ul class="nav nav-tabs mt-3" role="tablist">
+    <li class="nav-item">
+        <button class="nav-link @(_tab == "questions" ? "active" : "")" @onclick='() => _tab = "questions"'>Questions</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link @(_tab == "create" ? "active" : "")" @onclick='() => _tab = "create"'>Create Question</button>
+    </li>
+</ul>
+
+<div class="mt-3">
+    @if (_tab == "questions")
+    {
+        @if (_questions is null)
+        {
+            <p class="text-muted">Loading questions...</p>
+        }
+        else if (_questions.Count == 0)
+        {
+            <p class="text-muted">No questions yet.</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Points</th>
+                        <th>Status</th>
+                        <th>Answer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var q in _questions)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@q.Title</strong>
+                                <br /><small class="text-muted">@q.Text</small>
+                            </td>
+                            <td>@q.Points</td>
+                            <td>
+                                <span class="badge @(q.ActiveStatus == "Active" ? "bg-success" : "bg-secondary")">
+                                    @q.ActiveStatus
+                                </span>
+                            </td>
+                            <td>
+                                @if (q.Answer is not null)
+                                {
+                                    <span class="text-success">✔ @q.Answer.Title</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+    else if (_tab == "create")
+    {
+        <div class="card">
+            <div class="card-body" style="max-width: 600px;">
+                <h5>Create New Question</h5>
+
+                <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    <input class="form-control" @bind="_newTitle" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Text</label>
+                    <textarea class="form-control" rows="3" @bind="_newText"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Points</label>
+                    <input class="form-control" type="number" min="0" @bind="_newPoints" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" @bind="_newStatus">
+                        <option value="0">Active</option>
+                        <option value="1">Inactive</option>
+                    </select>
+                </div>
+
+                @if (!string.IsNullOrEmpty(_createMessage))
+                {
+                    <div class="alert alert-info">@_createMessage</div>
+                }
+
+                <button class="btn btn-primary" @onclick="CreateQuestion">Create</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string _tab = "questions";
+    private List<QuestionDto>? _questions;
+
+    // Create form fields
+    private string _newTitle = "", _newText = "";
+    private int _newPoints;
+    private int _newStatus; // 0 = Active, 1 = Inactive
+    private string? _createMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadQuestions();
+    }
+
+    private async Task LoadQuestions()
+    {
+        _questions = await Api.GetAllQuestionsAsync();
+    }
+
+    private async Task CreateQuestion()
+    {
+        _createMessage = null;
+        try
+        {
+            await Api.CreateQuestionAsync(new CreateQuestionRequest(
+                Auth.CurrentUser!.Id,
+                _newTitle, _newText, _newPoints, _newStatus,
+                null, null, null));
+
+            _createMessage = "Question created!";
+            _newTitle = _newText = "";
+            _newPoints = 0;
+            _newStatus = 0;
+            await LoadQuestions();
+            _tab = "questions";
+        }
+        catch (Exception ex)
+        {
+            _createMessage = $"Error: {ex.Message}";
+        }
+    }
+}

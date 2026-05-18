@@ -1,4 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@using Evaluation.Web.Services
+@inject AuthState Auth
+@inject NavigationManager Nav
 
 <div class="page">
     <div class="sidebar">
@@ -6,8 +9,21 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <div class="top-row px-4 d-flex justify-content-between">
+            @if (Auth.IsLoggedIn)
+            {
+                <span>
+                    <strong>@Auth.CurrentUser?.FirstName @Auth.CurrentUser?.LastName</strong>
+                    <span class="badge bg-info ms-2">@Auth.ActiveRole</span>
+                </span>
+                <div>
+                    @if ((Auth.CurrentUser?.Roles.Count() ?? 0) > 1)
+                    {
+                        <button class="btn btn-sm btn-outline-secondary me-2" @onclick="SwitchRole">Switch Role</button>
+                    }
+                    <button class="btn btn-sm btn-outline-danger" @onclick="Logout">Logout</button>
+                </div>
+            }
         </div>
 
         <article class="content px-4">
@@ -21,3 +37,12 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    private void SwitchRole() => Nav.NavigateTo("/select-role");
+    private void Logout()
+    {
+        Auth.Logout();
+        Nav.NavigateTo("/login");
+    }
+}

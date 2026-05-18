@@ -26,7 +26,9 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
         {
             var user = await _userRepository.GetByIdAsync(request.Id);
 
-            user.Update(request.FirstName, request.LastName, request.Email);
+            var existingEmails = await _userRepository.GetAllEmailsAsync();
+
+            user.Update(request.FirstName, request.LastName, request.Email, existingEmails);
 
             await _userRepository.UpdateAsync(user);
 

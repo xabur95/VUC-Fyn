@@ -1,0 +1,53 @@
+@using Evaluation.Web.Services
+@inject ApiClient Api
+@inject AuthState Auth
+
+<h2>🎓 Student Dashboard</h2>
+<p class="text-muted">Welcome, @Auth.CurrentUser?.FirstName</p>
+
+<div class="mt-4">
+    <h5>Available Questions</h5>
+
+    @if (_questions is null)
+    {
+        <p class="text-muted">Loading...</p>
+    }
+    else if (_questions.Count == 0)
+    {
+        <p class="text-muted">No questions available yet.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var q in _questions.Where(q => q.ActiveStatus == "Active"))
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@q.Title</h5>
+                            <p class="card-text">@q.Text</p>
+                            <span class="badge bg-primary me-2">@q.Points pts</span>
+
+                            @if (q.Answer is not null)
+                            {
+                                <div class="mt-2 p-2 bg-light rounded">
+                                    <small class="text-muted">Answer:</small>
+                                    <p class="mb-0"><strong>@q.Answer.Title</strong> — @q.Answer.Text</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<QuestionDto>? _questions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _questions = await Api.GetAllQuestionsAsync();
+    }
+}

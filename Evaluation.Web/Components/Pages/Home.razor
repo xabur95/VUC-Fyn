@@ -1,7 +1,37 @@
 ﻿@page "/"
+@using Evaluation.Web.Services
+@inject AuthState Auth
+@inject NavigationManager Nav
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (!Auth.IsLoggedIn)
+{
+    <p>Redirecting to login...</p>
+}
+else if (Auth.ActiveRole is null)
+{
+    <p>Redirecting to role selection...</p>
+}
+else if (Auth.ActiveRole == "Admin")
+{
+    <AdminDashboard />
+}
+else if (Auth.ActiveRole == "Teacher")
+{
+    <TeacherDashboard />
+}
+else if (Auth.ActiveRole == "Student")
+{
+    <StudentDashboard />
+}
 
-Welcome to your new app.
+@code {
+    protected override void OnInitialized()
+    {
+        if (!Auth.IsLoggedIn)
+            Nav.NavigateTo("/login");
+        else if (Auth.ActiveRole is null)
+            Nav.NavigateTo("/select-role");
+    }
+}

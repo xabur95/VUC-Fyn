@@ -29,7 +29,7 @@ public class UserTest
     public void Create_WhenInvalidData_ThrowsErrorException(string firstName, string lastName, string email)
     {
         // Act
-        var user = () => Admin.Create(firstName, lastName, email);
+        var user = () => Admin.Create(firstName, lastName, email, "Password1", []);
 
         // Assert
         Assert.Throws<ErrorException>(user);
@@ -39,7 +39,7 @@ public class UserTest
     public void AssignRole_WhenRoleIsValid_ShouldAssignRole()
     {
         // Arrange
-        var user = Teacher.Create("Carl", "Carlson", "carl@gmail.com");
+        var user = Teacher.Create("Carl", "Carlson", "carl@gmail.com", "Password1", []);
 
         // Act
         user.AssignRole(new UserRole(RoleType.Admin));
@@ -52,7 +52,7 @@ public class UserTest
     public void AssignRole_WhenRoleIsAlreadyAssigned_ThrowsErrorException()
     {
         // Arrange
-        var user = Student.Create("Apu", "Nahasapeemapetilon", "apu@indiangmail.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
+        var user = Student.Create("Apu", "Nahasapeemapetilon", "apu@indiangmail.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null, []);
 
         // Assert
         Assert.Throws<ErrorException>(() => user.AssignRole(new UserRole(RoleType.Student)));
@@ -61,7 +61,7 @@ public class UserTest
     [Fact]
     public void RevokeRole_WhenRoleExists_RemovesRole()
     {                                                                                        // Arrange
-        var user = Teacher.Create("Lenny", "Leonard", "leeeennnyyy@wallmart.com");
+        var user = Teacher.Create("Lenny", "Leonard", "leeeennnyyy@wallmart.com", "Password1", []);
         user.AssignRole(new UserRole(RoleType.Admin));
 
         // Act
@@ -75,7 +75,7 @@ public class UserTest
     public void RevokeRole_WhenRoleDoesNotExist_ThrowsException()
     {
         // Arrange
-        var user = Student.Create("Maggie", "Simpson", "thababy@tahoo.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
+        var user = Student.Create("Maggie", "Simpson", "thababy@tahoo.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null, []);
         
         // Assert
         Assert.Throws<ErrorException>(() => user.RevokeRole(new UserRole(RoleType.Admin)));
@@ -85,10 +85,10 @@ public class UserTest
     public void Update_ShouldChangeNameAndEmail()
     {
         // Arrange
-        var user = Admin.Create("Abe", "Simpson", "grandpa@yahoo.com");
+        var user = Admin.Create("Abe", "Simpson", "grandpa@yahoo.com", "Password1", []);
 
         // Act
-        user.Update("Abraham", "Simpson", "hotDaddy@gmail.com");
+        user.Update("Abraham", "Simpson", "hotDaddy@gmail.com", []);
 
         // Assert
         Assert.Equal("Abraham", user.Name.FirstName);

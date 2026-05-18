@@ -11,7 +11,7 @@ public record UpdateTagCommand(UpdateTagRequest UpdateTagRequest)
     : IRequest<bool>, ITransactionalCommand;
 
 public class UpdateTagCommandHandler(
-    ILogger logger,
+    ILogger<UpdateTagCommandHandler> logger,
     ITagRepository tagRepository)
     : IRequestHandler<UpdateTagCommand, bool>
 {
