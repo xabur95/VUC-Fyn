@@ -1,0 +1,114 @@
+﻿@page "/dashboard"
+<!--TODO: implements IAsyncDisposable-->
+
+<PageTitle>Dashboard</PageTitle>
+
+@if (false)//(!isAuthenticated)
+{
+    <RedirectToLogin />
+}
+else
+{
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome!</h1>
+            <!--<h1>Welcome, @authService.CurrentUser!</h1>-->
+            <!--<button class="btn btn-outline-secondary" @onclick="HandleLogout">Logout</button>-->
+        </div>
+
+        <div class="tabs-container">
+            <div class="nav nav-tabs" role="tablist">
+                <button class="nav-link @(activeTab == "questions" ? "active" : "")" 
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("questions"))" 
+                        role="tab">
+                    Questions
+                </button>
+                <button class="nav-link @(activeTab == "assignments" ? "active" : "")" 
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("assignments"))" 
+                        role="tab">
+                    Assignments
+                </button>
+                <button class="nav-link @(activeTab == "evaluation" ? "active" : "")" 
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("evaluation"))" 
+                        role="tab">
+                    Evaluation
+                </button>
+                <button class="nav-link @(activeTab == "statistics" ? "active" : "")" 
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("statistics"))" 
+                        role="tab">
+                    Statistics
+                </button>
+            </div>
+
+            <div class="tab-content">
+                @if (activeTab == "questions")
+                {
+                    <div class="tab-pane active">
+                        <Questions />
+                    </div>
+                }
+                else if (activeTab == "assignments")
+                {
+                    <div class="tab-pane active">
+                        <Assignments />
+                    </div>
+                }
+                else if (activeTab == "evaluation")
+                {
+                    <div class="tab-pane active">
+                        <Evaluations />
+                    </div>
+                }
+                else if (activeTab == "statistics")
+                {
+                    <div class="tab-pane active">
+                        <Statistics />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private string activeTab = "questions";
+    //private bool isAuthenticated = false;
+
+    /*[Inject]
+    private AuthenticationStateService? authService { get; set; }*/
+
+    [Inject]
+    private NavigationManager? NavigationManager { get; set; }
+
+   /*protected override void OnInitialized()
+    {
+        if (authService != null)
+        {
+            isAuthenticated = authService.IsAuthenticated;
+            authService.OnAuthenticationStateChanged += StateHasChanged;
+        }
+    }*/
+
+    private void SetActiveTab(string tabName)
+    {
+        activeTab = tabName;
+    }
+
+    /*private async Task HandleLogout()
+    {
+        if (authService != null)
+        {
+            await authService.LogoutAsync();
+            NavigationManager?.NavigateTo("/login");
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (authService != null)
+        {
+            authService.OnAuthenticationStateChanged -= StateHasChanged;
+        }
+        await Task.CompletedTask;
+    }*/
+}
