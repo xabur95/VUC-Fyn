@@ -1,0 +1,43 @@
+# =============================================================
+# Promtail konfiguration
+#
+# Promtail læser Docker container-logs og sender dem til Loki.
+# Docker socket monteres i containeren så Promtail kan opdage
+# hvilke containers der kører (service discovery).
+# =============================================================
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+# Positions-filen husker hvor Promtail er kommet til i hver log-fil
+# så den ikke sender de samme log-linjer to gange ved genstart
+positions:
+  filename: /tmp/positions.yaml
+
+# Loki-endpoint som logs sendes til
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+
+  - job_name: docker-containers
+    # Docker service discovery via Docker socket
+    # Opdager automatisk nye containers uden genstart af Promtail
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+
+    relabel_configs:
+      # Brug container-navn som label (fjern den ledende skråstreg)
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: container
+
+      # Angiv om det er stdout eller stderr
+      - source_labels: ['__meta_docker_container_log_stream']
+        target_label: logstream
+
+      # Brug Docker Compose service-navn som label
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        target_label: service

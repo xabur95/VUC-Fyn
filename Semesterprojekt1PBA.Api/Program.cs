@@ -1,4 +1,5 @@
 using MediatR;
+using Prometheus;
 using Microsoft.EntityFrameworkCore;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 using Semesterprojekt1PBA.Application.Helpers;
@@ -43,6 +44,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+
+// Metrikker — placeret efter routing, før endpoints
+app.UseHttpMetrics();   // Indsamler HTTP request-metrikker (status, latency, m.m.)
+app.UseMetricServer();  // Eksponerer /metrics til Prometheus-scraping
 
 app.MapUserEndpoints();
 app.Run();
