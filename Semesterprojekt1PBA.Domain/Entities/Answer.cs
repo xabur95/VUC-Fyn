@@ -15,7 +15,8 @@ namespace Semesterprojekt1PBA.Domain.Entities
         public Guid QuestionId { get; private set; }
         public Guid CreatedByUserId { get; private set; }
 
-        // EF Core binds to this constructor by parameter-name → property-name matching.
+        protected Answer() { }
+
         internal Answer(Guid questionId, Title title, string text, Guid createdByUserId)
         {
             if (string.IsNullOrWhiteSpace(text))

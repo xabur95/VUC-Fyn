@@ -1,14 +1,13 @@
 using MediatR;
-using Prometheus;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
+using Semesterprojekt1PBA.Api;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 using Semesterprojekt1PBA.Application.Helpers;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
-using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Infrastructure.Database;
 using Semesterprojekt1PBA.Infrastructure.Database.Repositories;
-using Semesterprojekt1PBA.Api;
 using Semesterprojekt1PBA.Presentation.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,9 +16,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<ErrorExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITopicRepository, TopicRepository>(); 
+builder.Services.AddScoped<ITopicRepository, TopicRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
-builder.Services.AddScoped<ISchoolRepository, SchoolRepository>(); 
+builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork<AppDbContext>>();
@@ -37,6 +36,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
+// === SEEDER START — fjern denne blok hvis den ikke er ønsket ===
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+    await DatabaseSeeder.SeedAsync(db);
+}
+// === SEEDER SLUT ===
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -46,8 +54,8 @@ app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 // Metrikker — placeret efter routing, før endpoints
-app.UseHttpMetrics();   // Indsamler HTTP request-metrikker (status, latency, m.m.)
-app.UseMetricServer();  // Eksponerer /metrics til Prometheus-scraping
+app.UseHttpMetrics(); // Indsamler HTTP request-metrikker (status, latency, m.m.)
+app.UseMetricServer(); // Eksponerer /metrics til Prometheus-scraping
 
 app.MapUserEndpoints();
 app.Run();

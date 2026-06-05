@@ -26,5 +26,13 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>().OwnsOne(u => u.Name);
         modelBuilder.Entity<User>().OwnsOne(u => u.Email);
         modelBuilder.Entity<User>().OwnsMany(u => u.Roles, r => { r.ToTable("UserRoles"); });
+
+        modelBuilder.Entity<Class>().OwnsOne(c => c.ClassDateRange);
+        modelBuilder.Entity<Class>().OwnsOne(c => c.Title);
+        modelBuilder.Entity<School>().OwnsOne(s => s.Title);
+        modelBuilder.Entity<Subject>().OwnsOne(s => s.Title);
+        modelBuilder.Entity<Question>().OwnsOne(q => q.Title);
+        modelBuilder.Entity<Answer>().OwnsOne(a => a.Title);
+        modelBuilder.Entity<Tag>().OwnsOne(t => t.Title);
     }
 }

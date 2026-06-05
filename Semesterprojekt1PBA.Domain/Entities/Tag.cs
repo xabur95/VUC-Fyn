@@ -11,7 +11,8 @@ namespace Semesterprojekt1PBA.Domain.Entities
         public Title Title { get; private set; }
         public string Description { get; private set; }
 
-        // EF Core binds to this private constructor via parameter-name matching.
+        private Tag() { }
+
         private Tag(Title title, string description)
         {
             Id = Guid.NewGuid();

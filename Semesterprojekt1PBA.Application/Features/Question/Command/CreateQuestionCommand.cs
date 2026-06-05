@@ -14,7 +14,7 @@ public record CreateQuestionCommand(CreateQuestionRequest CreateQuestionRequest)
     : IRequest<Guid>, ITransactionalCommand;
 
 public class CreateQuestionCommandHandler(
-    ILogger logger,
+    ILogger<CreateQuestionCommandHandler> logger,
     IQuestionRepository questionRepository,
     IUserRepository userRepository,
     ITagRepository tagRepository,
