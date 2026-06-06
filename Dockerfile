@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0.8 AS build
 WORKDIR /src
 
 # Kopier alle .csproj-filer mens mappestrukturen bevares
@@ -26,7 +26,7 @@ RUN dotnet publish Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj \
 # Kun ASP.NET Core runtime — ingen SDK, intet kildekode.
 # Kører som non-root bruger for sikkerhed.
 # =============================================================
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.8 AS runtime
 WORKDIR /app
 
 # Opret en system-bruger og -gruppe der ikke er root
