@@ -57,8 +57,11 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetByRoleAsync(RoleType roleType)
     {
-        var users = _appDbContext.Users.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.RoleType == roleType) && u.IsActive);
+        var users = await _appDbContext.Users
+            .Include(u => u.Roles)
+            .Where(u => u.IsActive)
+            .ToListAsync();
 
-        return await users.ToListAsync();
+        return users.Where(u => u.Roles.Any(r => r.RoleType == roleType)).ToList();
     }
 }

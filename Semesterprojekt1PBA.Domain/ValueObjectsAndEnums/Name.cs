@@ -45,7 +45,7 @@ public record Name
 
     private void AssureNoSpecialCharacters(string value, string paramName)
     {
-        if (!Regex.IsMatch(value, "^[a-zA-Z]+$"))
+        if (!Regex.IsMatch(value, "^[a-zA-ZæøåÆØÅ\\-\\s]+$"))
         {
             throw new ErrorException($"{paramName} cannot contain special characters.", errorCode: "INVALID_NAME");
         }
