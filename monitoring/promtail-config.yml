@@ -1,11 +1,3 @@
-# =============================================================
-# Promtail konfiguration
-#
-# Promtail læser Docker container-logs og sender dem til Loki.
-# Docker socket monteres i containeren så Promtail kan opdage
-# hvilke containers der kører (service discovery).
-# =============================================================
-
 server:
   http_listen_port: 9080
   grpc_listen_port: 0

@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
+using Serilog;
+using Serilog.Formatting.Compact;
 using Semesterprojekt1PBA.Api;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 using Semesterprojekt1PBA.Application.Helpers;
@@ -11,6 +13,10 @@ using Semesterprojekt1PBA.Infrastructure.Database.Repositories;
 using Semesterprojekt1PBA.Presentation.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((ctx, cfg) =>
+    cfg.ReadFrom.Configuration(ctx.Configuration)
+       .WriteTo.Console(new CompactJsonFormatter()));
 
 builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<ErrorExceptionHandler>();
@@ -36,24 +42,22 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// === SEEDER START — fjern denne blok hvis den ikke er ønsket ===
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.MigrateAsync();
     await DatabaseSeeder.SeedAsync(db);
 }
-// === SEEDER SLUT ===
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
+app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
-// Metrikker — placeret efter routing, før endpoints
 app.UseHttpMetrics(); // Indsamler HTTP request-metrikker (status, latency, m.m.)
 app.UseMetricServer(); // Eksponerer /metrics til Prometheus-scraping
 

@@ -1,9 +1,3 @@
-# =============================================================
-# Stage 1: Build
-# .csproj-filer kopieres FØR resten af kildekode, så Docker
-# kan cache dotnet restore-laget og kun køre restore igen
-# når en .csproj ændres.
-# =============================================================
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 

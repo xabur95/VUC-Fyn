@@ -1,10 +1,3 @@
-# =============================================================
-# Prometheus scrape-konfiguration
-#
-# Prometheus poller disse targets hvert 15. sekund og gemmer
-# metrikker som tidsserier i sin lokale TSDB.
-# =============================================================
-
 global:
   scrape_interval: 15s      # Hvor ofte der indsamles metrikker
   evaluation_interval: 15s  # Hvor ofte alert-regler evalueres

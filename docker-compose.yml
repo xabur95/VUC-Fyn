@@ -1,16 +1,5 @@
-# =============================================================
-# Docker Compose — VUC-Fyn Semesterprojekt
-#
-# Kræver en .env-fil i roden med følgende variabler:
-#   DB_PASSWORD       — SQL Server SA-adgangskode
-#   GRAFANA_PASSWORD  — Grafana admin-adgangskode
-#
-# Se .env.example for et skabelon.
-# =============================================================
-
 services:
 
-  # ── API ──────────────────────────────────────────────────
   api:
     build:
       context: .
@@ -29,7 +18,6 @@ services:
       - app-net
       - monitoring-net
 
-  # ── SQL Server ───────────────────────────────────────────
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
@@ -54,7 +42,6 @@ services:
     networks:
       - app-net
 
-  # ── Node Exporter (host-metrics) ─────────────────────────
   node-exporter:
     image: prom/node-exporter:v1.9.1
     ports:
@@ -71,7 +58,6 @@ services:
     networks:
       - monitoring-net
 
-  # ── cAdvisor (container-metrics) ─────────────────────────
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.52.0
     ports:
@@ -84,7 +70,6 @@ services:
     networks:
       - monitoring-net
 
-  # ── Prometheus ───────────────────────────────────────────
   prometheus:
     image: prom/prometheus:v2.53.5
     ports:
@@ -100,7 +85,6 @@ services:
       - monitoring-net
       - app-net   # Skal nå api-servicen for at scrape /metrics
 
-  # ── Grafana ───────────────────────────────────────────────
   grafana:
     image: grafana/grafana:11.5.0
     ports:
@@ -115,7 +99,6 @@ services:
     networks:
       - monitoring-net
 
-  # ── Loki (log-aggregering) ────────────────────────────────
   loki:
     image: grafana/loki:3.4.3
     ports:
@@ -127,7 +110,6 @@ services:
     networks:
       - monitoring-net
 
-  # ── Promtail (log-indsamler) ──────────────────────────────
   promtail:
     image: grafana/promtail:3.4.3
     volumes:
@@ -142,7 +124,6 @@ services:
     networks:
       - monitoring-net
 
-# ── Netværk ───────────────────────────────────────────────────
 networks:
   app-net:       # API og database
   monitoring-net: # Observability-stakken

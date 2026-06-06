@@ -1,11 +1,3 @@
-# =============================================================
-# Loki konfiguration
-#
-# Loki er et log-aggregeringssystem fra Grafana Labs.
-# Det modtager logs fra Promtail og gør dem søgbare i Grafana.
-# Denne konfiguration bruger lokal filsystem-lagring (single process).
-# =============================================================
-
 auth_enabled: false
 
 server:
