@@ -1,8 +1,4 @@
-# VUC-Fyn — Opsætningsguide
-
-Denne guide får dig fra et tomt repo-clone til en fuldt kørende lokal udviklingsstack med API, database, monitoring og logging.
-
----
+# VUC-Fyn — DevOps opsætningsaguide
 
 ## Sådan er DevOps-stacken designet
 
@@ -27,13 +23,13 @@ Inden du sætter det op, er det nyttigt at forstå hvad du starter. Stacken best
 
 ```mermaid
 graph LR
-    subgraph "app-net"
+    subgraph "app & db"
         api["api\n:5000"]
         db["db\n:1433"]
         api -->|"SQL"| db
     end
 
-    subgraph "monitoring-net"
+    subgraph "monitoring & logging"
         prometheus["prometheus\n:9090"]
         grafana["grafana\n:3000"]
         loki["loki\n:3100"]
@@ -52,8 +48,8 @@ graph LR
     api -->|"JSON stdout"| promtail
 ```
 
-- **app-net** — kun `api` og `db` taler sammen her. Databasen er ikke synlig for resten af stacken.
-- **monitoring-net** hele observability-stakken. `api` er med på begge netværk så Prometheus kan scrape den.
+- **app** — kun `api/Onion` og `db` taler sammen her. Databasen er ikke synlig for resten af stacken.
+- **monitoring** hele observability-stakken. `api` er med på begge netværk så Prometheus kan scrape den.
 
 ### Komplet observability flow
 
@@ -116,7 +112,7 @@ API (JSON stdout) ──▶ Docker logs ──▶ Promtail ──▶ Loki ──
 
 Eksempler på LogQL queries i Grafana:
 ```
-{service="api"} | json | level="error"
+{service="api"} | json | @l="Error"
 {service="api"} | json | StatusCode >= 500
 ```
 
@@ -144,19 +140,15 @@ Når API'en starter første gang, kører den automatisk:
 
 Det betyder at `docker compose up` er alt hvad du behøver — ingen manuelle `dotnet ef database update`.
 
----
-
-## Forudsætninger
-
-Følgende skal køre på din pc inden du går i gang:
-
-- Docker Desktop
 
 ---
+# Opsætning
 
 ## Trin 1 — Opret din lokale `.env` fil
 
-Projektet kræver en `.env` fil med dine lokale passwords til databasen og Grafana. Denne fil er **ikke** med i repo'et — den er i `.gitignore` så passwords aldrig ryger på GitHub. Du skal derfor oprette din egen kopi lokalt.
+### *Inden du gør noget -> Så skal Docker desktop køre !!!* <br><br>
+
+Projektet kræver en `.env` fil med passwords til databasen og Grafana. Denne fil er **ikke** med i repo'et — den er i `.gitignore` så passwords aldrig ryger på GitHub. Du skal derfor oprette din egen kopi lokalt.
 
 Åbn en terminal i roden af projektet og kør:
 
@@ -171,42 +163,43 @@ Filen ser sådan ud:
 ```
 # SQL Server SA-adgangskode
 # Krav: minimum 8 tegn, store+små bogstaver, tal og specialtegn
-DB_PASSWORD=ChangeMe123!
+DB_PASSWORD=VucFyn2026!
 
 # Grafana admin-adgangskode
-GRAFANA_PASSWORD=ChangeMe123!
-```
-
-Erstat begge placeholder værdier med:
-
-```
-DB_PASSWORD=VucFyn2026!
 GRAFANA_PASSWORD=VucFyn2026!
 ```
 
-> **Vigtigt:** Så har vi alle det samme password
+## **Vigtigt:** Jeg har opsat at vores passwords er ens - men de kan ændres i filen efter behov
 
 ---
 
 # Trin 2 — Start stacken
 
+Du skal åbne en terminal i roden af projektet - eller højreclicke på hovedprojektet 'Solution 'Semesterprojekt' -> 'open in terminal' -> så bruges den interne terminal
+
 ```powershell
 docker compose up --build
 ```
 
-Første gang tager det 3-5 minutter da Docker skal downloade alle images. Efterfølgende starter det på under 30 sekunder.
+Første gang tager det 3-5 minutter da Docker skal downloade alle images. Efterfølgende starter det på under 30 sekunder.<br><br>
 
-Når du ser denne linje er API'en klar:
-
-```
-api-1  | Now listening on: http://[::]:8080
-```
-
-Vil du køre i baggrunden (anbefales til daglig brug):
+Tjek nu at alle containers er oppe og køre i docker, der skal være:
 
 ```powershell
-docker compose up --build -d
+docker compose ps
 ```
+
+Du skal meget gerne have disse containers:
+- `api-1` — VUC-Fyn API (port 5000)
+- `db-1` — SQL Server database (port 1433)
+- `prometheus-1` — Prometheus metrics (port 9090)
+- `grafana-1` — Grafana dashboards (port 3000)
+- `loki-1` — Loki log storage (port 3100)
+- `promtail-1` — Promtail log collector
+- `node-exporter-1` — Node Exporter host metrics (port 9100)
+- `cadvisor-1` — cAdvisor container metrics (port 8081)
+
+Alle services skal vise status `running` eller `healthy` i kolonnen `STATUS`.
 
 ---
 
