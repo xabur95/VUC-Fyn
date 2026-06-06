@@ -1,0 +1,57 @@
+﻿.question-form {
+    display: flex;
+    gap: 50px;
+    padding: 20px;
+    align-items: flex-start;
+}
+
+/* LEFT SIDE */
+.left-side {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* RIGHT SIDE */
+.right-side {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-box {
+    height: 45px;
+    border-radius: 6px;
+    padding: 10px;
+    border: 1px solid #999;
+}
+
+.upload-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.upload-label {
+    font-weight: 600;
+}
+
+.upload-btn {
+    border: 1px solid #999;
+    border-radius: 6px;
+    padding: 8px;
+    background-color: white;
+}
+
+.button-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.save-btn {
+    width: 180px;
+    height: 45px;
+}

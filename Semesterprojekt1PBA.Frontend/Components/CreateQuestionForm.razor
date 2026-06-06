@@ -1,0 +1,170 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Semesterprojekt1PBA.Frontend.Models
+
+<div class="question-form">
+
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+
+        <InputText @bind-Value="FormQuestion.Title"
+                   placeholder="Title"
+                   class="form-control input-box" />
+
+        <InputText @bind-Value="FormQuestion.Text"
+                   placeholder="Text"
+                   class="form-control input-box" />
+
+        <InputSelect @bind-Value="FormQuestion.Subjects"
+                     class="form-control input-box">
+                     
+                     <!--TODO: Populate box with subject from API-->
+            @* <option value="">Select Subject</option>
+            <option value="Danish">Danish</option>
+            <option value="English">English</option>
+            <option value="Math">Math</option>
+            <option value="Physics">Physics</option> *@
+
+        </InputSelect>
+
+        <InputSelect @bind-Value="FormQuestion.Tags"
+                     class="form-control input-box">
+                     
+                     <!--TODO: Populate box with subject from API-->
+            @* <option value="">Select Level</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option> *@
+
+        </InputSelect>
+
+        <InputText @bind-Value="Type"
+                   placeholder="Type"
+                   class="form-control input-box" />
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right-side">
+
+        <div class="upload-group">
+            <label class="upload-label">Upload Question</label>
+            <InputFile OnChange="HandleQuestionUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="upload-group">
+            <label class="upload-label">Upload Video</label>
+            <InputFile OnChange="HandleVideoUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="upload-group">
+            <label class="upload-label">Upload PDF</label>
+            <InputFile OnChange="HandlePdfUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="upload-group">
+            <label class="upload-label">Upload Answer</label>
+            <InputFile OnChange="HandleAnswerUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="button-container">
+            <button class="btn btn-primary save-btn"
+                    @onclick="CreateOrUpdate">
+                Create / Update
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    [Parameter]
+    public EventCallback<Question> OnQuestionCreated { get; set; }
+    [Parameter]
+    public Question? ExistingQuestion { get; set; }
+
+    private bool IsEditMode => ExistingQuestion != null;
+
+    private Question FormQuestion = new Question();
+    private string Title = string.Empty;
+    private string Text = string.Empty;
+    private int Points;
+    private List<Subject> Subjects = [];
+    private string Type = string.Empty;
+
+    private IBrowserFile? QuestionFile;
+    private IBrowserFile? VideoFile;
+    private IBrowserFile? AnswerFile;
+    private IBrowserFile? PdfFile;
+
+    protected override void OnParametersSet()
+    {
+        if (ExistingQuestion != null)
+        {
+            FormQuestion = ExistingQuestion;
+
+        }
+    }
+
+    private void HandleQuestionUpload(InputFileChangeEventArgs e)
+    {
+        QuestionFile = e.File;
+    }
+
+    private void HandleVideoUpload(InputFileChangeEventArgs e)
+    {
+        VideoFile = e.File;
+    }
+
+    private void HandleAnswerUpload(InputFileChangeEventArgs e)
+    {
+        AnswerFile = e.File;
+    }
+
+    private void HandlePdfUpload(InputFileChangeEventArgs e)
+    {
+        PdfFile = e.File;
+    }
+
+    private async Task CreateOrUpdate()
+    {
+        if (IsEditMode)
+        {
+            ExistingQuestion = FormQuestion;
+        }
+        else
+        {
+            //TODO: Add new question to API
+            // int newId = 1;
+
+            // if (GlobalVariables.AllQuestions.Any())
+            // {
+            //     newId = GlobalVariables.AllQuestions.Max(q => q.Id) + 1;
+            // }
+
+            // var newQuestion = new Question
+            // {
+            //     Id = newId,
+            //     Subject = Subject,
+            //     Topic = Topic,
+            //     Type = Type,
+            //     Level = Level,
+            //     Date = DateTime.Now,
+            //     Owner = "Me",
+            //     Tag = Title
+            // };
+
+            // GlobalVariables.AllQuestions.Add(newQuestion);
+
+            // await OnQuestionCreated.InvokeAsync(newQuestion);
+        }
+
+        await OnClose.InvokeAsync();
+    }
+}
