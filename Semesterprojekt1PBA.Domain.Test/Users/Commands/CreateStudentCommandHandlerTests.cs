@@ -27,6 +27,7 @@ public class CreateStudentCommandHandlerTests
     {
         // Arrange
         _mockRepository.Setup(r => r.AddAsync(It.IsAny<Student>())).Returns(Task.CompletedTask);
+        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<ValueObjectsAndEnums.Email>());
         var handler = new CreateStudentCommandHandler(_mockRepository.Object, _mockLogger.Object);
         var command = new CreateStudentCommand("Bart", "Simpson", "bart@springfield.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null);
 
@@ -42,6 +43,7 @@ public class CreateStudentCommandHandlerTests
     {
         // Arrange
         _mockRepository.Setup(r => r.AddAsync(It.IsAny<Student>())).Returns(Task.CompletedTask);
+        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<ValueObjectsAndEnums.Email>());
         var handler = new CreateStudentCommandHandler(_mockRepository.Object, _mockLogger.Object);
         var command = new CreateStudentCommand("Bart", "Simpson", "bart@springfield.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null);
 

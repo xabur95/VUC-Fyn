@@ -22,6 +22,7 @@ public class UpdateUserCommandHandlerTests
         var user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now),
             null, []);
         mockRepository.Setup(repo => repo.GetByIdAsync(user.Id)).ReturnsAsync(user);
+        mockRepository.Setup(repo => repo.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<ValueObjectsAndEnums.Email>());
         var updateUserCommandHandler = new UpdateUserCommandHandler(mockRepository.Object, mockLogger.Object);
         var command = new UpdateUserCommand
         {
