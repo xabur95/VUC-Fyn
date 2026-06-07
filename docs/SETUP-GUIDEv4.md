@@ -217,6 +217,18 @@ Alle services skal vise status `running` eller `healthy` i kolonnen `STATUS`.
 | **Node Exporter** | http://localhost:9100/metrics | Host metrics |
 | **Loki** | http://localhost:3100 | Log aggregering (ingen browser UI) |
 
+### Verificer seed-data
+
+API'en populerer automatisk databasen med testdata første gang den starter. Tjek at det virkede ved at åbne disse URLs i browseren:
+
+| URL | Forventet resultat |
+|---|---|
+| http://localhost:5000/users/role/Admin | 2 admins |
+| http://localhost:5000/users/role/Teacher | 10 lærere |
+| http://localhost:5000/users/role/Student | 20 studerende |
+
+Hvis du får JSON tilbage med brugere er alt korrekt opsat.
+
 ---
 
 # Trin 4 — Opsæt Grafana datasources (kun første gang)
