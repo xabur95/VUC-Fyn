@@ -13,7 +13,7 @@ public class QuestionTests
     // ---------- helpers ----------
 
     private static Teacher NewTeacher(string email = "teach@vucfyn.dk") =>
-        Teacher.Create("Tina", "Teacher", email);
+        Teacher.Create("Tina", "Teacher", email, "Password1", []);
 
     private static Question NewQuestion(Teacher? creator = null) =>
         Question.Create(

@@ -1,15 +1,18 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.AssignRole;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateStudent;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateTeacher;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.DeactivateUser;
+using Semesterprojekt1PBA.Application.Features.Users.Commands.ImportStudents;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.RevokeRole;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.UpdateUser;
 using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUserById;
 using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUsersByRole;
+using Semesterprojekt1PBA.Application.Features.Users.Queries.Login;
 using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Presentation.Endpoints;
@@ -24,6 +27,13 @@ public static class UserEndpoints
 {
     public static void MapUserEndpoints(this WebApplication app)
     {
+        // Login
+        app.MapPost("/users/login", async (IMediator mediator, LoginQuery request) =>
+        {
+            var result = await mediator.Send(request);
+            return Results.Ok(result);
+        });
+
         // Create Admin
         app.MapPost("/users/admin", async (IMediator mediator, CreateAdminCommand request) =>
         {
@@ -89,5 +99,13 @@ public static class UserEndpoints
             var result = await mediator.Send(new GetUsersByRoleQuery { RoleType = roleType });
             return Results.Ok(result);
         });
+
+        // Import Students From CSV
+        app.MapPost("/users/students/import", async (IMediator mediator, IFormFile file) =>
+        {
+            await using var stream = file.OpenReadStream();
+            await mediator.Send(new ImportStudentsFromCsvCommand { CsvFile = stream });
+            return Results.Ok();
+        }).DisableAntiforgery();
     }
 }

@@ -12,7 +12,7 @@ public record SetAnswerCommand(SetAnswerRequest SetAnswerRequest)
     : IRequest<Guid>, ITransactionalCommand;
 
 public class SetAnswerCommandHandler(
-    ILogger logger,
+    ILogger<SetAnswerCommandHandler> logger,
     IQuestionRepository questionRepository,
     IUserRepository userRepository)
     : IRequestHandler<SetAnswerCommand, Guid>

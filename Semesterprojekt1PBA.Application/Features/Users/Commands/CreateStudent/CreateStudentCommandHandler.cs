@@ -25,7 +25,9 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
     {
         try
         {
-            var user = Student.Create(request.FirstName, request.LastName, request.Email, request.Knr, request.Tilmeldt, request.Ophørt);
+            var existingEmails = await _userRepository.GetAllEmailsAsync();
+
+            var user = Student.Create(request.FirstName, request.LastName, request.Email, request.Password, request.Knr, request.Tilmeldt, request.Ophørt, existingEmails);
 
             await _userRepository.AddAsync(user);
 

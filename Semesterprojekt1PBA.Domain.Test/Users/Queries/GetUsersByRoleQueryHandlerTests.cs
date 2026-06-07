@@ -28,8 +28,8 @@ public class GetUsersByRoleQueryHandlerTests
     public async Task GetUsersByRoleQuery_WhenUsersExist_ReturnsAllUsersWithRole()
     {
         // Arrange
-        var student1 = Student.Create("Homer", "Simpson", "homer@gmail.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
-        var student2 = Student.Create("Bart", "Simpson", "bart@gmail.com", "67890", DateOnly.FromDateTime(DateTime.Now), null);
+        var student1 = Student.Create("Homer", "Simpson", "homer@gmail.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null, []);
+        var student2 = Student.Create("Bart", "Simpson", "bart@gmail.com", "Password1", "67890", DateOnly.FromDateTime(DateTime.Now), null, []);
         var users = new List<User> { student1, student2 };
 
         _mockRepository.Setup(r => r.GetByRoleAsync(RoleType.Student)).ReturnsAsync(users);

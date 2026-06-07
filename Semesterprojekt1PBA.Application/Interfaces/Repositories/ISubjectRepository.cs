@@ -10,6 +10,7 @@ namespace Semesterprojekt1PBA.Application.Interfaces.Repositories
         Task AddAsync(Subject subject);
         Task<IReadOnlyCollection<Subject>> GetByNameAsync(string name);
         Task<IReadOnlyCollection<Subject>> GetAllSubjectsAsync();
+        Task<Subject> GetByIdAsync(Guid id);
 
     }
 }

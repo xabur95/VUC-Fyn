@@ -35,15 +35,15 @@ public class ImportStudentsFromCsvCommandHandler : IRequestHandler<ImportStudent
             {
                 var columns = line.Split(';');
 
-                await _mediator.Send(new CreateStudentCommand
-                {
-                    FirstName = columns[2],
-                    LastName = columns[3],
-                    Email = columns[9],
-                    Knr = columns[0],
-                    Tilmeldt = DateOnly.ParseExact(columns[4], "dd.MM.yy", CultureInfo.InvariantCulture),
-                    Ophørt = null
-                }, cancellationToken);
+                await _mediator.Send(new CreateStudentCommand(
+                    columns[2],
+                    columns[3],
+                    columns[9],
+                    "Default123!",
+                    columns[0],
+                    DateOnly.ParseExact(columns[4], "dd.MM.yy", CultureInfo.InvariantCulture),
+                    null
+                ), cancellationToken);
 
                 line = await reader.ReadLineAsync();
             }

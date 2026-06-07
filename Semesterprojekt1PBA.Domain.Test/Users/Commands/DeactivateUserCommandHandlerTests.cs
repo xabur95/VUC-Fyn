@@ -20,7 +20,7 @@ public class DeactivateUserCommandHandlerTests
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
         var mockLogger = new Mock<ILogger<DeactivateUserCommandHandler>>();
-        var user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
+        var user = Student.Create("Homer", "Simpson", "dooh@gmail.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null, []);
         mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(user);
         var deactivateUserCommandHandler = new DeactivateUserCommandHandler(mockRepository.Object, mockLogger.Object);
         var command = new DeactivateUserCommand { Id = user.Id };

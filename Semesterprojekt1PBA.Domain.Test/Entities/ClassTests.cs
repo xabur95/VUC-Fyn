@@ -89,7 +89,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S3", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var student = Student.Create("Stu", "Dent", "stu@example.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
+            var student = Student.Create("Stu", "Dent", "stu@example.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null, []);
 
             // Act
             cls.AddStudent(student);
@@ -104,7 +104,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S5", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var student = Student.Create("Dup", "User", "dup@example.com", "12345", DateOnly.FromDateTime(DateTime.Now), null);
+            var student = Student.Create("Dup", "User", "dup@example.com", "Password1", "12345", DateOnly.FromDateTime(DateTime.Now), null, []);
             cls.AddStudent(student);
 
             // Act & Assert
@@ -116,7 +116,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S6", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var teacher = Teacher.Create("Bo", "Teacher", "teach@example.com");
+            var teacher = Teacher.Create("Bo", "Teacher", "teach@example.com", "Password1", []);
 
             // Act
             cls.AddTeacher(teacher);
@@ -131,7 +131,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Entities
         {
             // Arrange
             var cls = Class.Create("S8", DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), Array.Empty<Class>());
-            var teacher = Teacher.Create("DupT", "Eacher", "dupt@example.com");
+            var teacher = Teacher.Create("DupT", "Eacher", "dupt@example.com", "Password1", []);
             cls.AddTeacher(teacher);
 
             // Act & Assert

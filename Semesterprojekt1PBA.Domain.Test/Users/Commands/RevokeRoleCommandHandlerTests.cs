@@ -20,7 +20,7 @@ public class RevokeRoleCommandHandlerTests
         // Arrange
         var mockRepository = new Mock<IUserRepository>();
         var mockLogger = new Mock<ILogger<RevokeRoleCommandHandler>>();
-        var user = Teacher.Create("Homer", "Simpson", "dooh@gmail.com");
+        var user = Teacher.Create("Homer", "Simpson", "dooh@gmail.com", "Password1", []);
         user.AssignRole(new UserRole(RoleType.Admin));
         mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(user);
         var revokeCommandHandler = new RevokeRoleCommandHandler(mockRepository.Object, mockLogger.Object);

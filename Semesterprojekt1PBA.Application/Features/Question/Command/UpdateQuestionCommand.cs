@@ -12,7 +12,7 @@ public record UpdateQuestionCommand(UpdateQuestionRequest UpdateQuestionRequest)
     : IRequest<bool>, ITransactionalCommand;
 
 public class UpdateQuestionCommandHandler(
-    ILogger logger,
+    ILogger<UpdateQuestionCommandHandler> logger,
     IQuestionRepository questionRepository,
     IUserRepository userRepository)
     : IRequestHandler<UpdateQuestionCommand, bool>

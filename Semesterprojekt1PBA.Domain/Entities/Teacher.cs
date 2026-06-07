@@ -13,12 +13,13 @@ public class Teacher : User
         _rolePolicy = CreatePolicy(RoleType.Teacher);
     }
 
-    protected Teacher(string firstName, string lastName, string email) :base(firstName, lastName, email, RoleType.Teacher) 
+    private Teacher(string firstName, string lastName, string email, string password, IReadOnlyCollection<Email> existingEmails)
+        : base(firstName, lastName, email, password, RoleType.Teacher, existingEmails)
     { }
 
-    public static Teacher Create(string firstName, string lastName, string email)
+    public static Teacher Create(string firstName, string lastName, string email, string password, IReadOnlyCollection<Email> existingEmails)
     {
-        var teacher = new Teacher(firstName, lastName, email);
+        var teacher = new Teacher(firstName, lastName, email, password, existingEmails);
         teacher.AssignRole(new UserRole(RoleType.Teacher));
         return teacher;
     }

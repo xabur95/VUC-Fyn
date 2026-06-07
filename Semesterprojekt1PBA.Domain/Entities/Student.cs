@@ -17,17 +17,17 @@ public class Student : User
         _rolePolicy = CreatePolicy(RoleType.Student);
     }
 
-    protected Student(string firstName, string lastName, string email, string knr, DateOnly startDate, DateOnly? endDate)
-        : base(firstName, lastName, email, RoleType.Student)
+    private Student(string firstName, string lastName, string email, string password, string knr, DateOnly startDate, DateOnly? endDate, IReadOnlyCollection<Email> existingEmails)
+        : base(firstName, lastName, email, password, RoleType.Student, existingEmails)
     {
         Knr = knr;
         StartDate = startDate;
         EndDate = endDate;
     }
 
-    public static Student Create(string firstName, string lastName, string email, string knr, DateOnly tilmeldt, DateOnly? ophørt)
+    public static Student Create(string firstName, string lastName, string email, string password, string knr, DateOnly tilmeldt, DateOnly? ophørt, IReadOnlyCollection<Email> existingEmails)
     {
-        var student = new Student(firstName, lastName, email, knr, tilmeldt, ophørt);
+        var student = new Student(firstName, lastName, email, password, knr, tilmeldt, ophørt, existingEmails);
         student.AssignRole(new UserRole(RoleType.Student));
         return student;
     }

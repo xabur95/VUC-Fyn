@@ -6,7 +6,7 @@ using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 namespace Semesterprojekt1PBA.Application.Features.Tag.Query;
 
 public class GetAllTagsQueryHandler(
-    ILogger logger,
+    ILogger<GetAllTagsQueryHandler> logger,
     ITagRepository tagRepository)
     : IRequestHandler<GetAllTagsQuery, IEnumerable<GetTagResponse>>
 {

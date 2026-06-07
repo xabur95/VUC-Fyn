@@ -9,11 +9,13 @@ namespace Semesterprojekt1PBA.Domain.Entities
     /// </summary>
     public class Answer : Entity
     {
-        public Title Title { get; private set; }
-        public string Text { get; private set; }
+        public Title Title { get; private set; } = null!;
+        public string Text { get; private set; } = null!;
 
         public Guid QuestionId { get; private set; }
         public Guid CreatedByUserId { get; private set; }
+
+        protected Answer() { } // For EF Core
 
         // EF Core binds to this constructor by parameter-name → property-name matching.
         internal Answer(Guid questionId, Title title, string text, Guid createdByUserId)

@@ -18,6 +18,7 @@ public class User : Entity
     private readonly List<UserRole> _roles = [];
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
+    public Password Password { get; private set; } = null!;
     public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
 
     public bool IsActive { get; private set; } = true;
@@ -26,23 +27,14 @@ public class User : Entity
     {
     }
 
-    private User(string firstName, string lastName, string email, IRolePolicy rolePolicy)
+    protected User(string firstName, string lastName, string email, string password, RoleType roleType, IReadOnlyCollection<Email> existingEmails)
     {
-        var name = new Name(firstName, lastName);
-        Name = name;
+        var newEmail = new Email(email);
+        AssureEmailIsUnique(newEmail, existingEmails);
 
-        var userEmail = new Email(email);
-        Email = userEmail;
-
-        Id = Guid.NewGuid();
-
-        _rolePolicy = rolePolicy;
-    }
-    protected User(string firstName, string lastName, string email, RoleType roleType)
-    {
         Name = new Name(firstName, lastName);
-        Email = new Email(email);
-        Id = Guid.NewGuid();
+        Email = newEmail;
+        Password = Password.Create(password);
         _rolePolicy = CreatePolicy(roleType);
     }
 
@@ -73,15 +65,23 @@ public class User : Entity
         _roles.Add(role);
     }
 
- 
-
-    public void Update(string firstName, string lastName, string email)
+    public void Update(string firstName, string lastName, string email, IReadOnlyCollection<Email> existingEmails)
     {
-        var name = new Name(firstName, lastName);
-        Name = name;
+        var newEmail = new Email(email);
 
-        var userEmail = new Email(email);
-        Email = userEmail;
+        if (newEmail != Email)
+            AssureEmailIsUnique(newEmail, existingEmails);
+
+        Name = new Name(firstName, lastName);
+        Email = newEmail;
+    }
+
+    public void UpdatePassword(string currentPassword, string newPassword)
+    {
+        if (!Password.Verify(currentPassword))
+            throw new ErrorException("Current password is incorrect.", errorCode: "INVALID_CURRENT_PASSWORD");
+
+        Password = Password.Create(newPassword);
     }
 
     protected static IRolePolicy CreatePolicy(RoleType roleType)
@@ -98,9 +98,15 @@ public class User : Entity
                 throw new ErrorException($"Invalid role type: {roleType}", errorCode: "INVALID_ROLE_TYPE");
         }
     }
- 
+
     public void Deactivate()
     {
         IsActive = false;
+    }
+
+    private static void AssureEmailIsUnique(Email email, IReadOnlyCollection<Email> existingEmails)
+    {
+        if (existingEmails.Contains(email))
+            throw new ErrorException($"Email '{email.Value}' is already in use.", errorCode: "EMAIL_NOT_UNIQUE");
     }
 }

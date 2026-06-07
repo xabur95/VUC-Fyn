@@ -11,7 +11,7 @@ public record CreateTagCommand(CreateTagRequest CreateTagRequest)
     : IRequest<Guid>, ITransactionalCommand;
 
 public class CreateTagCommandHandler(
-    ILogger logger,
+    ILogger<CreateTagCommandHandler> logger,
     ITagRepository tagRepository)
     : IRequestHandler<CreateTagCommand, Guid>
 {
