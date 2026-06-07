@@ -1,0 +1,68 @@
+# Author: Michael
+#
+# Centrale forskelle fra docker-compose.yml:
+#   - Swarm kan ikke bygge images (ingen 'build:' blok) — image skal være færdigt og tilgængeligt
+#   - .env erstattes af Docker Secrets (/run/secrets/...) — krypteret opbevaring i Swarm
+#   - 'deploy:'-blok aktiveres kun af Swarm (ignoreres af docker compose up)
+#   - Netværk bruger 'overlay'-driver til multi-host kommunikation
+#   - 'replicas: 2' på API — Swarm sørger for load balancing og self-healing
+#  
+# Deploy med:
+#   docker swarm init
+#   docker stack deploy -c docker-stack.yml vucfyn
+#   docker stack services vucfyn  
+
+version: "3.8"
+services:
+  api:
+    image: vuc-fyn-api:latest  # Swarm kan ikke bygge — image publiceres til registry først
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      # Password læses fra /run/secrets/db_password via File.ReadAllText()
+      # og sættes ind i connection string ved opstart i Program.cs
+      DB_SECRET_PATH: /run/secrets/db_password
+    secrets:
+      - db_password             # Monteres som fil: /run/secrets/db_password
+    deploy:
+      replicas: 2               # To API-instanser — Swarm load balancer fordeler requests
+      update_config:
+        parallelism: 1          # Rolling update: opdatér én instans ad gangen
+        delay: 10s              # Vent 10s mellem hver instans
+        failure_action: rollback # Ved fejl: rul automatisk tilbage til forrige version
+      restart_policy:
+        condition: on-failure   # Self-healing: genstart ved fejl
+    networks:
+      - app-net
+      - monitoring-net
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-CU25-ubuntu-22.04
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - sql_data:/var/opt/mssql
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager  # Database kører kun på manager-noden for datakonsistens
+    networks:
+      - app-net
+
+secrets:
+  db_password:
+    external: true  # Oprettes én gang med: echo "VucFyn2026!" | docker secret create db_password -
+
+networks:
+  app-net:
+    driver: overlay             # Overlay: netværket spænder på tværs af Swarm-noder
+  monitoring-net:
+    driver: overlay
+
+volumes:
+  sql_data:
