@@ -14,6 +14,9 @@ public class AppDbContext : DbContext
     public DbSet<Tag> Tags { get; set; } = null!;
     public DbSet<Subject> Subjects { get; set; } = null!;
     public DbSet<Topic> Topics { get; set; } = null!;
+    public DbSet<AssignmentSheet> AssignmentSheets { get; set; } = null!;
+    public DbSet<EvaluationSheet> EvaluationSheets { get; set; } = null!;
+    public DbSet<QuestionScore> QuestionScores { get; set; } = null!;
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -208,6 +211,72 @@ public class AppDbContext : DbContext
             });
 
             entity.Property(t => t.Description).HasMaxLength(500);
+        });
+
+        // ── AssignmentSheet ───────────────────────────────────────────
+        modelBuilder.Entity<AssignmentSheet>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+            entity.Property(a => a.RowVersion).IsRowVersion();
+
+            entity.HasOne(a => a.Author)
+                .WithMany()
+                .HasForeignKey("AuthorId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            entity.HasOne(a => a.Subject)
+                .WithMany()
+                .HasForeignKey("SubjectId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            entity.HasMany(a => a.Topics)
+                .WithMany()
+                .UsingEntity(j => j.ToTable("AssignmentSheetTopics"));
+
+            entity.HasMany(a => a.Questions)
+                .WithMany()
+                .UsingEntity(j => j.ToTable("AssignmentSheetQuestions"));
+        });
+
+        // ── QuestionScore (owned by EvaluationSheet) ──────────────────
+        modelBuilder.Entity<QuestionScore>(entity =>
+        {
+            entity.HasKey(s => s.Id);
+            entity.Property(s => s.RowVersion).IsRowVersion();
+            entity.Property(s => s.StudentId).IsRequired();
+            entity.Property(s => s.QuestionId).IsRequired();
+            entity.Property(s => s.Points).IsRequired();
+            entity.Property(s => s.ScoredByUserId).IsRequired();
+        });
+
+        // ── EvaluationSheet ───────────────────────────────────────────
+        modelBuilder.Entity<EvaluationSheet>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.RowVersion).IsRowVersion();
+
+            entity.HasOne(e => e.Class)
+                .WithMany()
+                .HasForeignKey("ClassId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            // Snapshot of Question Ids stored as a primitive collection (JSON column on SQL Server).
+            entity.PrimitiveCollection<List<Guid>>("_questionIds")
+                .HasColumnName("QuestionIds")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+            entity.HasMany(e => e.TeacherScores)
+                .WithOne()
+                .HasForeignKey("EvaluationSheetTeacherId")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.StudentScores)
+                .WithOne()
+                .HasForeignKey("EvaluationSheetStudentId")
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

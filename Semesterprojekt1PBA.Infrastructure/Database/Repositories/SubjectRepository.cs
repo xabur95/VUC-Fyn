@@ -37,4 +37,14 @@ public class SubjectRepository : ISubjectRepository
 
         return subjects.AsReadOnly();
     }
+
+    public async Task<Subject> GetByIdAsync(Guid id)
+    {
+        var subject = await _appDbContext.Subjects
+            .Include(s => s.Topics)
+            .FirstOrDefaultAsync(s => s.Id == id);
+
+        return subject
+            ?? throw new ErrorException($"Subject with id {id} was not found.", "SUBJECT_NOT_FOUND");
+    }
 }

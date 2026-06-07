@@ -22,6 +22,8 @@ builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IAssignmentSheetRepository, AssignmentSheetRepository>();
+builder.Services.AddScoped<IEvaluationSheetRepository, EvaluationSheetRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork<AppDbContext>>();
 

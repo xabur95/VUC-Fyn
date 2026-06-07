@@ -11,7 +11,6 @@ namespace Semesterprojekt1PBA.Application.Interfaces.Repositories
         Task<IReadOnlyCollection<Subject>> GetByNameAsync(string name);
         Task<IReadOnlyCollection<Subject>> GetAllSubjectsAsync();
         Task<Subject> GetByIdAsync(Guid id);
-        Task<IReadOnlyCollection<Subject>> GetByNameAsync(string name);
 
     }
 }

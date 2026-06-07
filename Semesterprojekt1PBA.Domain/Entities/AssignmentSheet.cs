@@ -27,7 +27,7 @@ namespace Semesterprojekt1PBA.Domain.Entities
         #endregion
 
         #region Constructor
-        private AssignmentSheet() { } //For EF
+        protected AssignmentSheet() { } //For EF
 
         private AssignmentSheet(Teacher author, Subject subject)
         {
