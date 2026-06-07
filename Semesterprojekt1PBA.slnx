@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="Evaluation.Web/Evaluation.Web.csproj" Id="a9b277b8-bbd0-40bc-a407-d1feccfe36a5" />
   <Project Path="Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj" />
   <Project Path="Semesterprojekt1PBA.Application/Semesterprojekt1PBA.Application.csproj" />
   <Project Path="Semesterprojekt1PBA.DatabaseMigration/Semesterprojekt1PBA.DatabaseMigration.csproj" />
