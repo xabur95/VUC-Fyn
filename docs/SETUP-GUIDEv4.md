@@ -158,18 +158,25 @@ cp .env.example .env
 
 Dette opretter en ny fil kaldet `.env` i roden af projektet. Filen er skjult i VS Code som standard — åbn den i Windows Stifinder eller direkte i terminalen.
 
-Filen ser sådan ud:
+Filen ser sådan ud — begge felter er tomme og skal udfyldes:
 
 ```
 # SQL Server SA-adgangskode
 # Krav: minimum 8 tegn, store+små bogstaver, tal og specialtegn
-DB_PASSWORD=VucFyn2026!
+DB_PASSWORD=
 
 # Grafana admin-adgangskode
+GRAFANA_PASSWORD=
+```
+
+Udfyld begge med dette:
+
+```
+DB_PASSWORD=VucFyn2026!
 GRAFANA_PASSWORD=VucFyn2026!
 ```
 
-## **Vigtigt:** Jeg har opsat at vores passwords er ens - men de kan ændres i filen efter behov
+> **Vigtigt:** Så har vi alle samme password - og der er inge forrvirring omkring password. Ellers skal I selv huske på jeres passwords
 
 ---
 
@@ -236,7 +243,7 @@ Hvis du får JSON tilbage med brugere er alt korrekt opsat.
 Log ind på Grafana: http://localhost:3000
 
 - Brugernavn: `admin`
-- Password: `VucFyn2026!`
+- Password: dit `GRAFANA_PASSWORD` fra `.env`
 
 ## Tilføj Prometheus
 
