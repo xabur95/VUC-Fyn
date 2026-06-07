@@ -55,5 +55,8 @@ app.MapQuestionEndpoints();
 app.MapAnswerEndpoints();
 app.MapSubjectEndpoints();
 app.MapTopicEndpoints();
+app.MapTagEndpoints();
+app.MapAssignmentSheetEndpoints();
+app.MapEvaluationSheetEndpoints();
 
 app.Run();

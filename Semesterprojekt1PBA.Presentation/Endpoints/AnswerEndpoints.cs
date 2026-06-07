@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Semesterprojekt1PBA.Application.Dto.Answer.Command;
 using Semesterprojekt1PBA.Application.Features.Answer.Command;
+using Semesterprojekt1PBA.Application.Features.Answer.Query;
 
 namespace Semesterprojekt1PBA.Presentation.Endpoints;
 
@@ -32,6 +33,13 @@ public static class AnswerEndpoints
         {
             var command = new RemoveAnswerCommand(request with { QuestionId = questionId });
             var result = await mediator.Send(command);
+            return Results.Ok(result);
+        });
+
+        // Get Answer By Question Id
+        app.MapGet("/questions/{questionId}/answer", async (IMediator mediator, Guid questionId) =>
+        {
+            var result = await mediator.Send(new GetAnswerByQuestionIdQuery(questionId));
             return Results.Ok(result);
         });
     }

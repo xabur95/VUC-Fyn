@@ -6,10 +6,10 @@ namespace Semesterprojekt1PBA.Application.Features.AssignmentSheets.Command.Crea
 {
     public class CreateAssignmentSheetCommandHandler : IRequestHandler<CreateAssignmentSheetCommand, Guid>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<CreateAssignmentSheetCommandHandler> _logger;
         private readonly IAssignmentSheetRepository _assignmentSheetrepository;
 
-        public CreateAssignmentSheetCommandHandler( ILogger logger, IAssignmentSheetRepository assignmentSheetRepository)
+        public CreateAssignmentSheetCommandHandler(ILogger<CreateAssignmentSheetCommandHandler> logger, IAssignmentSheetRepository assignmentSheetRepository)
         {
             _logger = logger;
             _assignmentSheetrepository = assignmentSheetRepository;
