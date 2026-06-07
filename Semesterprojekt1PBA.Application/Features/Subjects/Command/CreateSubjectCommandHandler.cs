@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Semesterprojekt1PBA.Domain.Entities;
 using Microsoft.Extensions.Logging;
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 
