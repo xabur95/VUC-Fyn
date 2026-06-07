@@ -1,3 +1,4 @@
+# Author: Michael
 global:
   scrape_interval: 15s      # Hvor ofte der indsamles metrikker
   evaluation_interval: 15s  # Hvor ofte alert-regler evalueres

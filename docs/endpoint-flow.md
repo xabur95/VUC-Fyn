@@ -1,5 +1,7 @@
 # Endpoint flow — request til response
 
+#### Author: Michael
+
 Diagrammet viser hvad der sker fra klienten sender en request til den modtager et svar.
 Eksemplet bruger `POST /users/admin`, men flowet er identisk for alle endpoints.
 

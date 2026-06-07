@@ -1,5 +1,7 @@
 # VUC-Fyn — DevOps opsætningsaguide
 
+#### Author: Michael
+
 ## Sådan er DevOps-stacken designet
 
 Inden du sætter det op, er det nyttigt at forstå hvad du starter. Stacken består af **8 separate Docker containers** fordelt på to ansvarsområder.
