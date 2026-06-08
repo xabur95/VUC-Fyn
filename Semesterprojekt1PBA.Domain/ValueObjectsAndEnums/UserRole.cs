@@ -5,7 +5,7 @@
 /// </summary>
 public record UserRole
 {
-    public RoleType RoleType { get; }
+    public RoleType RoleType { get; private set; }
 
     private UserRole()
     {

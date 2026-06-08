@@ -11,9 +11,8 @@ namespace Semesterprojekt1PBA.Domain.Entities
         public Title Title { get; private set; } = null!;
         public string Description { get; private set; } = null!;
 
-        protected Tag() { } // For EF Core
+        private Tag() { }
 
-        // EF Core binds to this private constructor via parameter-name matching.
         private Tag(Title title, string description)
         {
             Title = title;

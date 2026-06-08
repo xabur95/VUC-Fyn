@@ -1,0 +1,29 @@
+# Kompilerede output — behøves ikke i build-konteksten
+**/bin/
+**/obj/
+
+# Git-historik
+.git/
+.gitignore
+
+# Miljø- og hemmeligheds-filer
+.env
+*.env
+
+# Testprojekter skal ikke med i produktions-imaget
+Semesterprojekt1PBA.Domain.Test/
+
+# Visual Studio og IDE-filer
+.vs/
+**/*.user
+**/*.suo
+
+# Konfiguration der er miljø-specifik og ikke må i imaget
+**/appsettings.Development.json
+**/appsettings.Local.json
+
+# Dokumentation og lokale devtools
+docs/
+*.md
+.claude/
+local-CLAUDE.md

@@ -441,12 +441,20 @@ namespace Semesterprojekt1PBA.DatabaseMigration.Migrations
                 {
                     b.HasBaseType("Semesterprojekt1PBA.Domain.Entities.User");
 
+                    b.Property<Guid?>("SchoolId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("SchoolId");
+
                     b.HasDiscriminator().HasValue("Admin");
                 });
 
             modelBuilder.Entity("Semesterprojekt1PBA.Domain.Entities.Student", b =>
                 {
                     b.HasBaseType("Semesterprojekt1PBA.Domain.Entities.User");
+
+                    b.Property<Guid?>("ClassId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly?>("EndDate")
                         .HasColumnType("date");
@@ -459,6 +467,14 @@ namespace Semesterprojekt1PBA.DatabaseMigration.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("Users", t =>
+                        {
+                            t.Property("ClassId")
+                                .HasColumnName("Student_ClassId");
+                        });
+
                     b.HasDiscriminator().HasValue("Student");
                 });
 
@@ -466,7 +482,142 @@ namespace Semesterprojekt1PBA.DatabaseMigration.Migrations
                 {
                     b.HasBaseType("Semesterprojekt1PBA.Domain.Entities.User");
 
+                    b.Property<Guid?>("ClassId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("ClassId");
+
                     b.HasDiscriminator().HasValue("Teacher");
+                });
+
+            modelBuilder.Entity("Semesterprojekt1PBA.Domain.Entities.Answer", b =>
+                {
+                    b.HasOne("Semesterprojekt1PBA.Domain.Entities.Question", null)
+                        .WithOne("Answer")
+                        .HasForeignKey("Semesterprojekt1PBA.Domain.Entities.Answer", "QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Semesterprojekt1PBA.Domain.ValueObjectsAndEnums.Title", "Title", b1 =>
+                        {
+                            b1.Property<Guid>("AnswerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("AnswerId");
+
+                            b1.ToTable("Answer");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AnswerId");
+                        });
+
+                    b.Navigation("Title")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Semesterprojekt1PBA.Domain.Entities.Class", b =>
+                {
+                    b.HasOne("Semesterprojekt1PBA.Domain.Entities.School", null)
+                        .WithMany("Classes")
+                        .HasForeignKey("SchoolId");
+
+                    b.OwnsOne("Semesterprojekt1PBA.Domain.ValueObjectsAndEnums.Title", "Title", b1 =>
+                        {
+                            b1.Property<Guid>("ClassId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ClassId");
+
+                            b1.ToTable("Classes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClassId");
+                        });
+
+                    b.OwnsOne("Semesterprojekt1PBA.Domain.ValueObjectsAndEnums.DateRange", "ClassDateRange", b1 =>
+                        {
+                            b1.Property<Guid>("ClassId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateOnly>("End")
+                                .HasColumnType("date");
+
+                            b1.Property<DateOnly>("Start")
+                                .HasColumnType("date");
+
+                            b1.HasKey("ClassId");
+
+                            b1.ToTable("Classes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClassId");
+                        });
+
+                    b.Navigation("ClassDateRange")
+                        .IsRequired();
+
+                    b.Navigation("Title")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Semesterprojekt1PBA.Domain.Entities.Question", b =>
+                {
+                    b.HasOne("Semesterprojekt1PBA.Domain.Entities.Question", "ParentQuestion")
+                        .WithMany()
+                        .HasForeignKey("ParentQuestionId");
+
+                    b.OwnsOne("Semesterprojekt1PBA.Domain.ValueObjectsAndEnums.Title", "Title", b1 =>
+                        {
+                            b1.Property<Guid>("QuestionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("QuestionId");
+
+                            b1.ToTable("Question");
+
+                            b1.WithOwner()
+                                .HasForeignKey("QuestionId");
+                        });
+
+                    b.Navigation("ParentQuestion");
+
+                    b.Navigation("Title")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Semesterprojekt1PBA.Domain.Entities.School", b =>
+                {
+                    b.OwnsOne("Semesterprojekt1PBA.Domain.ValueObjectsAndEnums.Title", "Title", b1 =>
+                        {
+                            b1.Property<Guid>("SchoolId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("SchoolId");
+
+                            b1.ToTable("Schools");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SchoolId");
+                        });
+
+                    b.Navigation("Title")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AdminSchool", b =>

@@ -1,24 +1,30 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
+using Serilog;
+using Serilog.Formatting.Compact;
+using Semesterprojekt1PBA.Api;
 using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 using Semesterprojekt1PBA.Application.Helpers;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
-using Semesterprojekt1PBA.Domain.Interfaces;
 using Semesterprojekt1PBA.Infrastructure.Database;
 using Semesterprojekt1PBA.Infrastructure.Database.Repositories;
-using Semesterprojekt1PBA.Api;
 using Semesterprojekt1PBA.Presentation.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((ctx, cfg) =>
+    cfg.ReadFrom.Configuration(ctx.Configuration)
+       .WriteTo.Console(new CompactJsonFormatter()));
 
 builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<ErrorExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITopicRepository, TopicRepository>(); 
+builder.Services.AddScoped<ITopicRepository, TopicRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
-builder.Services.AddScoped<ISchoolRepository, SchoolRepository>(); 
+builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
@@ -40,13 +46,24 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+    await DatabaseSeeder.SeedAsync(db);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
+app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+
+app.UseHttpMetrics(); // Indsamler HTTP request-metrikker (status, latency, m.m.)
+app.UseMetricServer(); // Eksponerer /metrics til Prometheus-scraping
 
 app.MapUserEndpoints();
 app.MapSchoolEndpoints();

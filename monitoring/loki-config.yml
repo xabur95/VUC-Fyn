@@ -1,0 +1,39 @@
+# Author: Michael
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+# Kørselstilstand: alle Loki-komponenter i én proces (egnet til dev)
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory  # In-memory ring — kræver ikke ekstern koordinator
+
+# Schema-konfiguration: definerer hvilken indekserings-motor der bruges
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: tsdb          # TSDB er den moderne indekserings-motor i Loki 3.x
+      object_store: filesystem
+      schema: v13          # v13 er den nyeste og anbefalede skemaversion
+      index:
+        prefix: index_
+        period: 24h        # Nyt indeksfil pr. dag
+
+# Begrænsninger for log-indsendelse
+limits_config:
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h  # Afvis logs ældre end 7 dage
+
+# Compactor rydder op i gamle indeksfiler
+compactor:
+  working_directory: /loki/compactor
+  compaction_interval: 10m
