@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Semesterprojekt1PBA.Domain.Entities;
 
 namespace Semesterprojekt1PBA.Infrastructure.Database;
@@ -6,7 +7,7 @@ public static class DatabaseSeeder
 {
     public static async Task SeedAsync(AppDbContext context)
     {
-        if (context.Users.Any())
+        if (await context.Users.AnyAsync())
         {
             return;
         }

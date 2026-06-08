@@ -19,7 +19,7 @@ Inden du sætter det op, er det nyttigt at forstå hvad du starter. Stacken best
 | `node-exporter` | Indsamler host-metrics (CPU, RAM, disk) | 9100 |
 | `cadvisor` | Indsamler container-metrics (hvad bruger hver container?) | 8081 |
 
-> **Pensum:** Kenneth opsætter på samme måde i hans hans monotorerings materiale.
+> **Pensum:** Kenneth opsætter på samme måde i hans monitoreringsmateriale.
 
 ### To netværk — bevidst adskilt
 
