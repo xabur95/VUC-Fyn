@@ -1,7 +1,0 @@
-PS C:\Users\mpede\source\repos\xabur95\VUC-Fyn> git checkout -b fix/missing-password-migration
-Switched to a new branch 'fix/missing-password-migration'
-PS C:\Users\mpede\source\repos\xabur95\VUC-Fyn> dotnet ef migrations add AddPasswordToUser --project Semesterprojekt1PBA.DatabaseMigration --startup-project Semesterprojekt1PBA.Api
-Build started...
-Build succeeded.
-An operation was scaffolded that may result in the loss of data. Please review the migration for accuracy.
-Done. To undo this action, use 'ef migrations remove'
