@@ -270,7 +270,7 @@ public class AppDbContext : DbContext
             entity.HasMany(e => e.TeacherScores)
                 .WithOne()
                 .HasForeignKey("EvaluationSheetTeacherId")
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasMany(e => e.StudentScores)
                 .WithOne()

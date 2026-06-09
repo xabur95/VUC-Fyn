@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Semesterprojekt1PBA.DatabaseMigration.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAssignmentAndEvaluationSheets : Migration
+    public partial class ReconcileAfterMerge : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -132,7 +132,7 @@ namespace Semesterprojekt1PBA.DatabaseMigration.Migrations
                         column: x => x.EvaluationSheetTeacherId,
                         principalTable: "EvaluationSheets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
