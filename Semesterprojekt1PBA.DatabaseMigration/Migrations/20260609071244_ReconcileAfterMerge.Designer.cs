@@ -12,8 +12,8 @@ using Semesterprojekt1PBA.Infrastructure.Database;
 namespace Semesterprojekt1PBA.DatabaseMigration.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260607080332_AddAssignmentAndEvaluationSheets")]
-    partial class AddAssignmentAndEvaluationSheets
+    [Migration("20260609071244_ReconcileAfterMerge")]
+    partial class ReconcileAfterMerge
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -749,7 +749,7 @@ namespace Semesterprojekt1PBA.DatabaseMigration.Migrations
                     b.HasOne("Semesterprojekt1PBA.Domain.Entities.EvaluationSheet", null)
                         .WithMany("TeacherScores")
                         .HasForeignKey("EvaluationSheetTeacherId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Semesterprojekt1PBA.Domain.Entities.School", b =>
