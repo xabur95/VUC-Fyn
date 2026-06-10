@@ -1,57 +1,56 @@
 ﻿.question-form {
     display: flex;
-    gap: 50px;
-    padding: 20px;
-    align-items: flex-start;
+    gap: 40px;
 }
 
-/* LEFT SIDE */
-.left-side {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* RIGHT SIDE */
-.right-side {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.left-side, .right-side {
+    flex: 1;
 }
 
 .input-box {
-    height: 45px;
-    border-radius: 6px;
-    padding: 10px;
-    border: 1px solid #999;
+    margin-bottom: 12px;
 }
 
-.upload-group {
+/* TAGS */
+.tag-container {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tag-chip {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 14px;
+}
+
+    .tag-chip:hover {
+        background: #f3f3f3;
+    }
+
+    .tag-chip.selected {
+        background: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+
+/* upload sections */
+.upload-group {
+    margin-bottom: 12px;
 }
 
 .upload-label {
-    font-weight: 600;
-}
-
-.upload-btn {
-    border: 1px solid #999;
-    border-radius: 6px;
-    padding: 8px;
-    background-color: white;
-}
-
-.button-container {
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end;
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: block;
 }
 
 .save-btn {
-    width: 180px;
-    height: 45px;
+    width: 100%;
+    margin-top: 10px;
 }

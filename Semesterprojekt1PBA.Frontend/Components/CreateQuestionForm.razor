@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @using Semesterprojekt1PBA.Frontend.Models
+@using Semesterprojekt1PBA.Frontend.Models.DTO
+@inject HttpClient HttpClient
 
 <div class="question-form">
 
@@ -14,28 +16,24 @@
                    placeholder="Text"
                    class="form-control input-box" />
 
-        <InputSelect @bind-Value="FormQuestion.Subjects"
-                     class="form-control input-box">
-                     
-                     <!--TODO: Populate box with subject from API-->
-            @* <option value="">Select Subject</option>
-            <option value="Danish">Danish</option>
-            <option value="English">English</option>
-            <option value="Math">Math</option>
-            <option value="Physics">Physics</option> *@
+        <InputNumber @bind-Value="FormQuestion.Points"
+                     class="form-control input-box"
+                     min="1"
+                     max="10"
+                     step="1"
+                     placeholder="Points (1–10)" />
 
-        </InputSelect>
-
-        <InputSelect @bind-Value="FormQuestion.Tags"
-                     class="form-control input-box">
-                     
-                     <!--TODO: Populate box with subject from API-->
-            @* <option value="">Select Level</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option> *@
-
-        </InputSelect>
+        <!-- TAG SELECTOR (CHIPS) -->
+        <div class="tag-container">
+            @foreach (var tag in AvailableTags)
+            {
+                <button type="button"
+                        class="tag-chip @(SelectedTagIds.Contains(tag.Id) ? "selected" : "")"
+                        @onclick="() => ToggleTag(tag.Id)">
+                    @tag.Title
+                </button>
+            }
+        </div>
 
         <InputText @bind-Value="Type"
                    placeholder="Type"
@@ -82,20 +80,17 @@
 
 @code {
 
-    [Parameter]
-    public EventCallback OnClose { get; set; }
-    [Parameter]
-    public EventCallback<Question> OnQuestionCreated { get; set; }
-    [Parameter]
-    public Question? ExistingQuestion { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback<Question> OnQuestionCreated { get; set; }
+    [Parameter] public Question? ExistingQuestion { get; set; }
+
+    private List<Tag> AvailableTags = new();
+    private List<Guid> SelectedTagIds = new();
 
     private bool IsEditMode => ExistingQuestion != null;
 
-    private Question FormQuestion = new Question();
-    private string Title = string.Empty;
-    private string Text = string.Empty;
-    private int Points;
-    private List<Subject> Subjects = [];
+    private Question FormQuestion = new();
+
     private string Type = string.Empty;
 
     private IBrowserFile? QuestionFile;
@@ -103,68 +98,58 @@
     private IBrowserFile? AnswerFile;
     private IBrowserFile? PdfFile;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTags();
+    }
+
+    private async Task LoadTags()
+    {
+        var result = await HttpClient.GetFromJsonAsync<List<Tag>>("tags");
+        if (result != null)
+        {
+            AvailableTags = result;
+        }
+    }
+
     protected override void OnParametersSet()
     {
         if (ExistingQuestion != null)
         {
             FormQuestion = ExistingQuestion;
 
+            // optional: preload tags if editing
+            // SelectedTagIds = ExistingQuestion.TagIds ?? new List<Guid>();
         }
     }
 
-    private void HandleQuestionUpload(InputFileChangeEventArgs e)
+    private void ToggleTag(Guid tagId)
     {
-        QuestionFile = e.File;
+        if (SelectedTagIds.Contains(tagId))
+            SelectedTagIds.Remove(tagId);
+        else
+            SelectedTagIds.Add(tagId);
     }
 
-    private void HandleVideoUpload(InputFileChangeEventArgs e)
-    {
-        VideoFile = e.File;
-    }
-
-    private void HandleAnswerUpload(InputFileChangeEventArgs e)
-    {
-        AnswerFile = e.File;
-    }
-
-    private void HandlePdfUpload(InputFileChangeEventArgs e)
-    {
-        PdfFile = e.File;
-    }
+    private void HandleQuestionUpload(InputFileChangeEventArgs e) => QuestionFile = e.File;
+    private void HandleVideoUpload(InputFileChangeEventArgs e) => VideoFile = e.File;
+    private void HandleAnswerUpload(InputFileChangeEventArgs e) => AnswerFile = e.File;
+    private void HandlePdfUpload(InputFileChangeEventArgs e) => PdfFile = e.File;
 
     private async Task CreateOrUpdate()
     {
-        if (IsEditMode)
+        var request = new QuestionPostDto
         {
-            ExistingQuestion = FormQuestion;
-        }
-        else
-        {
-            //TODO: Add new question to API
-            // int newId = 1;
+            CreatedByUserId = Guid.Parse("52af6891-7acb-4bb8-8e99-0740b92cd032"),
+            Title = FormQuestion.Title,
+            Text = FormQuestion.Text,
+            Points = FormQuestion.Points,
+            ActiveStatus = 0,
+            ParentQuestionId = null,
+            TagIds = SelectedTagIds,
+            SubjectIds = new List<Guid>()
+        };
 
-            // if (GlobalVariables.AllQuestions.Any())
-            // {
-            //     newId = GlobalVariables.AllQuestions.Max(q => q.Id) + 1;
-            // }
-
-            // var newQuestion = new Question
-            // {
-            //     Id = newId,
-            //     Subject = Subject,
-            //     Topic = Topic,
-            //     Type = Type,
-            //     Level = Level,
-            //     Date = DateTime.Now,
-            //     Owner = "Me",
-            //     Tag = Title
-            // };
-
-            // GlobalVariables.AllQuestions.Add(newQuestion);
-
-            // await OnQuestionCreated.InvokeAsync(newQuestion);
-        }
-
-        await OnClose.InvokeAsync();
+        var response = await HttpClient.PostAsJsonAsync("questions", request);
     }
 }
