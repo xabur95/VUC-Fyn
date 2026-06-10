@@ -4,7 +4,6 @@ using Semesterprojekt1PBA.Application.Dto.Question.Command;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Entities;
-using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
 using Semesterprojekt1PBA.Domain.Interfaces;
 
@@ -14,7 +13,7 @@ public record CreateQuestionCommand(CreateQuestionRequest CreateQuestionRequest)
     : IRequest<Guid>, ITransactionalCommand;
 
 public class CreateQuestionCommandHandler(
-    ILogger logger,
+    ILogger<CreateQuestionCommandHandler> logger,
     IQuestionRepository questionRepository,
     IUserRepository userRepository,
     ITagRepository tagRepository,

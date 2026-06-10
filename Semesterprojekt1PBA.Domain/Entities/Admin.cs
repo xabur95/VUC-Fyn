@@ -14,11 +14,13 @@ public class Admin : User
         _rolePolicy = CreatePolicy(RoleType.Admin);
     }
 
-    protected Admin(string firstName, string lastName, string email) : base(firstName, lastName, email, RoleType.Admin) { }
+    private Admin(string firstName, string lastName, string email, string password, IReadOnlyCollection<Email> existingEmails)
+        : base(firstName, lastName, email, password, RoleType.Admin, existingEmails)
+    { }
 
-    public static Admin Create(string firstName, string lastName, string email)
+    public static Admin Create(string firstName, string lastName, string email, string password, IReadOnlyCollection<Email> existingEmails)
     {
-        var admin = new Admin(firstName, lastName, email);
+        var admin = new Admin(firstName, lastName, email, password, existingEmails);
         admin.AssignRole(new UserRole(RoleType.Admin));
         return admin;
     }

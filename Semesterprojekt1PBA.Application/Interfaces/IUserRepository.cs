@@ -14,4 +14,6 @@ public interface IUserRepository
     Task<T> GetByIdAsync<T>(Guid id) where T : User;
     Task UpdateAsync(User user);
     Task<List<User>> GetByRoleAsync(RoleType roleType);
+    Task<IReadOnlyCollection<Email>> GetAllEmailsAsync();
+    Task<User?> GetByEmailAsync(string email);
 }

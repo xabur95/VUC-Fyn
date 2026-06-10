@@ -7,7 +7,7 @@ using Semesterprojekt1PBA.Domain.Helpers;
 namespace Semesterprojekt1PBA.Application.Features.Tag.Query;
 
 public class GetTagByIdQueryHandler(
-    ILogger logger,
+    ILogger<GetTagByIdQueryHandler> logger,
     ITagRepository tagRepository)
     : IRequestHandler<GetTagByIdQuery, GetTagResponse>
 {

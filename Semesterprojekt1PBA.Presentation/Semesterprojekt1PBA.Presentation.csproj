@@ -11,7 +11,6 @@
 	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Semesterprojekt1PBA.Application\Semesterprojekt1PBA.Application.csproj" />
-    <ProjectReference Include="..\Semesterprojekt1PBA.Infrastructure\Semesterprojekt1PBA.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

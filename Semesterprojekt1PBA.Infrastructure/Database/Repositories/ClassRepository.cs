@@ -44,9 +44,8 @@ public class ClassRepository : IClassRepository
 
     public async Task<IEnumerable<Class>> GetAllClassesInSchoolAsync(Guid schoolId)
     {
-        return await _appDbContext.Schools
-            .Where(s => s.Id == schoolId)
-            .SelectMany(s => s.Classes)
+        return await _appDbContext.Classes
+            .Where(c => EF.Property<Guid>(c, "SchoolId") == schoolId)
             .Include(c => c.Teachers)
             .Include(c => c.Students)
             .Include(c => c.Subjects)

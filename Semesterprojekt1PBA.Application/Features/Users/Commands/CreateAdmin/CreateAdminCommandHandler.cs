@@ -12,7 +12,7 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 /// repository. Logging is performed for both domain-specific and general exceptions encountered during the operation.
 /// This class is typically used within a MediatR pipeline to process admin creation requests.
 /// </summary>
-public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Guid>
+public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Guid>, ITransactionalCommand
 {
     private readonly IUserRepository _userRepository;
     private readonly ILogger<CreateAdminCommandHandler> _logger;
@@ -28,7 +28,9 @@ public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Gui
     {
         try
         {
-            var admin = Admin.Create(request.FirstName, request.LastName, request.Email);
+            var existingEmails = await _userRepository.GetAllEmailsAsync();
+
+            var admin = Admin.Create(request.FirstName, request.LastName, request.Email, request.Password, existingEmails);
 
             await _userRepository.AddAsync(admin);
 

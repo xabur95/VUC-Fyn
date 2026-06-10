@@ -29,7 +29,9 @@ public class CreateTeacherCommandHandler : IRequestHandler<CreateTeacherCommand,
     {
         try
         {
-            var teacher = Teacher.Create(request.FirstName, request.LastName, request.Email);
+            var existingEmails = await _userRepository.GetAllEmailsAsync();
+
+            var teacher = Teacher.Create(request.FirstName, request.LastName, request.Email, request.Password, existingEmails);
 
             await _userRepository.AddAsync(teacher);
 

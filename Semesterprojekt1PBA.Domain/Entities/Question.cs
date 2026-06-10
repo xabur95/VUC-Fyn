@@ -10,8 +10,8 @@ namespace Semesterprojekt1PBA.Domain.Entities
   {
     #region Properties
 
-    public Title Title { get; private set; }
-    public string Text { get; private set; }
+    public Title Title { get; private set; } = null!;
+    public string Text { get; private set; } = null!;
     public int Points { get; private set; }
     public ActiveStatus ActiveStatus { get; private set; }
     public Question? ParentQuestion { get; private set; }
@@ -29,10 +29,8 @@ namespace Semesterprojekt1PBA.Domain.Entities
 
     #region Constructors
 
-    // EF Core / serializers bind to this private constructor by matching
-    // parameter names to property names (case-insensitive). No parameterless
-    // constructor is needed, which means Title/Text are guaranteed non-null
-    // for every materialized instance — no `null!` required.
+    private Question() { }
+
     private Question(Title title, string text, int points, ActiveStatus activeStatus, Guid createdByUserId)
     {
       Title = title;
