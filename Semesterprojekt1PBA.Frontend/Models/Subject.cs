@@ -2,7 +2,7 @@
 {
     public class Subject
     {
-        public Guid id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
     }
 }

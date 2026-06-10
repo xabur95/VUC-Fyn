@@ -76,7 +76,7 @@
                                     <strong>Subjects</strong>
                                     @if (question.Subjects?.Any() == true)
                                     {
-                                        @string.Join(", ", question.Subjects.Select(s => s.Name))
+                                        @string.Join(", ", question.Subjects.Select(s => s.Title))
                                     }
                                     else
                                     {
@@ -131,7 +131,7 @@
 
     private async Task LoadQuestions()
     {
-        questions = await HttpClient.GetFromJsonAsync<List<Question>>("Question") ?? [];
+        questions = await HttpClient.GetFromJsonAsync<List<Question>>("questions") ?? [];
     }
 
     private void CloseCreateQuestionModal()
@@ -157,7 +157,7 @@
         .Where(q =>
             (string.IsNullOrWhiteSpace(filterModel.Subject)
                 || q.Subjects.Any(s =>
-                    s.Name.Contains(filterModel.Subject, StringComparison.OrdinalIgnoreCase)))
+                    s.Title.Contains(filterModel.Subject, StringComparison.OrdinalIgnoreCase)))
 
             && (string.IsNullOrWhiteSpace(filterModel.Tag)
                 || q.Tags.Any(t =>
@@ -169,8 +169,8 @@
             && (!filterModel.MinPoints.HasValue
                 || q.Points >= filterModel.MinPoints.Value)
 
-            && (string.IsNullOrWhiteSpace(filterModel.ActiveStatus)
-                || q.ActiveStatus.Contains(filterModel.ActiveStatus, StringComparison.OrdinalIgnoreCase))
+            && (!filterModel.ActiveStatus.HasValue
+                || q.ActiveStatus == filterModel.ActiveStatus)
 
             && (!filterModel.ShowMyQuestionsOnly
                 || q.CreatedByUserId == CurrentUserId)

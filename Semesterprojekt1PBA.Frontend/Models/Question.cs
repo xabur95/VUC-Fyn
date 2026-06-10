@@ -12,7 +12,7 @@ public class Question
 
     public int Points { get; set; }
 
-    public string ActiveStatus { get; set; } = string.Empty;
+    public int ActiveStatus { get; set; }
 
     public Guid CreatedByUserId { get; set; }
 
