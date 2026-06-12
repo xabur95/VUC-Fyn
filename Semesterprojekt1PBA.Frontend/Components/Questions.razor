@@ -140,11 +140,10 @@
         selectedQuestion = null;
     }
 
-    private void HandleQuestionCreated(Question question)
+    private async Task HandleQuestionCreated()
     {
-        filteredQuestions = new List<Question>();
-
-        StateHasChanged();
+        await LoadQuestions();
+        ApplyFilters();
     }
 
     [Inject]

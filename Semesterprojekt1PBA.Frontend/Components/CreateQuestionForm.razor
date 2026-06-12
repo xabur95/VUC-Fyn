@@ -34,10 +34,6 @@
                 </button>
             }
         </div>
-
-        <InputText @bind-Value="Type"
-                   placeholder="Type"
-                   class="form-control input-box" />
     </div>
 
     <!-- RIGHT SIDE -->
@@ -81,10 +77,10 @@
 @code {
 
     [Parameter] public EventCallback OnClose { get; set; }
-    [Parameter] public EventCallback<Question> OnQuestionCreated { get; set; }
+    [Parameter] public EventCallback OnQuestionCreated { get; set; }
     [Parameter] public Question? ExistingQuestion { get; set; }
 
-    private List<Tag> AvailableTags = new();
+    private List<TagGetDto> AvailableTags = new();
     private List<Guid> SelectedTagIds = new();
 
     private bool IsEditMode => ExistingQuestion != null;
@@ -105,7 +101,7 @@
 
     private async Task LoadTags()
     {
-        var result = await HttpClient.GetFromJsonAsync<List<Tag>>("tags");
+        var result = await HttpClient.GetFromJsonAsync<List<TagGetDto>>("tags");
         if (result != null)
         {
             AvailableTags = result;
@@ -151,5 +147,11 @@
         };
 
         var response = await HttpClient.PostAsJsonAsync("questions", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await OnQuestionCreated.InvokeAsync();
+            await OnClose.InvokeAsync();
+        }
     }
 }
