@@ -19,7 +19,7 @@ public class SubjectRepository : ISubjectRepository
         await _appDbContext.Subjects.AddAsync(subject);
     }
 
-    public async Task<IReadOnlyCollection<Subject>> GetByNameAsync(string name)
+    public async Task<IEnumerable<Subject>> GetByNameAsync(string name)
     {
         var subjects = await _appDbContext.Subjects
             .Include(s => s.Topics)
@@ -29,7 +29,7 @@ public class SubjectRepository : ISubjectRepository
         return subjects.AsReadOnly();
     }
 
-    public async Task<IReadOnlyCollection<Subject>> GetAllSubjectsAsync()
+    public async Task<IEnumerable<Subject>> GetAllSubjectsAsync()
     {
         var subjects = await _appDbContext.Subjects
             .Include(s => s.Topics)

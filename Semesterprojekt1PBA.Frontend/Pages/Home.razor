@@ -1,0 +1,16 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        {
+            NavigationManager?.NavigateTo("/dashboard");
+        }
+    }
+}

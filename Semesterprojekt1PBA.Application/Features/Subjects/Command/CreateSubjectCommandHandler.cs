@@ -22,7 +22,7 @@ namespace Semesterprojekt1PBA.Application.Features.Subjects.Command
             try
             {
                 var otherSubjects = await _subjectRepository.GetAllSubjectsAsync();
-                Subject subject = Subject.Create(request.Name, request.Level, otherSubjects);
+                Subject subject = Subject.Create(request.Title, request.Level, otherSubjects);
 
                 await _subjectRepository.AddAsync(subject);
 
