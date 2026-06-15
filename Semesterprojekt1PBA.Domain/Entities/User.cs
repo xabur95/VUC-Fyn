@@ -75,15 +75,7 @@ public class User : Entity
         Name = new Name(firstName, lastName);
         Email = newEmail;
     }
-
-    public void UpdatePassword(string currentPassword, string newPassword)
-    {
-        if (!Password.Verify(currentPassword))
-            throw new ErrorException("Current password is incorrect.", errorCode: "INVALID_CURRENT_PASSWORD");
-
-        Password = Password.Create(newPassword);
-    }
-
+    
     protected static IRolePolicy CreatePolicy(RoleType roleType)
     {
         switch (roleType)
@@ -107,6 +99,8 @@ public class User : Entity
     private static void AssureEmailIsUnique(Email email, IReadOnlyCollection<Email> existingEmails)
     {
         if (existingEmails.Contains(email))
+        {
             throw new ErrorException($"Email '{email.Value}' is already in use.", errorCode: "EMAIL_NOT_UNIQUE");
+        }
     }
 }
