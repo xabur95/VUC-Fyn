@@ -1,0 +1,206 @@
+﻿@using Semesterprojekt1PBA.Frontend.Models
+@using Semesterprojekt1PBA.Frontend.Models.Filters
+@inject HttpClient HttpClient
+
+<div class="questions-container">
+    <h2>Teacher Question Overview</h2>
+
+    <div class="questions-layout">
+        <!-- Left Sidebar -->
+        <div class="questions-sidebar">
+            <div class="filter-section">
+                <h3>Filter</h3>
+
+                <!-- Subject Filter-->
+                <div class="filter-group">
+                    <label for="subject">Subject</label>
+                    <input 
+                        type="text" 
+                        id="subject"
+                        class="form-control" 
+                        @bind="filterModel.Subject" 
+                        placeholder="Filter by subjects" />
+                </div>
+
+                <!-- Tag Filter-->
+                <div class="filter-group">
+                    <label for="tag">Tag</label>
+                    <input 
+                        type="text" 
+                        id="tag" 
+                        class="form-control" 
+                        @bind="filterModel.Tag" 
+                        placeholder="Enter tag" />
+                </div>
+                
+                <!--TODO: If we get auth, make this work-->
+                <div class="filter-group">
+                    <label>
+                        <input type="checkbox" @bind="filterModel.ShowMyQuestionsOnly" />
+                        Show my Questions only
+                    </label>
+                </div>
+
+                <!--TODO: If we get a proper creationdate property, this'd be good-->
+                @* <div class="filter-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" class="form-control" @bind="filterModel.date" />
+                </div> *@                             
+
+                <button class="btn btn-primary btn-block" @onclick="ApplyFilters">Apply Filters</button>
+                <button class="btn btn-secondary btn-block" @onclick="ClearFilters">Clear Filters</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="questions-content">
+            <div class="questions-list">
+                @if (filteredQuestions != null && filteredQuestions.Count > 0)
+                {
+                    @foreach (var question in filteredQuestions)
+                    {
+                        <div class="question-card">
+                            <div class="question-info">
+                                <!-- Title -->
+                                <p class="question-title">
+                                    <strong>@question.Title</strong>
+                                </p>
+
+                                <!--Question Text-->
+                                <p class="question-text">
+                                    @question.Text
+                                </p>
+
+                                <!-- Subjects-->
+                                <div class="question-meta">
+                                    <strong>Subjects</strong>
+                                    @if (question.Subjects?.Any() == true)
+                                    {
+                                        @string.Join(", ", question.Subjects.Select(s => s.Title))
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">None</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="question-actions">
+                                <button class="btn btn-edit" @onclick="() => EditQuestion(question.Id)">Edit</button>
+                                @if ( true /*question.CreatedByUserId == 0*/)
+                                {
+                                    <button class="btn btn-delete" @onclick="() => DeleteQuestion(question.Id)">Delete</button>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-questions">
+                        <p>No questions found.</p>
+                    </div>
+                }
+            </div>
+
+            <button class="btn btn-create" @onclick="@(() => ShowCreateQuestionModal = true)">Create New Question</button>
+            <Modal Title="Create New Question" Show="ShowCreateQuestionModal" OnClose="CloseCreateQuestionModal">
+                <CreateQuestionForm 
+                    OnClose="CloseCreateQuestionModal" 
+                    OnQuestionCreated="HandleQuestionCreated" 
+                    ExistingQuestion="selectedQuestion"/>
+            </Modal>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool ShowCreateQuestionModal = false;
+
+    private List<Question> questions = [];
+    private List<Question>? filteredQuestions = [];
+    private QuestionFilter filterModel = new();
+    private Question? selectedQuestion;
+
+    private Guid CurrentUserId = Guid.Empty; // replace later
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadQuestions();
+        ApplyFilters();
+    }
+
+    private async Task LoadQuestions()
+    {
+        questions = await HttpClient.GetFromJsonAsync<List<Question>>("questions") ?? [];
+    }
+
+    private void CloseCreateQuestionModal()
+    {
+        ShowCreateQuestionModal = false;
+        selectedQuestion = null;
+    }
+
+    private async Task HandleQuestionCreated()
+    {
+        await LoadQuestions();
+        ApplyFilters();
+    }
+
+    [Inject]
+    private NavigationManager? NavigationManager { get; set; }
+
+    private void ApplyFilters()
+    {
+        filteredQuestions = questions
+        .Where(q =>
+            (string.IsNullOrWhiteSpace(filterModel.Subject)
+                || q.Subjects.Any(s =>
+                    s.Title.Contains(filterModel.Subject, StringComparison.OrdinalIgnoreCase)))
+
+            && (string.IsNullOrWhiteSpace(filterModel.Tag)
+                || q.Tags.Any(t =>
+                    t.Title.Contains(filterModel.Tag, StringComparison.OrdinalIgnoreCase)))
+
+            && (string.IsNullOrWhiteSpace(filterModel.Text)
+                || q.Text.Contains(filterModel.Text, StringComparison.OrdinalIgnoreCase))
+
+            && (!filterModel.MinPoints.HasValue
+                || q.Points >= filterModel.MinPoints.Value)
+
+            && (!filterModel.ActiveStatus.HasValue
+                || q.ActiveStatus == filterModel.ActiveStatus)
+
+            && (!filterModel.ShowMyQuestionsOnly
+                || q.CreatedByUserId == CurrentUserId)
+        )
+        .ToList();
+    }
+
+    private void ClearFilters()
+    {
+        filterModel = new QuestionFilter();
+        ApplyFilters();
+    }
+
+    //TODO: Edit database in the backend
+    private void EditQuestion(Guid questionId)
+    {
+        selectedQuestion = questions.FirstOrDefault(q => q.Id == questionId);
+        ShowCreateQuestionModal = true;
+    }
+
+    //TODO: Edit database in the backend
+    private void DeleteQuestion(Guid questionId)
+    {
+        var question = questions.FirstOrDefault(q => q.Id == questionId);
+        if (question != null)
+        {
+            ApplyFilters();
+        }
+    }
+
+    private void CreateNewQuestion()
+    {
+        NavigationManager?.NavigateTo("/create-question");
+    }
+}

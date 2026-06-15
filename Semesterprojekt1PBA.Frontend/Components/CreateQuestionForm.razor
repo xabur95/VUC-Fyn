@@ -1,0 +1,157 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Semesterprojekt1PBA.Frontend.Models
+@using Semesterprojekt1PBA.Frontend.Models.DTO
+@inject HttpClient HttpClient
+
+<div class="question-form">
+
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+
+        <InputText @bind-Value="FormQuestion.Title"
+                   placeholder="Title"
+                   class="form-control input-box" />
+
+        <InputText @bind-Value="FormQuestion.Text"
+                   placeholder="Text"
+                   class="form-control input-box" />
+
+        <InputNumber @bind-Value="FormQuestion.Points"
+                     class="form-control input-box"
+                     min="1"
+                     max="10"
+                     step="1"
+                     placeholder="Points (1–10)" />
+
+        <!-- TAG SELECTOR (CHIPS) -->
+        <div class="tag-container">
+            @foreach (var tag in AvailableTags)
+            {
+                <button type="button"
+                        class="tag-chip @(SelectedTagIds.Contains(tag.Id) ? "selected" : "")"
+                        @onclick="() => ToggleTag(tag.Id)">
+                    @tag.Title
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right-side">
+
+        <div class="upload-group">
+            <label class="upload-label">Upload Question</label>
+            <InputFile OnChange="HandleQuestionUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="upload-group">
+            <label class="upload-label">Upload Video</label>
+            <InputFile OnChange="HandleVideoUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="upload-group">
+            <label class="upload-label">Upload PDF</label>
+            <InputFile OnChange="HandlePdfUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="upload-group">
+            <label class="upload-label">Upload Answer</label>
+            <InputFile OnChange="HandleAnswerUpload"
+                       class="form-control upload-btn" />
+        </div>
+
+        <div class="button-container">
+            <button class="btn btn-primary save-btn"
+                    @onclick="CreateOrUpdate">
+                Create / Update
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback OnQuestionCreated { get; set; }
+    [Parameter] public Question? ExistingQuestion { get; set; }
+
+    private List<TagGetDto> AvailableTags = new();
+    private List<Guid> SelectedTagIds = new();
+
+    private bool IsEditMode => ExistingQuestion != null;
+
+    private Question FormQuestion = new();
+
+    private string Type = string.Empty;
+
+    private IBrowserFile? QuestionFile;
+    private IBrowserFile? VideoFile;
+    private IBrowserFile? AnswerFile;
+    private IBrowserFile? PdfFile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTags();
+    }
+
+    private async Task LoadTags()
+    {
+        var result = await HttpClient.GetFromJsonAsync<List<TagGetDto>>("tags");
+        if (result != null)
+        {
+            AvailableTags = result;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (ExistingQuestion != null)
+        {
+            FormQuestion = ExistingQuestion;
+
+            // optional: preload tags if editing
+            // SelectedTagIds = ExistingQuestion.TagIds ?? new List<Guid>();
+        }
+    }
+
+    private void ToggleTag(Guid tagId)
+    {
+        if (SelectedTagIds.Contains(tagId))
+            SelectedTagIds.Remove(tagId);
+        else
+            SelectedTagIds.Add(tagId);
+    }
+
+    private void HandleQuestionUpload(InputFileChangeEventArgs e) => QuestionFile = e.File;
+    private void HandleVideoUpload(InputFileChangeEventArgs e) => VideoFile = e.File;
+    private void HandleAnswerUpload(InputFileChangeEventArgs e) => AnswerFile = e.File;
+    private void HandlePdfUpload(InputFileChangeEventArgs e) => PdfFile = e.File;
+
+    private async Task CreateOrUpdate()
+    {
+        var request = new QuestionPostDto
+        {
+            CreatedByUserId = Guid.Parse("52af6891-7acb-4bb8-8e99-0740b92cd032"),
+            Title = FormQuestion.Title,
+            Text = FormQuestion.Text,
+            Points = FormQuestion.Points,
+            ActiveStatus = 0,
+            ParentQuestionId = null,
+            TagIds = SelectedTagIds,
+            SubjectIds = new List<Guid>()
+        };
+
+        var response = await HttpClient.PostAsJsonAsync("questions", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await OnQuestionCreated.InvokeAsync();
+            await OnClose.InvokeAsync();
+        }
+    }
+}

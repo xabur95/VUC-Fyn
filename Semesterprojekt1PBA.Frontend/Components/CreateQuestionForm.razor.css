@@ -1,0 +1,56 @@
+﻿.question-form {
+    display: flex;
+    gap: 40px;
+}
+
+.left-side, .right-side {
+    flex: 1;
+}
+
+.input-box {
+    margin-bottom: 12px;
+}
+
+/* TAGS */
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tag-chip {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 14px;
+}
+
+    .tag-chip:hover {
+        background: #f3f3f3;
+    }
+
+    .tag-chip.selected {
+        background: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+
+/* upload sections */
+.upload-group {
+    margin-bottom: 12px;
+}
+
+.upload-label {
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.save-btn {
+    width: 100%;
+    margin-top: 10px;
+}
