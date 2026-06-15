@@ -1,28 +1,40 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# CI-pipeline
+# Kører automatisk ved push og pull requests til main-branchen.
+# Formål: fange fejl tidligt byg og test koden automatisk uden manuel indgriben.
 
 name: CI
 
+# Trigger: hvornår skal denne workflow køre?
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]        
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ]         
 
 jobs:
   build:
-
+    # Runner: hvilket operativsystem GitHub Actions skal bruge til at køre jobbet
     runs-on: ubuntu-22.04
 
     steps:
+    # Hent kildekoden fra repositoriet ned på runneren
     - uses: actions/checkout@v4
+
+    # Installer den ønskede .NET SDK-version på runneren
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 10.0.x
+        dotnet-version: 10.0.x             # x = nyeste version 
+
+    # Hent alle NuGet-pakker som projektet afhænger af (svarer til npm install)
     - name: Restore dependencies
       run: dotnet restore
+
+    # Kompilér løsningen — --no-restore springer restore over da det allerede er gjort
     - name: Build
       run: dotnet build --no-restore
+
+    # Kør alle xUnit-tests
+    # --no-build springer kompilering over da build allerede er udført
     - name: Test
       run: dotnet test --no-build --verbosity normal

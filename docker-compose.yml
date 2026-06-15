@@ -1,23 +1,22 @@
 # Author: Michael
 services:
-
   api:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:8080"
+      - "5000:8080"   # Ekstern port 5000 mappes til intern port 8080 (ASP.NET Core default i .NET 8+)
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       # Overskriver connection string fra appsettings.json
       ConnectionStrings__DefaultConnection: "Server=db,1433;Database=VucFyn;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;"
     depends_on:
       db:
-        # API starter ikke før databasen er healthy
+        # API starter ikke før databasen er healthy — undgår connection-fejl ved opstart
         condition: service_healthy
     networks:
       - app-net
-      - monitoring-net
+      - monitoring-net   # API er på begge netværk — app-net til DB og monitoring-net så Prometheus kan scrape /metrics
 
   db:
     image: mcr.microsoft.com/mssql/server:2022-CU25-ubuntu-22.04
@@ -27,11 +26,9 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - sql_data:/var/opt/mssql
+      - sql_data:/var/opt/mssql   # Persisterer databasedata så det overlever container-genstarter
     healthcheck:
-      # sqlcmd er placeret i mssql-tools18 i SQL Server 2022-imaget
-      # -C angiver at server-certifikatet skal stoles på (self-signed)
-      # -b afslutter med fejlkode hvis SELECT fejler
+      # Kører SELECT 1 mod databasen — returnerer fejlkode hvis SQL Server ikke er klar
       test: [
         "CMD-SHELL",
         "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -C"
@@ -77,7 +74,7 @@ services:
       - "9090:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
+      - prometheus_data:/prometheus   # Persisterer tidsseriedata så historik overlever genstarter
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -93,7 +90,7 @@ services:
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
     volumes:
-      - grafana_data:/var/lib/grafana
+      - grafana_data:/var/lib/grafana   # Persisterer dashboards og brugere så de overlever genstarter
     depends_on:
       - prometheus
       - loki
@@ -106,7 +103,7 @@ services:
       - "3100:3100"
     volumes:
       - ./monitoring/loki-config.yml:/etc/loki/loki-config.yml:ro
-      - loki_data:/loki
+      - loki_data:/loki   # Persisterer log-chunks så loghistorik ikke mistes ved genstart
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - monitoring-net
@@ -115,7 +112,7 @@ services:
     image: grafana/promtail:3.4.3
     volumes:
       - ./monitoring/promtail-config.yml:/etc/promtail/promtail-config.yml:ro
-      # Docker socket bruges til automatisk service-discovery af containers
+      # Docker socket giver Promtail adgang til automatisk at opdage kørende containers og hente deres logs
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Adgang til container-log-filer på hosten
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
@@ -126,12 +123,12 @@ services:
       - monitoring-net
 
 networks:
-  app-net:       # API og database
-  monitoring-net: # Observability-stakken
+  app-net:        # Isoleret netværk til API og database — monitoring-stakken har ingen direkte adgang til DB
+  monitoring-net: # Observability-stakken — API er også tilsluttet så Prometheus kan scrape metrics
 
 # ── Persistente volumes ────────────────────────────────────────
 volumes:
-  sql_data:       # SQL Server data
+  sql_data:        # SQL Server data
   prometheus_data: # Prometheus tidsserier
-  grafana_data:   # Grafana dashboards og brugere
-  loki_data:      # Loki log-chunks
+  grafana_data:    # Grafana dashboards og brugere
+  loki_data:       # Loki log-chunks

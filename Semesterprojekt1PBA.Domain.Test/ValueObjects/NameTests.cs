@@ -99,7 +99,6 @@ public class InvalidNameData : IEnumerable<object[]>
     {
         return GetEnumerator();
     }
-
     public IEnumerator<object[]> GetEnumerator()
     {
         yield return new object[] { "", "Hansen" };

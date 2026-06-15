@@ -5,17 +5,20 @@ using Semesterprojekt1PBA.Application.Features.Users.Commands.CreateAdmin;
 using Semesterprojekt1PBA.Application.Interfaces;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.Helpers;
+using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
 namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
+
 /// <summary>
-/// Author: Michael
-/// Contains unit tests for CreateAdminCommandHandler, verifying that an admin is created correctly
-/// and that the returned Guid is valid.
+///     Author: Michael
+///     Contains unit tests for CreateAdminCommandHandler,
+///     verifying that an admin is created correctly
+///     and that the returned Guid is valid.
 /// </summary>
 public class CreateAdminCommandHandlerTests
 {
-    private readonly Mock<IUserRepository> _mockRepository;
     private readonly Mock<ILogger<CreateAdminCommandHandler>> _mockLogger;
+    private readonly Mock<IUserRepository> _mockRepository;
 
     public CreateAdminCommandHandlerTests()
     {
@@ -28,7 +31,7 @@ public class CreateAdminCommandHandlerTests
     {
         // Arrange
         _mockRepository.Setup(r => r.AddAsync(It.IsAny<Admin>())).Returns(Task.CompletedTask);
-        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<ValueObjectsAndEnums.Email>());
+        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<Email>());
         var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
         var command = new CreateAdminCommand("Marge", "Simpson", "marge@springfield.com", "Password1");
 
@@ -44,7 +47,7 @@ public class CreateAdminCommandHandlerTests
     {
         // Arrange
         _mockRepository.Setup(r => r.AddAsync(It.IsAny<Admin>())).Returns(Task.CompletedTask);
-        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<Semesterprojekt1PBA.Domain.ValueObjectsAndEnums.Email>());
+        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<Email>());
         var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
         var command = new CreateAdminCommand("Marge", "Simpson", "marge@springfield.com", "Password1");
 
@@ -60,10 +63,11 @@ public class CreateAdminCommandHandlerTests
     [InlineData("Marge", "", "marge@springfield.com")]
     [InlineData("Marge", "Simpson", "not-an-email")]
     [InlineData("Marge", "Simpson", "")]
-    public async Task CreateAdminCommand_WhenDataIsInvalid_ThrowsErrorException(string firstName, string lastName, string email)
+    public async Task CreateAdminCommand_WhenDataIsInvalid_ThrowsErrorException(string firstName, string lastName,
+        string email)
     {
         // Arrange
-        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<Semesterprojekt1PBA.Domain.ValueObjectsAndEnums.Email>());
+        _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<Email>());
         var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
         var command = new CreateAdminCommand(firstName, lastName, email, "Password1");
 

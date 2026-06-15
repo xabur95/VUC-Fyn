@@ -15,24 +15,28 @@
 version: "3.8"
 services:
   api:
-    image: vuc-fyn-api:latest  # Swarm kan ikke bygge — image publiceres til registry først
+    # Swarm kan ikke bygge — image publiceres til registry først
+    image: vuc-fyn-api:latest  
     ports:
       - "5000:8080"
+    # Password læses fra /run/secrets/ — ikke .env
+    secrets:
+      - db_password
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      # Password læses fra /run/secrets/db_password via File.ReadAllText()
-      # og sættes ind i connection string ved opstart i Program.cs
-      DB_SECRET_PATH: /run/secrets/db_password
-    secrets:
-      - db_password             # Monteres som fil: /run/secrets/db_password
+      DB_SECRET_PATH: /run/secrets/db_password            
     deploy:
-      replicas: 2               # To API-instanser — Swarm load balancer fordeler requests
+      # 2 replicas — load balancing + self-healing
+      replicas: 2               
       update_config:
-        parallelism: 1          # Rolling update: opdatér én instans ad gangen
-        delay: 10s              # Vent 10s mellem hver instans
-        failure_action: rollback # Ved fejl: rul automatisk tilbage til forrige version
+        # Rolling update: opdatér én instans ad gangen
+        parallelism: 1  
+        # Default er pause — vi sætter eksplicit rollback
+        delay: 10s     
+        failure_action: rollback 
       restart_policy:
-        condition: on-failure   # Self-healing: genstart ved fejl
+         # Self-healing: genstart ved fejl
+        condition: on-failure  
     networks:
       - app-net
       - monitoring-net
@@ -50,17 +54,21 @@ services:
       replicas: 1
       placement:
         constraints:
-          - node.role == manager  # Database kører kun på manager-noden for datakonsistens
+        # Database kører kun på manager-noden for datakonsistens
+          - node.role == manager  
     networks:
       - app-net
 
 secrets:
   db_password:
-    external: true  # Oprettes én gang med: echo "VucFyn2026!" | docker secret create db_password -
+    # Krypteret i Swarm — oprettes med:
+    # echo "password" | docker secret create db_password -
+    external: true
 
 networks:
   app-net:
-    driver: overlay             # Overlay: netværket spænder på tværs af Swarm-noder
+  # Overlay: netværket spænder på tværs af Swarm-noder
+    driver: overlay             
   monitoring-net:
     driver: overlay
 
