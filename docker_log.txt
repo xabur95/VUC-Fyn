@@ -1,0 +1,94 @@
+k @ http://localhost:5084/_framework/dotnet.5n96gd4pn8.js:4
+(anonymous) @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+Qr @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+Po @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+Fo @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+(anonymous) @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+Mc @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+$func298 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$func222 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$func213 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$func256 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$func3231 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$func2553 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$func2558 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$func2582 @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+$mono_wasm_invoke_jsexport @ http://localhost:5084/_framework/dotnet.native.veuqw8a0w9.wasm:1
+Module._mono_wasm_invoke_jsexport @ http://localhost:5084/_framework/dotnet.native.ikrs475e5v.js:8
+kn @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+(anonymous) @ http://localhost:5084/_framework/dotnet.runtime.a6jcqbs390.js:3
+beginInvokeDotNetFromJS @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+invokeDotNetMethodAsync @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+invokeMethodAsync @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+(anonymous) @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+D @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+(anonymous) @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+invokeWhenHeapUnlocked @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+(anonymous) @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+D @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+N @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+dispatchGlobalEventToAllElements @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+onGlobalEvent @ http://localhost:5084/_framework/blazor.webassembly.958z1vx7fr.js:1
+
+Request URL
+http://localhost:5000/questions
+Request Method
+POST
+Status Code
+404 Not Found
+Remote Address
+[::1]:5000
+Referrer Policy
+strict-origin-when-cross-origin
+access-control-allow-origin
+*
+cache-control
+no-cache,no-store
+content-type
+application/json; charset=utf-8
+date
+Mon, 15 Jun 2026 07:59:50 GMT
+expires
+-1
+pragma
+no-cache
+server
+Kestrel
+transfer-encoding
+chunked
+accept
+*/*
+accept-encoding
+gzip, deflate, br, zstd
+accept-language
+da,en;q=0.9
+connection
+keep-alive
+content-length
+184
+content-type
+application/json; charset=utf-8
+dnt
+1
+host
+localhost:5000
+origin
+http://localhost:5084
+referer
+http://localhost:5084/
+sec-ch-ua
+"Google Chrome";v="149", "Chromium";v="149", "Not)A;Brand";v="24"
+sec-ch-ua-mobile
+?0
+sec-ch-ua-platform
+"Windows"
+sec-fetch-dest
+empty
+sec-fetch-mode
+cors
+sec-fetch-site
+same-site
+sec-gpc
+1
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
