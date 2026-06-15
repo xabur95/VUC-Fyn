@@ -1,0 +1,245 @@
+@using Semesterprojekt1PBA.Frontend.Models
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient HttpClient
+
+<div class="questions-container">
+    <h2>User Management</h2>
+
+    <div class="questions-layout">
+        <div class="questions-sidebar">
+            <div class="filter-section">
+                <h3>Role</h3>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <select style="width: 120px;" @bind="SelectedRole">
+                        <option value="0">Student</option>
+                        <option value="1">Teacher</option>
+                        <option value="2">Admin</option>
+                    </select>
+                    <button class="btn btn-primary" @onclick="LoadUsers">Load Users</button>
+                </div>
+            </div>
+
+            <div class="filter-section" style="margin-top: 1rem;">
+                <h3>Assign Role</h3>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="User ID" @bind="AssignUserId" />
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <select style="width: 120px;" @bind="AssignRoleType">
+                        <option value="0">Student</option>
+                        <option value="1">Teacher</option>
+                        <option value="2">Admin</option>
+                    </select>
+                    <button class="btn btn-primary" @onclick="AssignRole">Assign Role</button>
+                </div>
+                @if (!string.IsNullOrEmpty(AssignMessage))
+                {
+                    <p style="color: green; margin-top: 0.5rem;">@AssignMessage</p>
+                }
+            </div>
+
+            <div class="filter-section" style="margin-top: 1rem;">
+                <h3>Import Students (CSV)</h3>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <InputFile OnChange="HandleCsvUpload" style="width: 120px;" />
+                    <button class="btn btn-primary" @onclick="ImportCsv">Import</button>
+                </div>
+                @if (!string.IsNullOrEmpty(ImportMessage))
+                {
+                    <p style="color: green; margin-top: 0.5rem;">@ImportMessage</p>
+                }
+            </div>
+        </div>
+
+        <div class="questions-content">
+            <button class="btn btn-success" style="margin-top: 1rem; margin-bottom: 1rem;" @onclick="@(() => ShowCreateModal = true)">
+                + Create New Student
+            </button>
+
+            <Modal Title="Create Student" Show="ShowCreateModal" OnClose="@(() => ShowCreateModal = false)">
+                <CreateUserForm OnClose="@(() => ShowCreateModal = false)"
+                                OnUserCreated="HandleUserCreated" />
+            </Modal>
+
+            @if (Users.Count > 0)
+            {
+                <table class="table" style="margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            @if (SelectedRole == 0)
+                            {
+                                <th>Classes</th>
+                            }
+                            <th>ID</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Users)
+                        {
+                            <tr style="@(!user.IsActive ? "opacity: 0.5;" : "")">
+                                @if (EditingUserId == user.Id)
+                                {
+                                    <td><input class="form-control" @bind="EditFirstName" placeholder="First Name" /></td>
+                                    <td><input class="form-control" @bind="EditEmail" placeholder="Email" /></td>
+                                    @if (SelectedRole == 0) { <td></td> }
+                                    <td style="font-size: 0.75rem; color: gray;">@user.Id</td>
+                                    <td></td>
+                                    <td>
+                                        <button class="btn btn-primary" @onclick="() => SaveUser(user.Id)">Save</button>
+                                        <button class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>@user.FirstName @user.LastName</td>
+                                    <td>@user.Email</td>
+                                    @if (SelectedRole == 0)
+                                    {
+                                        <td>
+                                            @if (user.Classes.Count > 0)
+                                            {
+                                                @string.Join(", ", user.Classes)
+                                            }
+                                            else
+                                            {
+                                                <span style="color: gray;">—</span>
+                                            }
+                                        </td>
+                                    }
+                                    <td style="font-size: 0.75rem; color: gray;">@user.Id</td>
+                                    <td>
+                                        @if (user.IsActive)
+                                        {
+                                            <span style="color: green;">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color: red;">Inactive</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-edit" @onclick="() => StartEdit(user)">Edit</button>
+                                        @if (user.IsActive)
+                                        {
+                                            <button class="btn btn-delete" @onclick="() => DeactivateUser(user.Id)">Deactivate</button>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p style="margin-top: 1rem;">No users loaded. Select a role and click Load Users.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private int SelectedRole = 0;
+    private List<UserListItem> Users = new();
+
+    private string AssignUserId = string.Empty;
+    private int AssignRoleType = 0;
+    private string AssignMessage = string.Empty;
+
+    private bool ShowCreateModal = false;
+
+    private async Task LoadUsers()
+    {
+        var result = await HttpClient.GetFromJsonAsync<List<UserListItem>>($"users/role/{SelectedRole}");
+        Users = result ?? new();
+    }
+
+    private async Task AssignRole()
+    {
+        AssignMessage = string.Empty;
+        if (!Guid.TryParse(AssignUserId, out var userId)) return;
+
+        var request = new { roleType = AssignRoleType };
+        var response = await HttpClient.PostAsJsonAsync($"users/{userId}/roles", request);
+
+        AssignMessage = response.IsSuccessStatusCode
+            ? "Role assigned successfully."
+            : $"Failed ({(int)response.StatusCode})";
+    }
+
+    private async Task HandleUserCreated()
+    {
+        ShowCreateModal = false;
+        await LoadUsers();
+    }
+
+    private async Task DeactivateUser(Guid userId)
+    {
+        var response = await HttpClient.DeleteAsync($"users/{userId}/deactivate");
+        if (response.IsSuccessStatusCode)
+            await LoadUsers();
+    }
+
+    private Guid? EditingUserId = null;
+    private string EditFirstName = string.Empty;
+    private string EditLastName = string.Empty;
+    private string EditEmail = string.Empty;
+
+    private void StartEdit(UserListItem user)
+    {
+        EditingUserId = user.Id;
+        EditFirstName = user.FirstName;
+        EditLastName = user.LastName;
+        EditEmail = user.Email;
+    }
+
+    private void CancelEdit() => EditingUserId = null;
+
+    private async Task SaveUser(Guid userId)
+    {
+        var request = new { firstName = EditFirstName, lastName = EditLastName, email = EditEmail };
+        var response = await HttpClient.PutAsJsonAsync($"users/{userId}", request);
+        if (response.IsSuccessStatusCode)
+        {
+            EditingUserId = null;
+            await LoadUsers();
+        }
+    }
+
+    private IBrowserFile? CsvFile;
+    private string ImportMessage = string.Empty;
+
+    private void HandleCsvUpload(InputFileChangeEventArgs e) => CsvFile = e.File;
+
+    private async Task ImportCsv()
+    {
+        ImportMessage = string.Empty;
+        if (CsvFile == null) return;
+
+        using var content = new MultipartFormDataContent();
+        using var stream = CsvFile.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+        content.Add(new StreamContent(stream), "file", CsvFile.Name);
+
+        var response = await HttpClient.PostAsync("users/students/import", content);
+        ImportMessage = response.IsSuccessStatusCode
+            ? "Students imported successfully."
+            : $"Failed ({(int)response.StatusCode})";
+
+        if (response.IsSuccessStatusCode)
+            await LoadUsers();
+    }
+
+    private class UserListItem
+    {
+        public Guid Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
+        public List<string> Classes { get; set; } = [];
+    }
+}

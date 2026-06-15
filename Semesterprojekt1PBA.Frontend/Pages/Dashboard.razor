@@ -19,25 +19,45 @@ else
 
         <div class="tabs-container">
             <div class="nav nav-tabs" role="tablist">
-                <button class="nav-link @(activeTab == "questions" ? "active" : "")" 
-                        @onclick="@((MouseEventArgs e) => SetActiveTab("questions"))" 
+                <button class="nav-link @(activeTab == "users" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("users"))"
+                        role="tab">
+                    Users
+                </button>
+                <button class="nav-link @(activeTab == "questions" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("questions"))"
                         role="tab">
                     Questions
                 </button>
-                <button class="nav-link @(activeTab == "assignments" ? "active" : "")" 
-                        @onclick="@((MouseEventArgs e) => SetActiveTab("assignments"))" 
+                <button class="nav-link @(activeTab == "assignments" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("assignments"))"
                         role="tab">
                     Assignments
                 </button>
-                <button class="nav-link @(activeTab == "evaluation" ? "active" : "")" 
-                        @onclick="@((MouseEventArgs e) => SetActiveTab("evaluation"))" 
+                <button class="nav-link @(activeTab == "evaluation" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("evaluation"))"
                         role="tab">
                     Evaluation
                 </button>
-                <button class="nav-link @(activeTab == "statistics" ? "active" : "")" 
-                        @onclick="@((MouseEventArgs e) => SetActiveTab("statistics"))" 
+                <button class="nav-link @(activeTab == "statistics" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("statistics"))"
                         role="tab">
                     Statistics
+                </button>
+                <button class="nav-link @(activeTab == "tags" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("tags"))"
+                        role="tab">
+                    Tags
+                </button>
+                <button class="nav-link @(activeTab == "schools" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("schools"))"
+                        role="tab">
+                    Schools
+                </button>
+                <button class="nav-link @(activeTab == "classes" ? "active" : "")"
+                        @onclick="@((MouseEventArgs e) => SetActiveTab("classes"))"
+                        role="tab">
+                    Classes
                 </button>
             </div>
 
@@ -66,13 +86,37 @@ else
                         <Statistics />
                     </div>
                 }
+                else if (activeTab == "users")
+                {
+                    <div class="tab-pane active">
+                        <UserList />
+                    </div>
+                }
+                else if (activeTab == "tags")
+                {
+                    <div class="tab-pane active">
+                        <TagsAdmin />
+                    </div>
+                }
+                else if (activeTab == "schools")
+                {
+                    <div class="tab-pane active">
+                        <SchoolAdmin />
+                    </div>
+                }
+                else if (activeTab == "classes")
+                {
+                    <div class="tab-pane active">
+                        <ClassAdmin />
+                    </div>
+                }
             </div>
         </div>
     </div>
 }
 
 @code {
-    private string activeTab = "questions";
+    private string activeTab = "users";
     //private bool isAuthenticated = false;
 
     /*[Inject]

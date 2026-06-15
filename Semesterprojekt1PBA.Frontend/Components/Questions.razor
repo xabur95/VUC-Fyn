@@ -71,6 +71,21 @@
                                     @question.Text
                                 </p>
 
+                                <!-- Tags -->
+                                <div class="question-meta" style="margin-top: 0.35rem;">
+                                    @if (question.Tags?.Any() == true)
+                                    {
+                                        @foreach (var tag in question.Tags)
+                                        {
+                                            <span style="display: inline-block; background: #e0e7ff; color: #3730a3; border-radius: 12px; padding: 1px 10px; font-size: 0.75rem; margin-right: 4px;">@tag.Title</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted" style="font-size: 0.75rem;">No tags</span>
+                                    }
+                                </div>
+
                                 <!-- Subjects-->
                                 <div class="question-meta">
                                     <strong>Subjects</strong>
@@ -84,9 +99,29 @@
                                     }
                                 </div>
                             </div>
+                            @if (question.Answer != null)
+                            {
+                                <div class="question-meta" style="margin-top: 0.5rem;">
+                                    <strong>Answer:</strong> @question.Answer.Title — @question.Answer.Text
+                                </div>
+                            }
+                            else if (AnswerFormQuestionId == question.Id)
+                            {
+                                <div style="margin-top: 0.5rem;">
+                                    <input class="form-control" placeholder="Answer title" @bind="AnswerTitle" style="margin-bottom: 0.25rem;" />
+                                    <input class="form-control" placeholder="Answer text" @bind="AnswerText" style="margin-bottom: 0.25rem;" />
+                                    <button class="btn btn-primary" @onclick="() => SubmitAnswer(question.Id)">Save</button>
+                                    <button class="btn btn-secondary" @onclick="@(() => AnswerFormQuestionId = null)">Cancel</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" style="margin-top: 0.5rem;" @onclick="@(() => AnswerFormQuestionId = question.Id)">Set Answer</button>
+                            }
+
                             <div class="question-actions">
                                 <button class="btn btn-edit" @onclick="() => EditQuestion(question.Id)">Edit</button>
-                                @if ( true /*question.CreatedByUserId == 0*/)
+                                @if (true /*question.CreatedByUserId == 0*/)
                                 {
                                     <button class="btn btn-delete" @onclick="() => DeleteQuestion(question.Id)">Delete</button>
                                 }
@@ -126,6 +161,7 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadQuestions();
+        await LoadEditorUserId();
         ApplyFilters();
     }
 
@@ -202,5 +238,44 @@
     private void CreateNewQuestion()
     {
         NavigationManager?.NavigateTo("/create-question");
+    }
+
+    private class TeacherItem
+    {
+        public Guid Id { get; set; }
+    }
+
+    private Guid EditorUserId = Guid.Empty;
+    private Guid? AnswerFormQuestionId = null;
+    private string AnswerTitle = string.Empty;
+    private string AnswerText = string.Empty;
+
+    private async Task LoadEditorUserId()
+    {
+        var teachers = await HttpClient.GetFromJsonAsync<List<TeacherItem>>("users/role/1");
+        if (teachers != null && teachers.Count > 0)
+            EditorUserId = teachers[0].Id;
+    }
+
+    private async Task SubmitAnswer(Guid questionId)
+    {
+        var request = new
+        {
+            questionId,
+            editorUserId = EditorUserId,
+            title = AnswerTitle,
+            text = AnswerText
+        };
+
+        var response = await HttpClient.PostAsJsonAsync($"questions/{questionId}/answer", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            AnswerFormQuestionId = null;
+            AnswerTitle = string.Empty;
+            AnswerText = string.Empty;
+            await LoadQuestions();
+            ApplyFilters();
+        }
     }
 }

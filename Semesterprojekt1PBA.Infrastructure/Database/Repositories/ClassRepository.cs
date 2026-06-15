@@ -52,6 +52,19 @@ public class ClassRepository : IClassRepository
             .ToListAsync();
     }
 
+    public async Task AddStudentToClassAsync(Guid classId, Guid studentId)
+    {
+        var clas = await GetClassByIdAsync(classId);
+
+        var student = await _appDbContext.Users.OfType<Student>()
+            .FirstOrDefaultAsync(s => s.Id == studentId);
+
+        if (student is null)
+            throw new ErrorException($"Student with id '{studentId}' was not found.", errorCode: "USER_NOT_FOUND");
+
+        clas.AddStudent(student);
+    }
+
     public async Task<IEnumerable<Class>> GetAllClassesAsync()
     {
         return await _appDbContext.Classes

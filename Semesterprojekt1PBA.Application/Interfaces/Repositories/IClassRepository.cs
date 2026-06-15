@@ -9,6 +9,7 @@ namespace Semesterprojekt1PBA.Application.Interfaces.Repositories
     {
         Task CreateClassAsync(Class clas);
         Task<Class> GetClassByIdAsync(Guid id);
+        Task AddStudentToClassAsync(Guid classId, Guid studentId);
 
         Task<IEnumerable<Class>> GetAllClassesInSchoolAsync(Guid schoolId);
         Task<IEnumerable<Class>> GetAllClassesAsync();

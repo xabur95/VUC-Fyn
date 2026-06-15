@@ -1,0 +1,121 @@
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient HttpClient
+
+<div class="questions-container">
+    <h2>Evaluation Sheets</h2>
+
+    <div class="questions-layout">
+        <div class="questions-sidebar">
+            <div class="filter-section">
+                <h3>Create Evaluation Sheet</h3>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="Class ID" @bind="NewClassId" />
+                </div>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="Assignment Sheet ID" @bind="NewAssignmentSheetId" />
+                </div>
+                <button class="btn btn-primary btn-block" @onclick="CreateEvaluationSheet">Create</button>
+                @if (!string.IsNullOrEmpty(Message))
+                {
+                    <p style="color: green; margin-top: 0.5rem;">@Message</p>
+                }
+            </div>
+
+            <div class="filter-section" style="margin-top: 1rem;">
+                <h3>Filter by Class</h3>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="Class ID" @bind="FilterClassId" />
+                </div>
+                <button class="btn btn-primary btn-block" @onclick="LoadByClass">Load by Class</button>
+                <button class="btn btn-secondary btn-block" style="margin-top: 0.25rem;" @onclick="LoadAll">Load All</button>
+            </div>
+        </div>
+
+        <div class="questions-content">
+            @if (EvaluationSheets.Count > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Class ID</th>
+                            <th>Questions</th>
+                            <th>Teacher Scores</th>
+                            <th>Student Scores</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sheet in EvaluationSheets)
+                        {
+                            <tr>
+                                <td style="font-size: 0.75rem; color: gray;">@sheet.Id</td>
+                                <td style="font-size: 0.75rem; color: gray;">@sheet.ClassId</td>
+                                <td>@sheet.QuestionIds.Count()</td>
+                                <td>@sheet.TeacherScores.Count()</td>
+                                <td>@sheet.StudentScores.Count()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No evaluation sheets found.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<EvaluationSheetItem> EvaluationSheets = new();
+    private string NewClassId = string.Empty;
+    private string NewAssignmentSheetId = string.Empty;
+    private string FilterClassId = string.Empty;
+    private string Message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAll();
+    }
+
+    private async Task LoadAll()
+    {
+        EvaluationSheets = await HttpClient.GetFromJsonAsync<List<EvaluationSheetItem>>("evaluation-sheets") ?? new();
+    }
+
+    private async Task LoadByClass()
+    {
+        if (!Guid.TryParse(FilterClassId, out var classId)) return;
+        EvaluationSheets = await HttpClient.GetFromJsonAsync<List<EvaluationSheetItem>>($"classes/{classId}/evaluation-sheets") ?? new();
+    }
+
+    private async Task CreateEvaluationSheet()
+    {
+        Message = string.Empty;
+        if (!Guid.TryParse(NewClassId, out var classId) || !Guid.TryParse(NewAssignmentSheetId, out var assignmentSheetId)) return;
+
+        var request = new { classId, assignmentSheetId };
+        var response = await HttpClient.PostAsJsonAsync("evaluation-sheets", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Message = "Evaluation sheet created.";
+            NewClassId = string.Empty;
+            NewAssignmentSheetId = string.Empty;
+            await LoadAll();
+        }
+        else
+        {
+            Message = $"Failed ({(int)response.StatusCode})";
+        }
+    }
+
+    private class EvaluationSheetItem
+    {
+        public Guid Id { get; set; }
+        public Guid ClassId { get; set; }
+        public IEnumerable<Guid> QuestionIds { get; set; } = [];
+        public IEnumerable<object> TeacherScores { get; set; } = [];
+        public IEnumerable<object> StudentScores { get; set; } = [];
+    }
+}

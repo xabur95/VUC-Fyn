@@ -82,6 +82,7 @@
 
     private List<TagGetDto> AvailableTags = new();
     private List<Guid> SelectedTagIds = new();
+    private Guid CreatorUserId = Guid.Empty;
 
     private bool IsEditMode => ExistingQuestion != null;
 
@@ -97,15 +98,21 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadTags();
+        await LoadCreatorUserId();
     }
 
     private async Task LoadTags()
     {
         var result = await HttpClient.GetFromJsonAsync<List<TagGetDto>>("tags");
         if (result != null)
-        {
             AvailableTags = result;
-        }
+    }
+
+    private async Task LoadCreatorUserId()
+    {
+        var teachers = await HttpClient.GetFromJsonAsync<List<TeacherItem>>("users/role/1");
+        if (teachers != null && teachers.Count > 0)
+            CreatorUserId = teachers[0].Id;
     }
 
     protected override void OnParametersSet()
@@ -113,9 +120,7 @@
         if (ExistingQuestion != null)
         {
             FormQuestion = ExistingQuestion;
-
-            // optional: preload tags if editing
-            // SelectedTagIds = ExistingQuestion.TagIds ?? new List<Guid>();
+            SelectedTagIds = ExistingQuestion.Tags.Select(t => t.Id).ToList();
         }
     }
 
@@ -132,21 +137,44 @@
     private void HandleAnswerUpload(InputFileChangeEventArgs e) => AnswerFile = e.File;
     private void HandlePdfUpload(InputFileChangeEventArgs e) => PdfFile = e.File;
 
+    private class TeacherItem
+    {
+        public Guid Id { get; set; }
+    }
+
     private async Task CreateOrUpdate()
     {
-        var request = new QuestionPostDto
-        {
-            CreatedByUserId = Guid.Parse("52af6891-7acb-4bb8-8e99-0740b92cd032"),
-            Title = FormQuestion.Title,
-            Text = FormQuestion.Text,
-            Points = FormQuestion.Points,
-            ActiveStatus = 0,
-            ParentQuestionId = null,
-            TagIds = SelectedTagIds,
-            SubjectIds = new List<Guid>()
-        };
+        HttpResponseMessage response;
 
-        var response = await HttpClient.PostAsJsonAsync("questions", request);
+        if (IsEditMode)
+        {
+            var updateRequest = new
+            {
+                questionId = ExistingQuestion!.Id,
+                editorUserId = CreatorUserId,
+                rowVersion = ExistingQuestion.RowVersion,
+                title = FormQuestion.Title,
+                text = FormQuestion.Text,
+                points = FormQuestion.Points,
+                activeStatus = FormQuestion.ActiveStatus
+            };
+            response = await HttpClient.PutAsJsonAsync($"questions/{ExistingQuestion.Id}", updateRequest);
+        }
+        else
+        {
+            var createRequest = new QuestionPostDto
+            {
+                CreatedByUserId = CreatorUserId,
+                Title = FormQuestion.Title,
+                Text = FormQuestion.Text,
+                Points = FormQuestion.Points,
+                ActiveStatus = 0,
+                ParentQuestionId = null,
+                TagIds = SelectedTagIds,
+                SubjectIds = new List<Guid>()
+            };
+            response = await HttpClient.PostAsJsonAsync("questions", createRequest);
+        }
 
         if (response.IsSuccessStatusCode)
         {

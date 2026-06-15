@@ -1,0 +1,172 @@
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient HttpClient
+
+<div class="questions-container">
+    <h2>Schools</h2>
+
+    <div class="questions-layout">
+        <div class="questions-sidebar">
+
+            <div class="filter-section">
+                <h3>Create School</h3>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="Title" @bind="NewTitle" />
+                </div>
+                <button class="btn btn-primary btn-block" @onclick="CreateSchool">Create</button>
+                @if (!string.IsNullOrEmpty(CreateMessage))
+                {
+                    <p style="color: green; margin-top: 0.5rem;">@CreateMessage</p>
+                }
+            </div>
+
+            <div class="filter-section" style="margin-top: 1rem;">
+                <h3>Find School</h3>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="School ID" @bind="LookupId" />
+                </div>
+                <button class="btn btn-primary btn-block" @onclick="LoadSchool">Load</button>
+            </div>
+
+            @if (SelectedSchool != null)
+            {
+                <div class="filter-section" style="margin-top: 1rem;">
+                    <h3>Update Title</h3>
+                    <div class="filter-group">
+                        <input class="form-control input-box" @bind="UpdateTitle" />
+                    </div>
+                    <button class="btn btn-primary btn-block" @onclick="UpdateSchool">Save</button>
+                    @if (!string.IsNullOrEmpty(UpdateMessage))
+                    {
+                        <p style="color: green; margin-top: 0.5rem;">@UpdateMessage</p>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="questions-content">
+            @if (AllSchools.Count > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Classes</th>
+                            <th>ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var school in AllSchools)
+                        {
+                            <tr>
+                                <td>@school.Title</td>
+                                <td>@school.Classes.Count()</td>
+                                <td style="font-size: 0.75rem; color: gray;">@school.Id</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No schools found.</p>
+            }
+
+            @if (SelectedSchool != null)
+            {
+                <div class="question-card" style="margin-top: 1rem;">
+                    <p><strong>Title:</strong> @SelectedSchool.Title</p>
+                    <p style="font-size: 0.75rem; color: gray;"><strong>ID:</strong> @SelectedSchool.Id</p>
+                    @if (SelectedSchool.Classes.Any())
+                    {
+                        <ul>
+                            @foreach (var c in SelectedSchool.Classes)
+                            {
+                                <li style="font-size: 0.75rem; color: gray;">@c.Id</li>
+                            }
+                        </ul>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<SchoolItem> AllSchools = new();
+    private string NewTitle = string.Empty;
+    private string LookupId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAllSchools();
+    }
+
+    private async Task LoadAllSchools()
+    {
+        AllSchools = await HttpClient.GetFromJsonAsync<List<SchoolItem>>("schools") ?? new();
+    }
+    private string UpdateTitle = string.Empty;
+    private string CreateMessage = string.Empty;
+    private string UpdateMessage = string.Empty;
+    private Guid? CreatedSchoolId = null;
+    private SchoolItem? SelectedSchool = null;
+
+    private async Task CreateSchool()
+    {
+        CreateMessage = string.Empty;
+        var request = new { title = NewTitle };
+        var response = await HttpClient.PostAsJsonAsync("schools", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            CreatedSchoolId = await response.Content.ReadFromJsonAsync<Guid>();
+            NewTitle = string.Empty;
+            CreateMessage = "School created.";
+            await LoadAllSchools();
+        }
+        else
+        {
+            CreateMessage = $"Failed ({(int)response.StatusCode})";
+        }
+    }
+
+    private async Task LoadSchool()
+    {
+        if (!Guid.TryParse(LookupId, out var id)) return;
+        SelectedSchool = await HttpClient.GetFromJsonAsync<SchoolItem>($"schools/{id}");
+        if (SelectedSchool != null)
+            UpdateTitle = SelectedSchool.Title;
+    }
+
+    private async Task UpdateSchool()
+    {
+        if (SelectedSchool == null) return;
+        UpdateMessage = string.Empty;
+
+        var request = new { id = SelectedSchool.Id, rowVersion = SelectedSchool.RowVersion, title = UpdateTitle };
+        var response = await HttpClient.PutAsJsonAsync($"schools/{SelectedSchool.Id}", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            UpdateMessage = "Title updated.";
+            await LoadSchool();
+        }
+        else
+        {
+            UpdateMessage = $"Failed ({(int)response.StatusCode})";
+        }
+    }
+
+    private class SchoolItem
+    {
+        public Guid Id { get; set; }
+        public byte[] RowVersion { get; set; } = [];
+        public string Title { get; set; } = string.Empty;
+        public IEnumerable<ClassRef> Classes { get; set; } = [];
+    }
+
+    private class ClassRef
+    {
+        public Guid Id { get; set; }
+    }
+}

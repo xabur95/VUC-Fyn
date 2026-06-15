@@ -9,7 +9,7 @@ namespace Semesterprojekt1PBA.Application.Features.Users.Commands.ImportStudents
 /// is typically handled by an application service that processes the CSV and creates or updates student records
 /// accordingly.</summary>
 
-public record ImportStudentsFromCsvCommand : IRequest<Unit>, ITransactionalCommand
+public record ImportStudentsFromCsvCommand : IRequest<Unit>
 {
     public Stream CsvFile { get; init; } = null!;
 }

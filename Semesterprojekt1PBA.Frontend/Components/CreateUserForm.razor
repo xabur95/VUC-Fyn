@@ -1,0 +1,87 @@
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient HttpClient
+
+<div class="question-form">
+    <div class="left-side">
+
+        <InputText @bind-Value="FirstName"
+                   placeholder="First Name"
+                   class="form-control input-box" />
+
+        <InputText @bind-Value="LastName"
+                   placeholder="Last Name"
+                   class="form-control input-box" />
+
+        <InputText @bind-Value="Email"
+                   placeholder="Email"
+                   class="form-control input-box" />
+
+        <InputText @bind-Value="Password"
+                   placeholder="Password"
+                   type="password"
+                   class="form-control input-box" />
+
+        <InputText @bind-Value="Knr"
+                   placeholder="Student Number (e.g. STU021)"
+                   class="form-control input-box" />
+
+        <label>Start Date</label>
+        <InputDate @bind-Value="Tilmeldt"
+                   class="form-control input-box" />
+
+    </div>
+
+    <div class="right-side">
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <p style="color: red;">@ErrorMessage</p>
+        }
+
+        <div class="button-container">
+            <button class="btn btn-primary save-btn" @onclick="Submit">
+                Create Student
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback OnUserCreated { get; set; }
+
+    private string FirstName = string.Empty;
+    private string LastName = string.Empty;
+    private string Email = string.Empty;
+    private string Password = string.Empty;
+    private string Knr = string.Empty;
+    private DateOnly Tilmeldt = DateOnly.FromDateTime(DateTime.Today);
+    private string ErrorMessage = string.Empty;
+
+    private async Task Submit()
+    {
+        ErrorMessage = string.Empty;
+
+        var request = new
+        {
+            firstName = FirstName,
+            lastName = LastName,
+            email = Email,
+            password = Password,
+            knr = Knr,
+            tilmeldt = Tilmeldt.ToString("yyyy-MM-dd"),
+            ophørt = (string?)null
+        };
+
+        var response = await HttpClient.PostAsJsonAsync("users/student", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await OnUserCreated.InvokeAsync();
+            await OnClose.InvokeAsync();
+        }
+        else
+        {
+            ErrorMessage = $"Failed to create student ({(int)response.StatusCode})";
+        }
+    }
+}

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Semesterprojekt1PBA.Application.Dto.School.Command;
 using Semesterprojekt1PBA.Application.Features.School.Command;
 using Semesterprojekt1PBA.Application.Features.School.Query;
+using GetAllSchoolsQuery = Semesterprojekt1PBA.Application.Features.School.Query.GetAllSchoolsQuery;
 
 namespace Semesterprojekt1PBA.Presentation.Endpoints;
 
@@ -11,6 +12,13 @@ public static class SchoolEndpoints
 {
     public static void MapSchoolEndpoints(this WebApplication app)
     {
+        // Get All Schools
+        app.MapGet("/schools", async (IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetAllSchoolsQuery());
+            return Results.Ok(result);
+        });
+
         // Create School
         app.MapPost("/schools", async (IMediator mediator, CreateSchoolRequest request) =>
         {

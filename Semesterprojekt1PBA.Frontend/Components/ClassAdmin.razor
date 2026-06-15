@@ -1,0 +1,163 @@
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient HttpClient
+
+<div class="questions-container">
+    <h2>Classes</h2>
+
+    <div class="questions-layout">
+        <div class="questions-sidebar">
+            <div class="filter-section">
+                <h3>Create Class</h3>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="Title" @bind="NewTitle" />
+                </div>
+                <div class="filter-group">
+                    <label>Start Date</label>
+                    <InputDate @bind-Value="StartDate" class="form-control input-box" />
+                </div>
+                <div class="filter-group">
+                    <label>End Date</label>
+                    <InputDate @bind-Value="EndDate" class="form-control input-box" />
+                </div>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="School ID" @bind="SchoolId" />
+                </div>
+                <button class="btn btn-primary btn-block" @onclick="CreateClass">Create</button>
+                @if (!string.IsNullOrEmpty(CreateMessage))
+                {
+                    <p style="color: @(CreateMessage.StartsWith("Failed") ? "red" : "green"); margin-top: 0.5rem;">@CreateMessage</p>
+                }
+            </div>
+
+            <div class="filter-section" style="margin-top: 1rem;">
+                <h3>Add Student to Class</h3>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="Class ID" @bind="AssignClassId" />
+                </div>
+                <div class="filter-group">
+                    <input class="form-control input-box" placeholder="Student ID" @bind="AssignStudentId" />
+                </div>
+                <button class="btn btn-primary btn-block" @onclick="AddStudentToClass">Add Student</button>
+                @if (!string.IsNullOrEmpty(AssignMessage))
+                {
+                    <p style="color: @(AssignMessage.StartsWith("Failed") ? "red" : "green"); margin-top: 0.5rem;">@AssignMessage</p>
+                }
+            </div>
+        </div>
+
+        <div class="questions-content">
+            @if (AllClasses.Count > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Students</th>
+                            <th>ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in AllClasses)
+                        {
+                            <tr>
+                                <td>@c.Title</td>
+                                <td>@c.StartDate.ToString("dd-MM-yyyy")</td>
+                                <td>@c.EndDate.ToString("dd-MM-yyyy")</td>
+                                <td>@c.StudentCount</td>
+                                <td style="font-size: 0.75rem; color: gray;">@c.Id</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No classes found.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<ClassItem> AllClasses = new();
+
+    private string NewTitle = string.Empty;
+    private DateOnly StartDate = DateOnly.FromDateTime(DateTime.Today.AddDays(1));
+    private DateOnly EndDate = DateOnly.FromDateTime(DateTime.Today.AddYears(1));
+    private string SchoolId = string.Empty;
+    private string CreateMessage = string.Empty;
+
+    private string AssignClassId = string.Empty;
+    private string AssignStudentId = string.Empty;
+    private string AssignMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadClasses();
+    }
+
+    private async Task LoadClasses()
+    {
+        AllClasses = await HttpClient.GetFromJsonAsync<List<ClassItem>>("classes") ?? new();
+    }
+
+    private async Task CreateClass()
+    {
+        CreateMessage = string.Empty;
+        if (!Guid.TryParse(SchoolId, out var schoolId)) return;
+
+        var request = new
+        {
+            title = NewTitle,
+            startDate = StartDate.ToString("yyyy-MM-dd"),
+            endDate = EndDate.ToString("yyyy-MM-dd"),
+            schoolId
+        };
+
+        var response = await HttpClient.PostAsJsonAsync("classes", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            CreateMessage = "Class created.";
+            NewTitle = string.Empty;
+            await LoadClasses();
+        }
+        else
+        {
+            CreateMessage = $"Failed ({(int)response.StatusCode})";
+        }
+    }
+
+    private async Task AddStudentToClass()
+    {
+        AssignMessage = string.Empty;
+        if (!Guid.TryParse(AssignClassId, out var classId)) return;
+        if (!Guid.TryParse(AssignStudentId, out var studentId)) return;
+
+        var response = await HttpClient.PostAsJsonAsync(
+            $"classes/{classId}/students",
+            new { studentId });
+
+        if (response.IsSuccessStatusCode)
+        {
+            AssignMessage = "Student added to class.";
+            AssignStudentId = string.Empty;
+            await LoadClasses();
+        }
+        else
+        {
+            AssignMessage = $"Failed ({(int)response.StatusCode})";
+        }
+    }
+
+    private class ClassItem
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public int StudentCount { get; set; }
+    }
+}

@@ -27,7 +27,8 @@ public class User : Entity
     {
     }
 
-    protected User(string firstName, string lastName, string email, string password, RoleType roleType, IReadOnlyCollection<Email> existingEmails)
+    protected User(string firstName, string lastName, string email, string password, 
+        RoleType roleType, IReadOnlyCollection<Email> existingEmails)
     {
         var newEmail = new Email(email);
         AssureEmailIsUnique(newEmail, existingEmails);
@@ -42,12 +43,12 @@ public class User : Entity
     {
         if (!_roles.Contains(role))
         {
-            throw new ErrorException($"User does not have the role, cannot remove:  {role.RoleType}", errorCode: "ROLE_NOT_FOUND");
+            throw new ErrorException($"User does not have the role, cannot remove:{role.RoleType}", errorCode: "ROLE_NOT_FOUND");
         }
 
         if (_roles.Count == 1 && _roles.Contains(role))
         {
-            throw new ErrorException($"User only have this single role,cannot remove: {role.RoleType}", errorCode: "ROLE_NOT_FOUND");
+            throw new ErrorException($"User only have this single role,cannot remove:{role.RoleType}", errorCode: "ROLE_NOT_FOUND");
         }
 
         _roles.Remove(role);

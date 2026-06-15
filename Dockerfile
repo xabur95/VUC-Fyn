@@ -20,9 +20,9 @@ RUN dotnet restore Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj
 COPY . .
 # Kompiler og publicer applikationen i Release-mode
 RUN dotnet publish Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj \
-    --configuration Release \  # Byg i Release-mode (optimeret, ingen debug-info)
-    --output /app/publish \    # Læg det færdige output i /app/publish
-    --no-restore               # Spring restore over — det er allerede gjort ovenfor!
+    --configuration Release \
+    --output /app/publish \
+    --no-restore
 
 # Stage 2: Runtime — kun ASP.NET Core runtime; ingen SDK og intet kildekode inkluderes i det endelige image
 FROM mcr.microsoft.com/dotnet/aspnet@sha256:8c0b6857eab7b2aa57884c839bf4678414606bd7d17370f18a842ac5cf414711 AS runtime

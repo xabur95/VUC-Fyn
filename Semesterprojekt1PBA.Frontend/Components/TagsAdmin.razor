@@ -1,0 +1,153 @@
+@using Semesterprojekt1PBA.Frontend.Models
+@using Semesterprojekt1PBA.Frontend.Models.DTO
+@inject HttpClient HttpClient
+
+<div class="questions-container">
+    <h2>Tags</h2>
+
+    <div class="questions-layout">
+        <div class="questions-sidebar">
+            <div class="filter-section">
+                <h3>Create Tag</h3>
+                <div class="filter-group">
+                    <InputText @bind-Value="NewTitle"
+                               placeholder="Title"
+                               class="form-control input-box" />
+                </div>
+                <div class="filter-group">
+                    <InputText @bind-Value="NewDescription"
+                               placeholder="Description"
+                               class="form-control input-box" />
+                </div>
+                <button class="btn btn-primary btn-block" @onclick="CreateTag">Create</button>
+                @if (!string.IsNullOrEmpty(CreateMessage))
+                {
+                    <p style="color: @(CreateMessage.StartsWith("Failed") ? "red" : "green"); margin-top: 0.5rem;">@CreateMessage</p>
+                }
+            </div>
+        </div>
+
+        <div class="questions-content">
+            @if (Tags.Count > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>ID</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tag in Tags)
+                        {
+                            <tr>
+                                @if (EditingTagId == tag.Id)
+                                {
+                                    <td><input class="form-control" @bind="EditTitle" /></td>
+                                    <td><input class="form-control" @bind="EditDescription" /></td>
+                                    <td style="font-size: 0.75rem; color: gray;">@tag.Id</td>
+                                    <td>
+                                        <button class="btn btn-primary" @onclick="() => SaveTag(tag)">Save</button>
+                                        <button class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>@tag.Title</td>
+                                    <td style="color: gray; font-size: 0.875rem;">@tag.Description</td>
+                                    <td style="font-size: 0.75rem; color: gray;">@tag.Id</td>
+                                    <td>
+                                        <button class="btn btn-edit" @onclick="() => StartEdit(tag)">Edit</button>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (!string.IsNullOrEmpty(EditMessage))
+                {
+                    <p style="color: @(EditMessage.StartsWith("Failed") ? "red" : "green");">@EditMessage</p>
+                }
+            }
+            else
+            {
+                <p>No tags found.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<TagGetDto> Tags = new();
+    private string NewTitle = string.Empty;
+    private string NewDescription = string.Empty;
+    private string CreateMessage = string.Empty;
+
+    private Guid? EditingTagId = null;
+    private string EditTitle = string.Empty;
+    private string EditDescription = string.Empty;
+    private string EditMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTags();
+    }
+
+    private async Task LoadTags()
+    {
+        Tags = await HttpClient.GetFromJsonAsync<List<TagGetDto>>("tags") ?? new();
+    }
+
+    private async Task CreateTag()
+    {
+        CreateMessage = string.Empty;
+        var request = new { title = NewTitle, description = NewDescription };
+        var response = await HttpClient.PostAsJsonAsync("tags", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            NewTitle = string.Empty;
+            NewDescription = string.Empty;
+            CreateMessage = "Tag created.";
+            await LoadTags();
+        }
+        else
+        {
+            CreateMessage = $"Failed ({(int)response.StatusCode})";
+        }
+    }
+
+    private void StartEdit(TagGetDto tag)
+    {
+        EditingTagId = tag.Id;
+        EditTitle = tag.Title;
+        EditDescription = tag.Description;
+        EditMessage = string.Empty;
+    }
+
+    private void CancelEdit()
+    {
+        EditingTagId = null;
+        EditMessage = string.Empty;
+    }
+
+    private async Task SaveTag(TagGetDto tag)
+    {
+        EditMessage = string.Empty;
+        var request = new { tagId = tag.Id, rowVersion = tag.RowVersion, title = EditTitle, description = EditDescription };
+        var response = await HttpClient.PutAsJsonAsync($"tags/{tag.Id}", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            EditingTagId = null;
+            EditMessage = "Tag updated.";
+            await LoadTags();
+        }
+        else
+        {
+            EditMessage = $"Failed ({(int)response.StatusCode})";
+        }
+    }
+}
