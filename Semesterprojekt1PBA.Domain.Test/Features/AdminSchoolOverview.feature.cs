@@ -17,22 +17,22 @@ namespace Semesterprojekt1PBA.Domain.Test.Features
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class TeacherQuestionOverviewFeature : object, Xunit.IClassFixture<TeacherQuestionOverviewFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class AdminSchoolOverviewFeature : object, Xunit.IClassFixture<AdminSchoolOverviewFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "Teacher Question Overview", "  As a teacher\r\n  I want to manage my questions\r\n  So that I can keep my question" +
-                " bank up to date", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "Admin School Overview", "  As an admin\r\n  I want to see all registered schools\r\n  So that I can manage the" +
+                " school directory", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "TeacherQuestionOverview.feature"
+#line 1 "AdminSchoolOverview.feature"
 #line hidden
         
-        public TeacherQuestionOverviewFeature(TeacherQuestionOverviewFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public AdminSchoolOverviewFeature(AdminSchoolOverviewFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -108,22 +108,7 @@ namespace Semesterprojekt1PBA.Domain.Test.Features
 #line 7
   #line hidden
 #line 8
-    await testRunner.GivenAsync("a teacher \"Tina Teacher\" with email \"tina@vucfyn.dk\" exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-            global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
-                        "Title",
-                        "Text",
-                        "Points"});
-            table1.AddRow(new string[] {
-                        "What is DDD?",
-                        "Explain Domain-Driven Design",
-                        "10"});
-            table1.AddRow(new string[] {
-                        "What is CQRS?",
-                        "Explain CQRS pattern",
-                        "5"});
-#line 9
-    await testRunner.AndAsync("the following questions exist for the teacher", ((string)(null)), table1, "And ");
+    await testRunner.GivenAsync("the system has 2 registered schools", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
         }
         
@@ -152,15 +137,15 @@ namespace Semesterprojekt1PBA.Domain.Test.Features
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Teacher sees existing questions in the overview")]
-        [Xunit.TraitAttribute("FeatureTitle", "Teacher Question Overview")]
-        [Xunit.TraitAttribute("Description", "Teacher sees existing questions in the overview")]
-        public async global::System.Threading.Tasks.Task TeacherSeesExistingQuestionsInTheOverview()
+        [Xunit.SkippableFactAttribute(DisplayName="Admin sees all registered schools")]
+        [Xunit.TraitAttribute("FeatureTitle", "Admin School Overview")]
+        [Xunit.TraitAttribute("Description", "Admin sees all registered schools")]
+        public async global::System.Threading.Tasks.Task AdminSeesAllRegisteredSchools()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Teacher sees existing questions in the overview", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 14
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Admin sees all registered schools", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 10
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -173,49 +158,11 @@ namespace Semesterprojekt1PBA.Domain.Test.Features
 #line 7
   await this.FeatureBackgroundAsync();
 #line hidden
-#line 15
-    await testRunner.WhenAsync("the teacher views the question overview", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line 11
+    await testRunner.WhenAsync("the admin requests the school overview", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 16
-    await testRunner.ThenAsync("the overview should contain 2 questions", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Teacher creates a new question and sees it in the overview")]
-        [Xunit.TraitAttribute("FeatureTitle", "Teacher Question Overview")]
-        [Xunit.TraitAttribute("Description", "Teacher creates a new question and sees it in the overview")]
-        public async global::System.Threading.Tasks.Task TeacherCreatesANewQuestionAndSeesItInTheOverview()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Teacher creates a new question and sees it in the overview", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 18
-  this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 7
-  await this.FeatureBackgroundAsync();
-#line hidden
-#line 19
-    await testRunner.WhenAsync("the teacher creates a new question with title \"What is TDD?\" and text \"Explain Te" +
-                        "st-Driven Development\" and points 8", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 20
-    await testRunner.AndAsync("the teacher views the question overview", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 21
-    await testRunner.ThenAsync("the overview should contain 3 questions", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 22
-    await testRunner.AndAsync("the overview should contain a question with title \"What is TDD?\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 12
+    await testRunner.ThenAsync("the overview should contain 2 schools", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -228,12 +175,12 @@ namespace Semesterprojekt1PBA.Domain.Test.Features
             
             async global::System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await TeacherQuestionOverviewFeature.FeatureSetupAsync();
+                await AdminSchoolOverviewFeature.FeatureSetupAsync();
             }
             
             async global::System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await TeacherQuestionOverviewFeature.FeatureTearDownAsync();
+                await AdminSchoolOverviewFeature.FeatureTearDownAsync();
             }
         }
     }
