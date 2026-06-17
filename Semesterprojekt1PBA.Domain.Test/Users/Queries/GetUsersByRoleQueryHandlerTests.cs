@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Semesterprojekt1PBA.Application.Features.Users.Queries.GetUsersByRole;
 using Semesterprojekt1PBA.Application.Interfaces;
+using Semesterprojekt1PBA.Application.Interfaces.Repositories;
 using Semesterprojekt1PBA.Domain.Entities;
 using Semesterprojekt1PBA.Domain.ValueObjectsAndEnums;
 
@@ -17,11 +18,13 @@ public class GetUsersByRoleQueryHandlerTests
 {
     private readonly Mock<IUserRepository> _mockRepository;
     private readonly Mock<ILogger<GetUsersByRoleQueryHandler>> _mockLogger;
+    private readonly Mock<IClassRepository> _mockClassRepository;
 
     public GetUsersByRoleQueryHandlerTests()
     {
         _mockRepository = new Mock<IUserRepository>();
         _mockLogger = new Mock<ILogger<GetUsersByRoleQueryHandler>>();
+        _mockClassRepository = new Mock<IClassRepository>();
     }
 
     [Fact]
@@ -33,7 +36,7 @@ public class GetUsersByRoleQueryHandlerTests
         var users = new List<User> { student1, student2 };
 
         _mockRepository.Setup(r => r.GetByRoleAsync(RoleType.Student)).ReturnsAsync(users);
-        var handler = new GetUsersByRoleQueryHandler(_mockRepository.Object, _mockLogger.Object);
+        var handler = new GetUsersByRoleQueryHandler(_mockRepository.Object, _mockClassRepository.Object, _mockLogger.Object);
         var query = new GetUsersByRoleQuery { RoleType = RoleType.Student };
 
         // Act
@@ -51,7 +54,7 @@ public class GetUsersByRoleQueryHandlerTests
         // Arrange
         _mockRepository.Setup(r => r.GetByRoleAsync(RoleType.Admin)).ReturnsAsync(new List<User>());
         
-        var handler = new GetUsersByRoleQueryHandler(_mockRepository.Object, _mockLogger.Object);
+        var handler = new GetUsersByRoleQueryHandler(_mockRepository.Object, _mockClassRepository.Object, _mockLogger.Object);
         var query = new GetUsersByRoleQuery { RoleType = RoleType.Admin };
 
         // Act
