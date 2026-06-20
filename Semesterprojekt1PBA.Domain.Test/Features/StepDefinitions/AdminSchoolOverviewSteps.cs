@@ -25,13 +25,14 @@ public class AdminSchoolOverviewSteps
         _repoMock.Setup(r => r.GetAllSchoolsAsync()).ReturnsAsync(schools);
     }
 
+    // ReqnRoll binder metode til When i feature fil
     [When("the admin requests the school overview")]
     public async Task WhenAdminRequestsOverview()
     {
-        // ReqnRoll binder metode til When i feature fil
         _result = await _repoMock.Object.GetAllSchoolsAsync();
     }
 
+    
     [Then("the overview should contain {int} schools")]
     public void ThenOverviewContains(int expected)
     {
