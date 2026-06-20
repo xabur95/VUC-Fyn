@@ -13,18 +13,19 @@ COPY Semesterprojekt1PBA.Infrastructure/Semesterprojekt1PBA.Infrastructure.cspro
 COPY Semesterprojekt1PBA.DatabaseMigration/Semesterprojekt1PBA.DatabaseMigration.csproj Semesterprojekt1PBA.DatabaseMigration/
 COPY Semesterprojekt1PBA.Presentation/Semesterprojekt1PBA.Presentation.csproj       Semesterprojekt1PBA.Presentation/
 
-# Nuget pakker hentes(fra .csproj i cache optimering) og caches som eget layer
+# Nuget pakker hentes(fra .csproj i cache optimering) og caches som eget layer(caches)
 RUN dotnet restore Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj
 
-# Kildekoden kopieres EFTER restore og bygges
+# Kildekoden kopieres EFTER restore(caches ikke)
 COPY . .
-# Kompiler og publicer applikationen i Release-mode
+
+# Kompiler og publicer app i Release mode, downloader Nuget pakker gennem Api .csproj(caches ikke)
 RUN dotnet publish Semesterprojekt1PBA.Api/Semesterprojekt1PBA.Api.csproj \
     --configuration Release \
     --output /app/publish \
     --no-restore
 
-# Stage 2: Runtime — kun ASP.NET Core runtime; ingen SDK og intet kildekode inkluderes i det endelige image
+# Stage 2: Runtime: Henter ASP.NET Core image der kun har runtime ingen tung SDK
 FROM mcr.microsoft.com/dotnet/aspnet@sha256:8c0b6857eab7b2aa57884c839bf4678414606bd7d17370f18a842ac5cf414711 AS runtime
 WORKDIR /app
 
@@ -35,9 +36,11 @@ RUN groupadd --system appgroup && \
 # Kopier kun det kompilerede output fra Stage 1 — ingen kildekode eller SDK
 COPY --from=build /app/publish .
 
-# Kør aldrig som root
+# Kør altid som appuser og ikke root user
 USER appuser
 
+# dokumenter vi lytter på port 8080, ikke at vi pbner port 8080(gøres i docker-compose)
 EXPOSE 8080
 
+# KOmmando der køres når container starter
 ENTRYPOINT ["dotnet", "Semesterprojekt1PBA.Api.dll"]

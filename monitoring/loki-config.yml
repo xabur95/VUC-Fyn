@@ -2,6 +2,7 @@
 auth_enabled: false
 
 server:
+  # loki lytter på port 3100 -> Det er den port Promtail sender logs til, samt port Grafana spærger på
   http_listen_port: 3100
 
 # Kørselstilstand: alle Loki-komponenter i én proces (egnet til dev)
@@ -10,7 +11,7 @@ common:
   path_prefix: /loki
   storage:
     filesystem:
-      chunks_directory: /loki/chunks
+      chunks_directory: /loki/chunks # her gemmes selve logs på host
       rules_directory: /loki/rules
   replication_factor: 1
   ring:
@@ -32,8 +33,10 @@ schema_config:
 limits_config:
   reject_old_samples: true
   reject_old_samples_max_age: 168h  # Afvis logs ældre end 7 dage
+  retention_period: 30d             # Gemmer logs i 30 dage
 
-# Compactor rydder op i gamle indeksfiler
+# Compactor rydder op i gamle indeksfiler hvert 10 min.
 compactor:
   working_directory: /loki/compactor
   compaction_interval: 10m
+  retention_enabled: true

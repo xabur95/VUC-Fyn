@@ -1,18 +1,19 @@
 # Author: Michael
+# Docker compose er et værktøj der håndtere og starter flere containers op
 services:
   api:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:8080"   # Ekstern port 5000 mappes til intern port 8080 (ASP.NET Core default i .NET 8+)
+      - "5000:8080"   # Ekstern port 5000 mappes til intern port 8080
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       # Overskriver connection string fra appsettings.json
       ConnectionStrings__DefaultConnection: "Server=db,1433;Database=VucFyn;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;"
     depends_on:
       db:
-        # API starter ikke før databasen er healthy — undgår connection-fejl ved opstart
+        # API starter ikke før databasen er healthy — undgår connection fejl ved opstart
         condition: service_healthy
     networks:
       - app-net
@@ -24,11 +25,11 @@ services:
       - "1433:1433"
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD} # Docker compose søger automatisk efter miljø variablerved 'docker compose up'
     volumes:
-      - sql_data:/var/opt/mssql   # Persisterer databasedata så det overlever container-genstarter
+      - sql_data:/var/opt/mssql   # Persisterer databasedata så det overlever container genstarter
     healthcheck:
-      # Kører SELECT 1 mod databasen — returnerer fejlkode hvis SQL Server ikke er klar
+      # Kører SELECT 1 mod databasen — sqlcmd returnerer exit-kode 0 ved succes, ikke-nul ved fejl
       test: [
         "CMD-SHELL",
         "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -C"
@@ -36,10 +37,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
+      start_period: 30s # Checks kører fra start, men fejl i de første 30s tæller ikke —> giver SQL Server tid til at initialiser første gang
     networks:
       - app-net
 
+  # node exporter returner host maskines metrikker som cpu forbrug
   node-exporter:
     image: prom/node-exporter:v1.9.1
     ports:
@@ -51,11 +53,12 @@ services:
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
-      # Ekskludér virtuelle og system-mount-points fra disk-metrics
+      # Ekskludér virtuelle og system-mount points fra disk-metrics
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     networks:
       - monitoring-net
 
+  # cadvisor levere container metrikker 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.52.0
     ports:
@@ -67,22 +70,26 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - monitoring-net
-
+  
+ # Prometheus scraper /metrics fra api, node-exporter og cadvisor hvert 15. sekund(kan ses i Prometheus.yml) 
   prometheus:
     image: prom/prometheus:v2.53.5
     ports:
       - "9090:9090"
     volumes:
+      # bind mount: værtsfil:containersti:ro(kun læsning)
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus   # Persisterer tidsseriedata så historik overlever genstarter
+      # Persisterer tidsseriedata så historik overlever genstarter  
+      - prometheus_data:/prometheus   
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=15d'
+      - '--config.file=/etc/prometheus/prometheus.yml'  # flag: hvor ligger konfigurations fil
+      - '--storage.tsdb.path=/prometheus'               # flag: hvilken path skal daa gemmes 
+      - '--storage.tsdb.retention.time=15d'             # falg: gem kun data for sidste 15 dAGE
     networks:
       - monitoring-net
       - app-net   # Skal nå api-servicen for at scrape /metrics
 
+  # grafana dashboard
   grafana:
     image: grafana/grafana:11.5.0
     ports:
@@ -97,6 +104,7 @@ services:
     networks:
       - monitoring-net
 
+  # loki modtager logs fra promtail
   loki:
     image: grafana/loki:3.4.3
     ports:
@@ -107,7 +115,8 @@ services:
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - monitoring-net
-
+  
+  # Promtail opdager containers via Docker socket og sender deres logs til Loki
   promtail:
     image: grafana/promtail:3.4.3
     volumes:
@@ -123,10 +132,10 @@ services:
       - monitoring-net
 
 networks:
-  app-net:        # Isoleret netværk til API og database — monitoring-stakken har ingen direkte adgang til DB
-  monitoring-net: # Observability-stakken — API er også tilsluttet så Prometheus kan scrape metrics
+  app-net:        # netværk til API og database -> monotorering-net kan ikke tilgå db = network segmentation
+  monitoring-net: # netværk til observability —> API er også tilsluttet så Prometheus kan scrape metrics
 
-# ── Persistente volumes ────────────────────────────────────────
+# Persistering af db, prometheus, grafana, loki(containers er ephemeral(slettes container slettes data))
 volumes:
   sql_data:        # SQL Server data
   prometheus_data: # Prometheus tidsserier

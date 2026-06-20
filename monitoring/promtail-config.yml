@@ -3,24 +3,24 @@ server:
   http_listen_port: 9080
   grpc_listen_port: 0
 
-# Positions-filen husker hvor Promtail er kommet til i hver log-fil
-# så den ikke sender de samme log-linjer to gange ved genstart
+# Positions filen husker hvor Promtail er kommet til i hver log fil
+# så den ikke sender de samme log linjer to gange ved genstart
 positions:
   filename: /tmp/positions.yaml
 
-# Loki-endpoint som logs sendes til
+# promtail sender(push) logs til endpoint som loki henter(pull) og gemmer
 clients:
   - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
-
   - job_name: docker-containers
     # Docker service discovery via Docker socket
     # Opdager automatisk nye containers uden genstart af Promtail
     docker_sd_configs:
-      - host: unix:///var/run/docker.sock
+      - host: unix:///var/run/docker.sock   # Promtail spørger Docker hvert 5 sek. hvilke containers køre
         refresh_interval: 5s
 
+    # Promtail tilføjer Labels som Loki bruger til at organiser og filtrere på
     relabel_configs:
       # Brug container-navn som label (fjern den ledende skråstreg)
       - source_labels: ['__meta_docker_container_name']

@@ -1,7 +1,3 @@
-# CI-pipeline
-# Kører automatisk ved push og pull requests til main-branchen.
-# Formål: fange fejl tidligt byg og test koden automatisk uden manuel indgriben.
-
 name: CI
 
 # Trigger: hvornår skal denne workflow køre?
@@ -17,16 +13,16 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    # Hent kildekoden fra repositoriet ned på runneren
+    # Hent kildekoden fra repositoriet ned på runneren - færdiglavet fra github marketplace
     - uses: actions/checkout@v4
 
     # Installer den ønskede .NET SDK-version på runneren
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 10.0.x             # x = nyeste version 
+        dotnet-version: 10.0.x             # x = nyeste version i håb om senest sikkerhedsrettelser
 
-    # Hent alle NuGet-pakker som projektet afhænger af (svarer til npm install)
+    # Læser og henter NuGet pakker som projektet afhænger af
     - name: Restore dependencies
       run: dotnet restore
 
