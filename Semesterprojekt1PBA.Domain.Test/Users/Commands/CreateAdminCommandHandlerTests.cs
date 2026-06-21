@@ -17,12 +17,12 @@ namespace Semesterprojekt1PBA.Domain.Test.Users.Commands;
 /// </summary>
 public class CreateAdminCommandHandlerTests
 {
-    private readonly Mock<ILogger<CreateAdminCommandHandler>> _mockLogger;
+    private readonly Mock<ILogger<CreateAdminCommandHandler>> _mockLogger;  // Variabler til DIP
     private readonly Mock<IUserRepository> _mockRepository;
 
     public CreateAdminCommandHandlerTests()
     {
-        _mockRepository = new Mock<IUserRepository>();
+        _mockRepository = new Mock<IUserRepository>();                      // mock opretter fake obkjekter
         _mockLogger = new Mock<ILogger<CreateAdminCommandHandler>>();
     }
 
@@ -30,9 +30,10 @@ public class CreateAdminCommandHandlerTests
     public async Task CreateAdminCommand_WhenDataIsValid_ReturnsNonEmptyGuid()
     {
         // Arrange
-        _mockRepository.Setup(r => r.AddAsync(It.IsAny<Admin>())).Returns(Task.CompletedTask);
+        _mockRepository.Setup(r => r.AddAsync(It.IsAny<Admin>())).Returns(Task.CompletedTask); // stub
         _mockRepository.Setup(r => r.GetAllEmailsAsync()).ReturnsAsync(Array.Empty<Email>());
-        var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object);
+        // // Her injectes de i CreateAdminCommandHandler både mockrepository og logger
+        var handler = new CreateAdminCommandHandler(_mockRepository.Object, _mockLogger.Object); 
         var command = new CreateAdminCommand("Marge", "Simpson", "marge@springfield.com", "Password1");
 
         // Act
